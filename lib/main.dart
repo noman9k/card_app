@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'screens/comunity_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import '/screens/select_role_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,13 +25,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Card App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.brown,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // home: HomeScreen(),
-      home: LoginScreen(),
+      // home: LoginScreen(),
+      home: SelectRoleScreen(),
       getPages: [
         GetPage(name: '/', page: () => LoginScreen()),
         GetPage(name: '/home-screen', page: () => HomeScreen()),
+        GetPage(name: '/select-role-screen', page: () => SelectRoleScreen()),
         GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
       ],
     );
