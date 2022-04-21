@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+
 class Role {
   String name;
   String description;
   String image;
-  String color;
+  Color color;
 
   Role(
       {required this.name,

@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.1
   firebase_auth: ^3.3.14
   country_picker: ^2.0.14
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   flutter_test:
