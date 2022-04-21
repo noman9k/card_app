@@ -8,6 +8,7 @@ import 'screens/comunity_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import '/screens/select_role_screen.dart';
+import 'screens/question_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +33,9 @@ class MyApp extends StatelessWidget {
       home: SelectRoleScreen(),
       getPages: [
         GetPage(name: '/', page: () => LoginScreen()),
-        GetPage(name: '/home-screen', page: () => HomeScreen()),
         GetPage(name: '/select-role-screen', page: () => SelectRoleScreen()),
+        GetPage(name: '/question-screen', page: () => QuestionScreen()),
+        GetPage(name: '/home-screen', page: () => HomeScreen()),
         GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
       ],
     );

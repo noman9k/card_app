@@ -52,7 +52,7 @@ class SelectRoleScreen extends StatelessWidget {
                         child: _gridItem(
                           role: roleController.rolesList[index],
                           isSelected:
-                              roleController.selectedRole.value == index,
+                              roleController.selectedRoleIndex.value == index,
                         ),
                       ));
                 },
@@ -72,7 +72,8 @@ class SelectRoleScreen extends StatelessWidget {
                   children: [
                     Text(
                       roleController
-                          .rolesList[roleController.selectedRole.value].name,
+                          .rolesList[roleController.selectedRoleIndex.value]
+                          .name,
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -87,7 +88,7 @@ class SelectRoleScreen extends StatelessWidget {
                       ),
                       child: Text(
                         roleController
-                            .rolesList[roleController.selectedRole.value]
+                            .rolesList[roleController.selectedRoleIndex.value]
                             .description,
                         style: TextStyle(
                           fontSize: 12,

@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import '../modals/role_model.dart';
 
 class RoleController extends GetxController {
-  var selectedRole = 0.obs;
+  var selectedRoleIndex = 0.obs;
+  // ignore: prefer_typing_uninitialized_variables
+  var selectedRole;
 
   final List<Role> rolesList = [
     Role(
@@ -37,11 +39,14 @@ class RoleController extends GetxController {
   ];
 
   void selectRole(int index) {
-    selectedRole.value = index;
+    selectedRoleIndex.value = index;
+    selectedRole = rolesList[index];
   }
 
   void saveToDB() {
     print('save to db');
-    print(rolesList[selectedRole.value].name);
+    print(selectedRole.name);
+
+    Get.offNamed('question-screen');
   }
 }
