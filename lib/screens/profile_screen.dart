@@ -1,10 +1,13 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
+import 'package:card_app/controllers/role_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  ProfileScreen({Key? key}) : super(key: key);
+  RoleController roleController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,8 @@ class ProfileScreen extends StatelessWidget {
                     child: SizedBox(
                       width: 50,
                       height: 50,
-                      child: Image.asset('assets/icons/club.png'),
+                      child:
+                          SvgPicture.asset(roleController.selectedRole.image),
                     ),
                   ),
                   Align(
@@ -142,8 +146,17 @@ class ProfileScreen extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 10),
                   Text(
-                      'I want to Meet Up with the professional payer who never fear to go there into space',
-                      style: TextStyle(height: 1.5)),
+                    'I want to Meet Up with the professional payer who never fear to go there into space',
+                    style: TextStyle(height: 1.5),
+                  ),
+                  SizedBox(height: 10),
+                  Text('What Kind Of Player you want ?',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  Text(
+                    'I want to Meet Up with the professional payer who never fear to go there into space',
+                    style: TextStyle(height: 1.5),
+                  ),
                   Expanded(
                     child: Center(
                       child: Container(

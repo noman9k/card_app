@@ -77,7 +77,15 @@ class LoginController {
     );
     await auth.signInWithCredential(credential);
     print('signin');
-    Get.snackbar('Signin Successfull', 'With User ID ${auth.currentUser!.uid}');
+    if (auth.currentUser == null) {
+      Get.snackbar(
+        'Signin Failed',
+        'Please check your code',
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
+    Get.toNamed('/select-role-screen');
   }
 
   void setCountry(Country country) {

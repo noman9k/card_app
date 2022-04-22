@@ -26,6 +26,11 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // Sample Code starts here
+                    TextButton(
+                        onPressed: () => Get.toNamed('/select-role-screen'),
+                        child: Text('Skip')),
+                    // Sample Code end
                     SizedBox(
                         height: Get.height * 0.15,
                         child: Center(

@@ -8,6 +8,7 @@ import 'chat_screen.dart';
 import 'comunity_screen.dart';
 import 'profile_screen.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
   HomeController controller = Get.put(HomeController());

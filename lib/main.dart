@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import 'screens/comunity_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/image_upload_screen.dart';
 import 'screens/login_screen.dart';
 import '/screens/select_role_screen.dart';
 import 'screens/question_screen.dart';
@@ -29,12 +30,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.brown,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // home: LoginScreen(),
-      home: SelectRoleScreen(),
+      home: LoginScreen(),
+      // home: SelectRoleScreen(),
       getPages: [
         GetPage(name: '/', page: () => LoginScreen()),
         GetPage(name: '/select-role-screen', page: () => SelectRoleScreen()),
         GetPage(name: '/question-screen', page: () => QuestionScreen()),
+        GetPage(name: '/image-upload-screen', page: () => ImageUploadScreen()),
         GetPage(name: '/home-screen', page: () => HomeScreen()),
         GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
       ],

@@ -7,20 +7,32 @@ class ComunityController extends GetxController
     with GetSingleTickerProviderStateMixin {
   late TabController tabController;
 
+  static String heartTitle = 'l\'amour du jeu';
+  static String clubTitle = 'des soirées poker';
+  static String diamondTitle = 'le business';
+  static String spadesTitle = 'une coloc poker';
+
   List<Map<String, String>> mytabs = [
-    {'title': 'Club', 'icon': 'assets/icons/club.png'},
-    {'title': 'Heart', 'icon': 'assets/icons/heart.png'},
-    {'title': 'Diamond', 'icon': 'assets/icons/diamond.png'},
-    {'title': 'Spades', 'icon': 'assets/icons/spades.png'},
+    {'title': clubTitle, 'icon': 'assets/icons/club.svg'},
+    {'title': heartTitle, 'icon': 'assets/icons/heart.svg'},
+    {'title': diamondTitle, 'icon': 'assets/icons/diamond.svg'},
+    {'title': spadesTitle, 'icon': 'assets/icons/spades.svg'},
   ];
 
-  List myTabColor = [
-    const Color.fromARGB(255, 233, 30, 99),
-    const Color.fromARGB(255, 228, 35, 21),
-    const Color.fromARGB(255, 51, 204, 56),
-    const Color.fromARGB(255, 255, 255, 255),
+  List<Map<String, Color>> myIconColor = [
+    {clubTitle: Colors.red},
+    {heartTitle: Colors.black},
+    {diamondTitle: Colors.red},
+    {spadesTitle: Colors.black},
   ];
-  var tabColor = const Color.fromARGB(255, 233, 26, 95).obs;
+
+  List myTabColor = const [
+    Color.fromARGB(255, 21, 135, 228),
+    Color.fromARGB(255, 24, 38, 236),
+    Color.fromARGB(255, 21, 135, 228),
+    Color.fromARGB(255, 24, 38, 236),
+  ];
+  var tabColor = const Color.fromARGB(255, 21, 135, 228).obs;
 
   @override
   void onInit() {

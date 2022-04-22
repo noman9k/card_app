@@ -21,15 +21,18 @@ class SelectRoleScreen extends StatelessWidget {
           //title
           Expanded(
               flex: 2,
-              child: Container(
-                color: Colors.red,
-                child: Center(
-                  child: Text(
-                    'Select Role',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: SizedBox(
+                  width: Get.width,
+                  child: Center(
+                    child: Text(
+                      'Choisissez le signe qui vous\ncorrespond le plus! ',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.brown),
+                    ),
                   ),
                 ),
               )),
@@ -53,6 +56,8 @@ class SelectRoleScreen extends StatelessWidget {
                           role: roleController.rolesList[index],
                           isSelected:
                               roleController.selectedRoleIndex.value == index,
+                          userSelectedRole:
+                              roleController.userSelectedRole.value,
                         ),
                       ));
                 },
@@ -116,11 +121,14 @@ class SelectRoleScreen extends StatelessWidget {
   }
 }
 
-Widget _gridItem({required Role role, required bool isSelected}) {
+Widget _gridItem(
+    {required Role role,
+    required bool isSelected,
+    required bool userSelectedRole}) {
   return Container(
-    decoration: isSelected
+    decoration: userSelectedRole && isSelected
         ? BoxDecoration(
-            border: Border.all(width: 3, color: Colors.blueAccent),
+            border: Border.all(width: 3, color: Colors.brown),
             borderRadius: BorderRadius.circular(80),
           )
         : null,
