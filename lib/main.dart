@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:card_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ import 'screens/home_screen.dart';
 import 'screens/image_upload_screen.dart';
 import 'screens/login_screen.dart';
 import '/screens/select_role_screen.dart';
+import 'screens/message_screen.dart';
+import 'screens/profile_screen.dart';
 import 'screens/question_screen.dart';
 
 void main() async {
@@ -30,15 +33,17 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.brown,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginScreen(),
+      home: SplashScreen(),
       // home: SelectRoleScreen(),
       getPages: [
         GetPage(name: '/', page: () => LoginScreen()),
         GetPage(name: '/select-role-screen', page: () => SelectRoleScreen()),
+        GetPage(name: '/profile-screen', page: () => ProfileScreen()),
         GetPage(name: '/question-screen', page: () => QuestionScreen()),
         GetPage(name: '/image-upload-screen', page: () => ImageUploadScreen()),
         GetPage(name: '/home-screen', page: () => HomeScreen()),
         GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
+        GetPage(name: '/message-screen', page: () => MessageScreen()),
       ],
     );
   }

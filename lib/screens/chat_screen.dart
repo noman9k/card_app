@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../modals/chat_model.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatelessWidget {
   var chats = dummyData;
-
   ChatScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -13,6 +13,14 @@ class ChatScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: const Text('Chats'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {
+              // Get.to(MyChatScreen());
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: chats.length,

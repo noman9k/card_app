@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print, prefer_typing_uninitialized_variables
 
+import 'package:card_app/controllers/profile_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +12,11 @@ class RoleController extends GetxController {
   var selectedRoleIndex = 0.obs;
   var selectedRole;
   var userSelectedRole = false.obs;
+  var uId = FirebaseAuth.instance.currentUser!.uid;
+  ProfileController profileController = Get.put(ProfileController());
+
+  CollectionReference usersReference =
+      FirebaseFirestore.instance.collection('users');
 
   final List<Role> rolesList = [
     Role(
@@ -46,11 +54,23 @@ class RoleController extends GetxController {
     userSelectedRole.value = true;
   }
 
-  void saveToDB() {
+  Future<void> saveToDB() async {
     if (userSelectedRole.value) {
       print('save to db');
-      print(selectedRole.name);
-      Get.toNamed('/question-screen');
+
+      String roleImage = rolesList[selectedRoleIndex.value].image;
+      String role = roleImage.split('/').last.split('.').first;
+      print(role);
+
+      await usersReference.doc(uId).update({
+        'role': role,
+      }).then(
+        (value) {
+          profileController.getProfileData();
+          Get.toNamed('/question-screen');
+        },
+      );
+
       return;
     }
     Get.snackbar('Role not Selected', 'Please Select The Role First');

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
+import '../controllers/role_controller.dart';
 import 'chat_screen.dart';
 import 'comunity_screen.dart';
 import 'profile_screen.dart';
@@ -12,6 +13,7 @@ import 'profile_screen.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
   HomeController controller = Get.put(HomeController());
+  RoleController roleController = Get.put(RoleController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.verified_user_sharp),
-                label: 'Home',
+                label: 'Comunity',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.messenger),
