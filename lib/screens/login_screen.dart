@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/role_controller.dart';
 import 'package:card_app/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color.fromARGB(255, 18, 21, 27),
+        backgroundColor: MyColors.backgroundColor,
         body: Obx(
           () => SingleChildScrollView(
             child: SizedBox(
@@ -27,11 +28,9 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Sample Code starts here
-                    TextButton(
-                        onPressed: () => Get.toNamed('/select-role-screen'),
-                        child: Text('Skip')),
-                    // Sample Code end
+                    SizedBox(
+                      height: Get.height * 0.01,
+                    ),
                     SizedBox(
                         height: Get.height * 0.15,
                         child: Center(

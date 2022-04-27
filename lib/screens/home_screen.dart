@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:card_app/controllers/profile_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,11 +16,13 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
   HomeController controller = Get.put(HomeController());
   RoleController roleController = Get.put(RoleController());
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (controller) {
+        profileController.getProfileData(null);
         return Scaffold(
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.tabIndex,

@@ -18,6 +18,8 @@ class RoleController extends GetxController {
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
 
+  var nextScreenRoute = '/question-screen';
+
   final List<Role> rolesList = [
     Role(
       name: 'Coeur Pour\nl\'amour du jeu ',
@@ -48,6 +50,11 @@ class RoleController extends GetxController {
     ),
   ];
 
+  void updateReturnRoute(String route) {
+    nextScreenRoute = route;
+    print(nextScreenRoute);
+  }
+
   void selectRole(int index) {
     selectedRoleIndex.value = index;
     selectedRole = rolesList[index];
@@ -56,20 +63,16 @@ class RoleController extends GetxController {
 
   Future<void> saveToDB() async {
     if (userSelectedRole.value) {
-      print('save to db');
-
       String roleImage = rolesList[selectedRoleIndex.value].image;
       String role = roleImage.split('/').last.split('.').first;
-      print(role);
 
       await usersReference.doc(uId).update({
         'role': role,
-      }).then(
-        (value) {
-          profileController.getProfileData();
-          Get.toNamed('/question-screen');
-        },
-      );
+      });
+
+      profileController.getProfileData(null);
+      print(nextScreenRoute);
+      Get.offNamed(nextScreenRoute);
 
       return;
     }

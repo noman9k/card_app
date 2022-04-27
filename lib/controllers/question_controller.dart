@@ -9,9 +9,9 @@ import 'profile_controller.dart';
 
 class QuestionController extends GetxController {
   final questionFormKey = GlobalKey<FormState>();
+  var q0Controller = TextEditingController();
   var q1Controller = TextEditingController();
   var q2Controller = TextEditingController();
-  var q3Controller = TextEditingController();
   String uId = FirebaseAuth.instance.currentUser!.uid;
   ProfileController profileController = Get.put(ProfileController());
 
@@ -19,42 +19,68 @@ class QuestionController extends GetxController {
       FirebaseFirestore.instance.collection('users');
 
   final questionList = [
-    'What is your name?',
-    'What is your age?',
-    'What is your favorite color?'
+    'What are your Ambisionsin Poker?',
+    'What Kind Of Player you want ?',
+    'What Kind Of Player you want ?'
   ];
+  var nextScreenRoute = '/image-upload-screen';
+
+  void updateReturnRoute(String route) {
+    nextScreenRoute = route;
+  }
 
   submitAnswers() async {
     if (!questionFormKey.currentState!.validate()) {
       print('Form is invalid');
       return;
-    } else {
-      print('Form is valid');
     }
 
     await _saveAnswersData(
-        q1Controller.text, q2Controller.text, q3Controller.text);
-    Get.toNamed('/image-upload-screen');
+        q0Controller.text, q1Controller.text, q2Controller.text);
+    Get.offNamed(nextScreenRoute);
   }
 
   Future<void> _saveAnswersData(
-      String answer1, String answer2, String answer3) {
+      String answer0, String answer1, String answer2) {
     return usersReference.doc(uId).update({
-      'question.answer1': answer1,
-      'question.answer2': answer2,
-      'question.answer3': answer3
-    }).then((value) => profileController.getProfileData());
+      'question.answer1': answer0,
+      'question.answer2': answer1,
+      'question.answer3': answer2
+    }).then((value) => profileController.getProfileData(null));
+  }
 
-    // print('Answer 1: $answer1');
-    // print('Answer 2: $answer2');
-    // print('Answer 3: $answer3');
+  void setControllerValues(String answer1, String answer2, String answer3) {
+    q0Controller = TextEditingController(text: answer1);
+    q1Controller = TextEditingController(text: answer2);
+    q2Controller = TextEditingController(text: answer3);
   }
 
   @override
   void dispose() {
     super.dispose();
+    q0Controller.dispose();
     q1Controller.dispose();
     q2Controller.dispose();
-    q3Controller.dispose();
+  }
+
+  String? q0validate(String? value) {
+    if (value == null || value.isEmpty || value.length < 3) {
+      return 'Please enter some text';
+    }
+    return null;
+  }
+
+  String? q1validate(String? value) {
+    if (value == null || value.isEmpty || value.length < 3) {
+      return 'Please enter some text';
+    }
+    return null;
+  }
+
+  String? q2validate(String? value) {
+    if (value == null || value.isEmpty || value.length < 3) {
+      return 'Please enter some text';
+    }
+    return null;
   }
 }

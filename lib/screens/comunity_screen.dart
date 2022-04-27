@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/screens/profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
@@ -14,6 +15,7 @@ class ComunityScreen extends StatelessWidget {
   ComunityScreen({Key? key}) : super(key: key);
 
   ComunityController homeController = Get.put(ComunityController());
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class ComunityScreen extends StatelessWidget {
                 floating: true,
                 pinned: true,
                 title: Text('Cards App'),
-                actions: [Container()],
+                automaticallyImplyLeading: false,
                 bottom: TabBar(
                   indicatorPadding: EdgeInsets.all(0),
 
@@ -114,6 +116,7 @@ class ComunityScreen extends StatelessWidget {
   Widget _myListTile(QueryDocumentSnapshot<Object?> doc) {
     return InkWell(
       onTap: () {
+        profileController.getProfileData(doc['uId']!);
         Get.toNamed('/profile-screen', arguments: doc);
       },
       child: Card(

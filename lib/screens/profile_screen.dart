@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:card_app/controllers/profile_controller.dart';
+import 'package:card_app/controllers/question_controller.dart';
 import 'package:card_app/controllers/role_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,17 +11,21 @@ import 'package:get/get.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
-  RoleController roleController = Get.find();
+  RoleController roleController = Get.put(RoleController());
 
   ProfileController profileController = Get.put(ProfileController());
+  QuestionController questionController = Get.put(QuestionController());
   var personData = Get.arguments;
+  var userItself = true;
 
   @override
   Widget build(BuildContext context) {
+    userItself = personData == null ? true : false;
+
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          leading: personData == null
+          leading: userItself
               ? Container()
               : IconButton(
                   icon: Icon(Icons.arrow_back),
@@ -29,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
                   },
                 ),
           actions: [
-            personData != null
+            !userItself
                 ? Container()
                 : IconButton(
                     icon: Icon(Icons.logout),
@@ -84,7 +89,8 @@ class ProfileScreen extends StatelessWidget {
                         height: 50,
                         child: InkWell(
                           onTap: () {
-                            if (personData == null) {
+                            if (userItself) {
+                              roleController.updateReturnRoute('/home-screen');
                               Get.toNamed('/select-role-screen');
                             }
                           },
@@ -107,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               child: profileController.picture.value == ''
                                   ? Image.asset(
-                                      'assets/images/profile.png',
+                                      'assets/images/logo.png',
                                       fit: BoxFit.cover,
                                     )
                                   : Image.network(
@@ -142,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
                           height: 50,
                           padding: const EdgeInsets.all(7),
                           child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+                            profileController.description.value,
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.white,
@@ -165,28 +171,50 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'About ${profileController.name.value}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'About ${profileController.name.value}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        !userItself
+                            ? Container()
+                            : IconButton(
+                                onPressed: () {
+                                  questionController.setControllerValues(
+                                    profileController.answer1.value,
+                                    profileController.answer2.value,
+                                    profileController.answer3.value,
+                                  );
+
+                                  questionController
+                                      .updateReturnRoute('/home-screen');
+                                  Get.toNamed('/question-screen');
+                                },
+                                icon: Icon(Icons.edit),
+                              ),
+                      ],
                     ),
                     Divider(
                       color: Colors.grey[700],
                       height: 5,
                       thickness: 2,
                       endIndent: 20,
-                      // indent: 20,
                     ),
                     SizedBox(height: 10),
-                    Text('What are your Ambisions in Poker ?',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    FittedBox(
+                      child: Text(questionController.questionList[0],
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
                     SizedBox(height: 10),
                     Text(profileController.answer1.value,
                         style: TextStyle(height: 1.5)),
                     SizedBox(height: 10),
-                    Text('What Kind Of Player you want ?',
+                    Text(questionController.questionList[1],
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
                     Text(
@@ -194,7 +222,7 @@ class ProfileScreen extends StatelessWidget {
                       style: TextStyle(height: 1.5),
                     ),
                     SizedBox(height: 10),
-                    Text('What Kind Of Player you want ?',
+                    Text(questionController.questionList[2],
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
                     Text(
@@ -212,12 +240,14 @@ class ProfileScreen extends StatelessWidget {
                               color: Color.fromARGB(255, 8, 145, 38),
                             ),
                             child: Row(
-                              // crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                _rowItem('Level ', '4'),
-                                _rowItem('Plays In', 'Cash Game'),
-                                _rowItem('Cash', '\$100'),
+                                _rowItem(
+                                    'Plays In ', profileController.game.value),
+                                _rowItem(
+                                    'Level ', profileController.level.value),
+                                _rowItem('Cash',
+                                    '\$${profileController.cash.value}'),
                               ],
                             )),
                       ),
@@ -228,7 +258,7 @@ class ProfileScreen extends StatelessWidget {
             )
           ],
         ),
-        floatingActionButton: personData == null
+        floatingActionButton: userItself
             ? Container()
             : FloatingActionButton(
                 onPressed: () {

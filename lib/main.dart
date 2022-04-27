@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'screens/comunity_screen.dart';
+import 'screens/get_userdata_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/image_upload_screen.dart';
 import 'screens/login_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       // home: SelectRoleScreen(),
       getPages: [
         GetPage(name: '/', page: () => LoginScreen()),
+        GetPage(name: '/userdata-screen', page: () => UserDataScreen()),
         GetPage(name: '/select-role-screen', page: () => SelectRoleScreen()),
         GetPage(name: '/profile-screen', page: () => ProfileScreen()),
         GetPage(name: '/question-screen', page: () => QuestionScreen()),

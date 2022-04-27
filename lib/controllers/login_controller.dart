@@ -100,22 +100,31 @@ class LoginController extends GetxController {
   void saveUserToDb() async {
     String uId = FirebaseAuth.instance.currentUser!.uid;
     await usersReference.doc(uId).set({
-      'userName': 'Elon Musk',
+      // ignore: must_call_super
+      'userName': '',
+      'description': '',
       'uId': uId,
       'phone': phoneNumber.value,
       'image': '',
       'country': selectedCountry.value.flagEmoji,
       'role': '',
+      'details': {
+        'game': '',
+        'level': '',
+        'cash': '',
+      },
       'question': {
         'answer1': '',
         'answer2': '',
         'answer3': '',
       },
     }).then(
-      (value) => Get.toNamed('/select-role-screen'),
+      (value) => Get.toNamed('/userdata-screen'),
     );
   }
 
+  @override
+  // ignore: must_call_super
   void dispose() {
     phoneNumberController.dispose();
     codeController.dispose();

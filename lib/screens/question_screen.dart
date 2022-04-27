@@ -30,54 +30,27 @@ class QuestionScreen extends StatelessWidget {
               child: Column(
                 children: [
                   _buildQuestion(0),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 3) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
-                    controller: questionController.q1Controller,
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: questionController.questionList[0],
-                      border: OutlineInputBorder(),
-                    ),
+                  myTextFormFiled(
+                    text: questionController.questionList[0],
+                    controller: questionController.q0Controller,
+                    validator: questionController.q0validate,
                   ),
                   _buildQuestion(1),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 3) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
-                    controller: questionController.q2Controller,
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: OutlineInputBorder(),
-                      labelText: questionController.questionList[1],
-                    ),
+                  myTextFormFiled(
+                    text: questionController.questionList[1],
+                    controller: questionController.q1Controller,
+                    validator: questionController.q1validate,
                   ),
                   _buildQuestion(2),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 3) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
-                    controller: questionController.q3Controller,
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: OutlineInputBorder(),
-                      labelText: questionController.questionList[2],
-                    ),
+                  myTextFormFiled(
+                    text: questionController.questionList[2],
+                    controller: questionController.q2Controller,
+                    validator: questionController.q2validate,
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            // SizedBox(height: 16),
             ElevatedButton(
               child: Text('Submit'),
               onPressed: () => questionController.submitAnswers(),
@@ -89,13 +62,28 @@ class QuestionScreen extends StatelessWidget {
   }
 }
 
+Widget myTextFormFiled({
+  required String text,
+  TextEditingController? controller,
+  String? Function(String?)? validator,
+}) {
+  return TextFormField(
+    validator: validator,
+    controller: controller,
+    decoration: InputDecoration(
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      labelText: text,
+      border: OutlineInputBorder(),
+    ),
+  );
+}
+
 Widget _buildQuestion(int index) {
   QuestionController questionController = Get.find();
   return Column(
     children: [
       SizedBox(height: 16),
       Row(
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
           Text(
             'Q${index + 1} : ',
@@ -104,8 +92,13 @@ Widget _buildQuestion(int index) {
               fontSize: 20,
             ),
           ),
-          Text(questionController.questionList[index],
-              style: TextStyle(fontSize: 20)),
+          SizedBox(
+            width: Get.width * 0.8,
+            child: FittedBox(
+              child: Text(questionController.questionList[index],
+                  style: TextStyle(fontSize: 20)),
+            ),
+          ),
         ],
       ),
       SizedBox(height: 10),

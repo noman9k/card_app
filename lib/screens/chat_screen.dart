@@ -13,6 +13,7 @@ class ChatScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         title: const Text('Chats'),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert),

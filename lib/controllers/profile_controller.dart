@@ -1,16 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
-  // final profileFormKey = GlobalKey<FormState>();
-  // final nameController = TextEditingController();
-  // final ageController = TextEditingController();
-  // final colorController = TextEditingController();
-  // final phoneNumberController = TextEditingController();
-  // final codeController = TextEditingController();
   var uId = FirebaseAuth.instance.currentUser!.uid;
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
@@ -22,19 +14,29 @@ class ProfileController extends GetxController {
   var answer3 = ''.obs;
   var role = ''.obs;
   var picture = ''.obs;
+  var game = ''.obs;
+  var level = ''.obs;
+  var cash = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    getProfileData();
+    getProfileData(null);
   }
 
-  void getProfileData() {
-    usersReference.doc(uId).get().then((DocumentSnapshot documentSnapshot) {
+  Future<void> getProfileData(String? uId) async {
+    await usersReference
+        .doc(uId ?? this.uId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
       name.value = documentSnapshot['userName'];
       role.value = documentSnapshot['role'];
       flag.value = documentSnapshot['country'];
       picture.value = documentSnapshot['image'];
+      description.value = documentSnapshot['description'];
+      game.value = documentSnapshot['details.game'];
+      level.value = documentSnapshot['details.level'];
+      cash.value = documentSnapshot['details.cash'];
 
       answer1.value = documentSnapshot['question.answer1'];
       answer2.value = documentSnapshot['question.answer2'];
