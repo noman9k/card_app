@@ -70,7 +70,7 @@ class RoleController extends GetxController {
         'role': role,
       });
 
-      profileController.getProfileData(null);
+      profileController.getProfileData();
       print(nextScreenRoute);
       Get.offNamed(nextScreenRoute);
 

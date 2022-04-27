@@ -116,7 +116,7 @@ class ComunityScreen extends StatelessWidget {
   Widget _myListTile(QueryDocumentSnapshot<Object?> doc) {
     return InkWell(
       onTap: () {
-        profileController.getProfileData(doc['uId']!);
+        profileController.setProfileData(doc);
         Get.toNamed('/profile-screen', arguments: doc);
       },
       child: Card(

@@ -38,9 +38,9 @@ class SelectRoleScreen extends StatelessWidget {
               )),
           // selec role
           Expanded(
-            flex: 5,
+            flex: 7,
             child: Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(15),
               child: GridView.builder(
                 itemCount: roleController.rolesList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -66,7 +66,7 @@ class SelectRoleScreen extends StatelessWidget {
           ),
           // desctiption
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Obx(
               () => Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -129,7 +129,7 @@ Widget _gridItem(
     decoration: userSelectedRole && isSelected
         ? BoxDecoration(
             border: Border.all(width: 3, color: Colors.brown),
-            borderRadius: BorderRadius.circular(80),
+            borderRadius: BorderRadius.circular(50),
           )
         : null,
     child: Center(

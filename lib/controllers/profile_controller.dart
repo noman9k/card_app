@@ -21,12 +21,12 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getProfileData(null);
+    getProfileData();
   }
 
-  Future<void> getProfileData(String? uId) async {
+  Future<void> getProfileData() async {
     await usersReference
-        .doc(uId ?? this.uId)
+        .doc(uId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       name.value = documentSnapshot['userName'];
@@ -37,10 +37,23 @@ class ProfileController extends GetxController {
       game.value = documentSnapshot['details.game'];
       level.value = documentSnapshot['details.level'];
       cash.value = documentSnapshot['details.cash'];
-
       answer1.value = documentSnapshot['question.answer1'];
       answer2.value = documentSnapshot['question.answer2'];
       answer3.value = documentSnapshot['question.answer3'];
     });
+  }
+
+  void setProfileData(QueryDocumentSnapshot<Object?> doc) {
+    name.value = doc['userName'];
+    role.value = doc['role'];
+    flag.value = doc['country'];
+    picture.value = doc['image'];
+    description.value = doc['description'];
+    game.value = doc['details.game'];
+    level.value = doc['details.level'];
+    cash.value = doc['details.cash'];
+    answer1.value = doc['question.answer1'];
+    answer2.value = doc['question.answer2'];
+    answer3.value = doc['question.answer3'];
   }
 }

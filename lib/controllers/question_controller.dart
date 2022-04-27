@@ -46,7 +46,7 @@ class QuestionController extends GetxController {
       'question.answer1': answer0,
       'question.answer2': answer1,
       'question.answer3': answer2
-    }).then((value) => profileController.getProfileData(null));
+    }).then((value) => profileController.getProfileData());
   }
 
   void setControllerValues(String answer1, String answer2, String answer3) {
