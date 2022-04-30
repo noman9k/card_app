@@ -160,7 +160,7 @@ class ComunityScreen extends StatelessWidget {
                     height: 37,
                     width: Get.width * 0.6,
                     child: Text(
-                      'lorem ipsum dolor sit amet  lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                      doc['description'],
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -174,12 +174,21 @@ class ComunityScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  Icon(Icons.circle, color: Colors.blue, size: 20),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: SvgPicture.asset(
+                      'assets/images/like.svg',
+                      color: profileController.likes.value > 0
+                          ? Color.fromARGB(255, 2, 63, 124)
+                          : Colors.black,
+                    ),
+                  ),
                   SizedBox(
                     width: 5,
                   ),
                   Text(
-                    '1.2k',
+                    doc["likes"].length.toString(),
                     style: TextStyle(
                       fontSize: 15,
                     ),
