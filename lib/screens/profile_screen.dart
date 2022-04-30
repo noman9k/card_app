@@ -82,6 +82,41 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     Positioned(
+                      top: 10,
+                      right: 5,
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                profileController.setLikes(personData['uId']);
+                              },
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: SvgPicture.asset(
+                                  'assets/images/like.svg',
+                                  color: profileController.likes.value > 0
+                                      ? Color.fromARGB(255, 2, 63, 124)
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              profileController.likes.value.toString(),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
                       bottom: 30,
                       right: 10,
                       child: SizedBox(
@@ -137,24 +172,29 @@ class ProfileScreen extends StatelessWidget {
                       bottom: -20,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(30),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                                color: Colors.grey[500],
+                              ),
+                              width: Get.width - 20,
+                              height: 50,
+                              padding: const EdgeInsets.all(7),
+                              child: Text(
+                                profileController.description.value,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
                             ),
-                            color: Colors.grey[500],
-                          ),
-                          width: Get.width - 20,
-                          height: 50,
-                          padding: const EdgeInsets.all(7),
-                          child: Text(
-                            profileController.description.value,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              overflow: TextOverflow.visible,
-                            ),
-                          ),
+                          ],
                         ),
                       ),
                     )

@@ -6,6 +6,8 @@ class ProfileController extends GetxController {
   var uId = FirebaseAuth.instance.currentUser!.uid;
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
+  // CollectionReference usersReference =
+  //     FirebaseFirestore.instance.collection('likes');
   var name = ''.obs;
   var flag = ''.obs;
   var description = ''.obs;
@@ -17,11 +19,15 @@ class ProfileController extends GetxController {
   var game = ''.obs;
   var level = ''.obs;
   var cash = ''.obs;
+  var likersList = [].obs;
+
+  var likes = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     getProfileData();
+    getLikes(null);
   }
 
   Future<void> getProfileData() async {
@@ -40,6 +46,7 @@ class ProfileController extends GetxController {
       answer1.value = documentSnapshot['question.answer1'];
       answer2.value = documentSnapshot['question.answer2'];
       answer3.value = documentSnapshot['question.answer3'];
+      likes.value = documentSnapshot['likes'].length;
     });
   }
 
@@ -55,5 +62,45 @@ class ProfileController extends GetxController {
     answer1.value = doc['question.answer1'];
     answer2.value = doc['question.answer2'];
     answer3.value = doc['question.answer3'];
+    likes.value = doc['likes'].length;
+  }
+
+  Future<int> getLikes(uId) async {
+    try {
+      await usersReference.doc(uId ?? this.uId).get().then((value) => {
+            likes.value = value['likes'].length,
+          });
+      return likes.value;
+    } catch (e) {
+      setLikes(null);
+      return 0;
+    }
+  }
+
+  Future<void> setLikes(String? uId) async {
+    try {
+      await usersReference
+          .doc(uId ?? this.uId)
+          .get()
+          .then((DocumentSnapshot<Object?> documentSnapshot) async {
+        if (documentSnapshot['likes'] != null) {
+          likersList.value = documentSnapshot['likes']
+              .map<String>((value) => value.toString())
+              .toList();
+          likersList.contains(uId)
+              ? null
+              : usersReference.doc(uId ?? this.uId).update({
+                  'likes': FieldValue.arrayUnion([uId])
+                });
+          getLikes(uId);
+        }
+      });
+    } catch (e) {
+      getLikes(uId);
+
+      await usersReference.doc(uId ?? this.uId).update({
+        'likes': [uId],
+      });
+    }
   }
 }

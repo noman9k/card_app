@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (controller) {
         profileController.getProfileData();
-        print('rebuild Happened');
+        // profileController.getLikes(null);
         return Scaffold(
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.tabIndex,
