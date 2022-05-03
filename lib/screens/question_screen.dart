@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:card_app/constant/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +17,7 @@ class QuestionScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: Colors.white,
         title: Text('Question'),
       ),
       body: Padding(
@@ -52,7 +54,16 @@ class QuestionScreen extends StatelessWidget {
             ),
             // SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Submit'),
+              style: ElevatedButton.styleFrom(
+                primary: MyColors.backgroundColor,
+                onSurface: Color.fromARGB(0, 219, 49, 49),
+                shadowColor: Color.fromARGB(0, 92, 5, 5),
+                fixedSize: Size(150, 50),
+              ),
+              child: Text(
+                'Submit',
+                style: TextStyle(color: MyColors.newTextColor),
+              ),
               onPressed: () => questionController.submitAnswers(),
             ),
           ],
@@ -73,7 +84,16 @@ Widget myTextFormFiled({
     decoration: InputDecoration(
       floatingLabelBehavior: FloatingLabelBehavior.never,
       labelText: text,
-      border: OutlineInputBorder(),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: MyColors.backgroundColor,
+        ),
+      ),
+      border: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.black,
+        ),
+      ),
     ),
   );
 }

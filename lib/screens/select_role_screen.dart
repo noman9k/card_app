@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../constant/colors.dart';
 import '../modals/role_model.dart';
 
 class SelectRoleScreen extends StatelessWidget {
@@ -31,7 +32,7 @@ class SelectRoleScreen extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.brown),
+                          color: MyColors.backgroundColor),
                     ),
                   ),
                 ),
@@ -105,8 +106,17 @@ class SelectRoleScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: MyColors.backgroundColor,
+                            onSurface: Color.fromARGB(0, 219, 49, 49),
+                            shadowColor: Color.fromARGB(0, 92, 5, 5),
+                            fixedSize: Size(250, 50),
+                          ),
                           onPressed: () => roleController.saveToDB(),
-                          child: Text('Continue With The Selection'),
+                          child: Text(
+                            'Continue With The Selection',
+                            style: TextStyle(color: MyColors.newTextColor),
+                          ),
                         ),
                       ],
                     ),
@@ -128,7 +138,7 @@ Widget _gridItem(
   return Container(
     decoration: userSelectedRole && isSelected
         ? BoxDecoration(
-            border: Border.all(width: 3, color: Colors.brown),
+            border: Border.all(width: 3, color: MyColors.backgroundColor),
             borderRadius: BorderRadius.circular(50),
           )
         : null,

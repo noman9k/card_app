@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
+import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/controllers/question_controller.dart';
 import 'package:card_app/controllers/role_controller.dart';
@@ -277,7 +278,7 @@ class ProfileScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50)),
-                              color: Color.fromARGB(255, 8, 145, 38),
+                              color: MyColors.backgroundColor.withOpacity(0.7),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -318,7 +319,11 @@ class ProfileScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(title),
+        Text(title,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: MyColors.newTextColor)),
         Container(
           height: 50,
           width: 50,

@@ -129,4 +129,12 @@ class LoginController extends GetxController {
     phoneNumberController.dispose();
     codeController.dispose();
   }
+
+  String returnNewRoute() {
+    if (auth.currentUser != null) {
+      return '/userdata-screen';
+    } else {
+      return '/login-screen';
+    }
+  }
 }

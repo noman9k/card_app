@@ -40,7 +40,8 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Phone Number',
-                          style: TextStyle(color: Colors.brown, fontSize: 16),
+                          style: TextStyle(
+                              color: MyColors.newTextColor, fontSize: 16),
                         ),
                         SizedBox(height: 5),
                         Form(
@@ -59,15 +60,22 @@ class LoginScreen extends StatelessWidget {
                             },
                             keyboardType: TextInputType.phone,
                             style: TextStyle(
-                              color: Colors.brown,
+                              color: MyColors.newTextColor,
                             ),
                             decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: MyColors.newTextColor,
+                                ),
+                              ),
                               labelText: 'Phone Number',
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
-                              labelStyle: TextStyle(color: Colors.brown),
+                              labelStyle:
+                                  TextStyle(color: MyColors.newTextColor),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.brown),
+                                borderSide:
+                                    BorderSide(color: MyColors.newTextColor),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               border: OutlineInputBorder(
@@ -84,17 +92,17 @@ class LoginScreen extends StatelessWidget {
                                       showPhoneCode: true,
                                       countryListTheme: CountryListThemeData(
                                         inputDecoration: InputDecoration(
-                                          focusColor: Colors.black,
+                                          focusColor: MyColors.newTextColor,
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.black),
+                                            borderSide: BorderSide(
+                                                color: MyColors.newTextColor),
                                           ),
                                           hintText: 'Search in french',
-                                          labelStyle:
-                                              TextStyle(color: Colors.black),
+                                          labelStyle: TextStyle(
+                                              color: MyColors.newTextColor),
                                           labelText: 'Search in french',
                                           hintStyle: TextStyle(
-                                            color: Colors.black,
+                                            color: MyColors.newTextColor,
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:
@@ -102,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                                           ),
                                         ),
                                         backgroundColor:
-                                            Color.fromARGB(255, 104, 87, 82),
+                                            Color.fromARGB(255, 163, 157, 157),
                                       ),
                                       onSelect: (Country selectedCountry) {
                                         loginController.selectedCountry.value =
@@ -121,7 +129,7 @@ class LoginScreen extends StatelessWidget {
                                             ? '+ CC'
                                             : '+ ${loginController.selectedCountry.value.phoneCode}',
                                         style: TextStyle(
-                                          color: Colors.brown,
+                                          color: MyColors.newTextColor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -137,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                             ? Text(
                                 'Code you received',
                                 style: TextStyle(
-                                    color: Colors.brown, fontSize: 16),
+                                    color: MyColors.newTextColor, fontSize: 16),
                               )
                             : SizedBox(),
                         SizedBox(height: 5),
@@ -145,16 +153,18 @@ class LoginScreen extends StatelessWidget {
                             ? TextFormField(
                                 controller: loginController.codeController,
                                 style: TextStyle(
-                                  color: Colors.brown,
+                                  color: MyColors.newTextColor,
                                 ),
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   labelText: 'Code',
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.never,
-                                  labelStyle: TextStyle(color: Colors.brown),
+                                  labelStyle:
+                                      TextStyle(color: MyColors.newTextColor),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.brown),
+                                    borderSide: BorderSide(
+                                        color: MyColors.newTextColor),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   border: OutlineInputBorder(
@@ -179,13 +189,14 @@ class LoginScreen extends StatelessWidget {
                             )
                           : loginController.isLoading.value
                               ? CircularProgressIndicator(
-                                  color: Colors.brown,
+                                  color: MyColors.newTextColor,
                                 )
                               : Text(
                                   'Send Code',
                                   style: const TextStyle(
                                       fontSize: 18,
-                                      color: Color.fromARGB(255, 59, 42, 35)),
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255)),
                                 ),
                       onButtonPressed: () {
                         loginController.codeSended.value
@@ -197,7 +208,7 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () => loginController.sendCode(),
                       child: Text(
                         'Resend Code ?',
-                        style: TextStyle(color: Colors.brown),
+                        style: TextStyle(color: MyColors.newTextColor),
                       ),
                     ),
                     SizedBox(height: Get.height * 0.01),

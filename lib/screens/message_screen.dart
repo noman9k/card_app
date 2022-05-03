@@ -13,7 +13,7 @@ class MessageScreen extends StatelessWidget {
         title: const Text('Message'),
       ),
       body: Center(
-        child: Text(userData['role']),
+        child: Text('uId ${userData['uId']}'),
       ),
     );
   }

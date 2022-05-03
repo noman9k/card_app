@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constant/colors.dart';
+
 class MyElevatedButton extends StatelessWidget {
   const MyElevatedButton(
       {Key? key, required this.child, required this.onButtonPressed})
@@ -17,8 +19,8 @@ class MyElevatedButton extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromARGB(255, 114, 74, 55),
-                Color.fromARGB(255, 201, 116, 47)
+                Color.fromARGB(255, 190, 186, 186),
+                Color.fromARGB(255, 52, 55, 61)
 
                 //add more colors
               ],
@@ -27,7 +29,7 @@ class MyElevatedButton extends StatelessWidget {
             boxShadow: const <BoxShadow>[
               BoxShadow(
                   offset: Offset(2, 5),
-                  color: Color.fromARGB(255, 133, 96, 42), //shadow for button
+                  color: Color.fromARGB(255, 141, 136, 136), //shadow for button
                   blurRadius: 5) //blur radius of shadow
             ]),
         child: ElevatedButton(

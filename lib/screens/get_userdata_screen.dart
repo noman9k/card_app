@@ -29,7 +29,7 @@ class UserDataScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: MyColors.textColor,
+                    color: MyColors.newTextColor,
                   ),
                 ),
                 SizedBox(height: height * 0.05),
@@ -73,7 +73,11 @@ class UserDataScreen extends StatelessWidget {
                 ),
                 SizedBox(height: height * 0.05),
                 MyElevatedButton(
-                  child: const Text('Submit'),
+                  child: const Text('Submit',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: MyColors.newTextColor,
+                      )),
                   onButtonPressed: () {
                     if (userDataController.isValid()) {
                       userDataController.upload();
@@ -104,16 +108,26 @@ Widget myTextFormFiled({
     keyboardType: inputType,
     style: const TextStyle(
       fontSize: 18,
-      color: MyColors.textColor,
+      color: MyColors.newTextColor,
     ),
     decoration: InputDecoration(
       labelText: text,
       labelStyle: TextStyle(
-        color: MyColors.textColor.withOpacity(0.7),
+        color: MyColors.newTextColor.withOpacity(0.7),
       ),
-      border: const OutlineInputBorder(),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: MyColors.newTextColor,
+        ),
+      ),
+      border: const OutlineInputBorder(
+        borderSide: BorderSide(color: MyColors.newTextColor),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
       enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: MyColors.textColor),
+        borderSide: BorderSide(color: MyColors.newTextColor),
       ),
     ),
   );

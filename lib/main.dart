@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:card_app/constant/colors.dart';
 import 'package:card_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Card App',
       theme: ThemeData(
-        primarySwatch: Colors.brown,
+        primarySwatch: MyColors.backgrnd,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(),

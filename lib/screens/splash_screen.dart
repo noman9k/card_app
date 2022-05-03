@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:card_app/constant/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown,
+      backgroundColor: MyColors.backgroundColor,
       body: Center(
         child: SizedBox(
             height: 200,
