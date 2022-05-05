@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, prefer_function_declarations_over_variables
 
+import 'package:card_app/constant/colors.dart';
 import 'package:card_app/modals/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
@@ -80,7 +81,12 @@ class LoginController extends GetxController {
       verificationId: _verificationId,
       smsCode: codeController.text,
     );
-    await auth.signInWithCredential(credential).then((value) => saveUserToDb());
+    await auth
+        .signInWithCredential(credential)
+        .then((value) => saveUserToDb())
+        .onError((error, stackTrace) => Get.snackbar('Error', error.toString(),
+            backgroundColor: MyColors.newTextColor,
+            snackPosition: SnackPosition.TOP));
 
     print('signin');
     if (auth.currentUser == null) {
@@ -98,29 +104,42 @@ class LoginController extends GetxController {
   }
 
   void saveUserToDb() async {
-    String uId = FirebaseAuth.instance.currentUser!.uid;
-    await usersReference.doc(uId).set({
-      // ignore: must_call_super
-      'userName': '',
-      'description': '',
-      'uId': uId,
-      'phone': phoneNumber.value,
-      'image': '',
-      'country': selectedCountry.value.flagEmoji,
-      'role': '',
-      'details': {
-        'game': '',
-        'level': '',
-        'cash': '',
-      },
-      'question': {
-        'answer1': '',
-        'answer2': '',
-        'answer3': '',
-      },
-    }).then(
-      (value) => Get.toNamed('/userdata-screen'),
-    );
+    try {
+      String uId = FirebaseAuth.instance.currentUser!.uid;
+      await usersReference
+          .doc(uId)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          Get.toNamed('/home-screen');
+        }
+        throw Exception('User not found');
+      });
+    } catch (e) {
+      String uId = FirebaseAuth.instance.currentUser!.uid;
+
+      await usersReference.doc(uId).set({
+        'userName': '0',
+        'description': '',
+        'uId': uId,
+        'phone': phoneNumber.value,
+        'image': '',
+        'country': selectedCountry.value.flagEmoji,
+        'role': '0',
+        'details': {
+          'game': '',
+          'level': '',
+          'cash': '',
+        },
+        'question': {
+          'answer1': '',
+          'answer2': '',
+          'answer3': '0',
+        },
+      }).then(
+        (value) => Get.toNamed('/userdata-screen'),
+      );
+    }
   }
 
   @override
@@ -128,13 +147,5 @@ class LoginController extends GetxController {
   void dispose() {
     phoneNumberController.dispose();
     codeController.dispose();
-  }
-
-  String returnNewRoute() {
-    if (auth.currentUser != null) {
-      return '/userdata-screen';
-    } else {
-      return '/login-screen';
-    }
   }
 }
