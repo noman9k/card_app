@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:camera/camera.dart';
 import 'package:card_app/constant/colors.dart';
 import 'package:card_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,10 +17,12 @@ import 'screens/message_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/question_screen.dart';
 
+List<CameraDescription> cameras = [];
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  cameras = await availableCameras();
   runApp(const MyApp());
 }
 
