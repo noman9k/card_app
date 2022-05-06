@@ -6,8 +6,7 @@ class ProfileController extends GetxController {
   var uId = FirebaseAuth.instance.currentUser!.uid;
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
-  // CollectionReference usersReference =
-  //     FirebaseFirestore.instance.collection('likes');
+
   var name = ''.obs;
   var flag = ''.obs;
   var description = ''.obs;
@@ -20,6 +19,7 @@ class ProfileController extends GetxController {
   var level = ''.obs;
   var cash = ''.obs;
   var likersList = [].obs;
+  var blueColor = false.obs;
 
   var likes = 0.obs;
 
@@ -87,11 +87,20 @@ class ProfileController extends GetxController {
           likersList.value = documentSnapshot['likes']
               .map<String>((value) => value.toString())
               .toList();
-          likersList.contains(uId)
-              ? null
-              : usersReference.doc(uId ?? this.uId).update({
-                  'likes': FieldValue.arrayUnion([uId])
-                });
+
+          if (likersList.contains(uId)) {
+            // blueColor.value = false;
+            usersReference.doc(uId ?? this.uId).update({
+              'likes': FieldValue.arrayRemove([uId])
+            });
+          } else {
+            // blueColor.value = true;
+
+            usersReference.doc(uId ?? this.uId).update({
+              'likes': FieldValue.arrayUnion([uId])
+            });
+          }
+
           getLikes(uId);
         }
       });

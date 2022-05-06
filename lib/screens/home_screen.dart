@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
             onTap: controller.changeTabIndex,
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.verified_user_sharp),
+                icon: Icon(Icons.people_alt_outlined),
                 label: 'Comunity',
               ),
               BottomNavigationBarItem(

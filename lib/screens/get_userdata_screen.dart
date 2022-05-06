@@ -20,51 +20,66 @@ class UserDataScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: MyColors.backgroundColor,
         body: Padding(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                  'Fill the Information',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: MyColors.newTextColor,
-                  ),
+                Column(
+                  children: [
+                    const Text(
+                      'AVANT DE COMMENCER',
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.newTextColor,
+                      ),
+                    ),
+                    SizedBox(height: height * 0.03),
+                    const Text(
+                      'Répondez aux questions en étant vous-même, C\'est comme ça que vous ferez vos plus belles rencontres.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.newTextColor,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: height * 0.05),
+                SizedBox(height: height * 0.03),
                 Form(
                   key: userDataController.userDataFormKey,
                   child: Column(
                     children: [
                       myTextFormFiled(
-                        text: 'Name',
+                        text: 'Nom',
                         controller: userDataController.name,
                         validator: userDataController.nameValidation(),
                       ),
                       SizedBox(height: height * 0.04),
                       myTextFormFiled(
-                        text: 'Dedscription',
+                        text: 'Que recherchez-vous sur cette plateforme ?',
                         controller: userDataController.description,
                         validator: userDataController.descriptionValidation(),
                         maxlines: 3,
                       ),
                       SizedBox(height: height * 0.04),
                       myTextFormFiled(
-                        text: 'Game You Paly',
+                        text: 'Votre niveau de jeu en un mot ',
                         controller: userDataController.game,
                         validator: userDataController.gameValidation(),
                       ),
                       SizedBox(height: height * 0.04),
                       myTextFormFiled(
-                        text: 'Level you are on',
+                        text: 'Cash Game ou Tournois ',
                         controller: userDataController.level,
                         validator: userDataController.levelValidation(),
                         inputType: TextInputType.number,
                       ),
                       SizedBox(height: height * 0.05),
                       myTextFormFiled(
-                          text: 'Cash you have',
+                          text: ' Live ou Online',
                           controller: userDataController.cash,
                           validator: userDataController.cashValidation(),
                           inputType: TextInputType.number),
@@ -73,7 +88,7 @@ class UserDataScreen extends StatelessWidget {
                 ),
                 SizedBox(height: height * 0.05),
                 MyElevatedButton(
-                  child: const Text('Submit',
+                  child: const Text('Suivant',
                       style: TextStyle(
                         fontSize: 20,
                         color: MyColors.newTextColor,

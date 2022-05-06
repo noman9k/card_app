@@ -4,8 +4,9 @@ class MyColors {
   // Color primaryColor = Color.fromRGBO(255, 193, 7, 1);
   static const Color backgroundColor = Color.fromARGB(255, 18, 21, 27);
 
-  static const Color textColor = Colors.brown;
+  static const Color textColor = Colors.black;
   static const Color newTextColor = Colors.white;
+
   static const MaterialColor backgrnd = MaterialColor(
     0xFF302B2B,
     <int, Color>{

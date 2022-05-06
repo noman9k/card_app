@@ -100,14 +100,14 @@ class ProfileScreen extends StatelessWidget {
                                 height: 30,
                                 child: SvgPicture.asset(
                                   'assets/images/like.svg',
-                                  color: profileController.likes.value > 0
+                                  color: profileController.likes.value - 1 > 0
                                       ? Color.fromARGB(255, 2, 63, 124)
-                                      : Colors.black,
+                                      : Color.fromARGB(169, 92, 81, 81),
                                 ),
                               ),
                             ),
                             Text(
-                              profileController.likes.value.toString(),
+                              (profileController.likes.value - 1).toString(),
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.black,
