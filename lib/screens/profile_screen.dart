@@ -305,7 +305,11 @@ class ProfileScreen extends StatelessWidget {
                 onPressed: () {
                   Get.toNamed(
                     '/message-screen',
-                    arguments: personData,
+                    arguments: [
+                      personData['uId'],
+                      personData['userName'],
+                      personData['image'],
+                    ],
                   );
                 },
                 child: Icon(Icons.message),
