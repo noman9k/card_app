@@ -7,21 +7,21 @@ class ComunityController extends GetxController
     with GetSingleTickerProviderStateMixin {
   late TabController tabController;
 
-  static String heartTitle = 'l\'amour du jeu';
-  static String clubTitle = 'des soirées poker';
-  static String diamondTitle = 'le business';
-  static String spadesTitle = 'une coloc poker';
+  static String heartTitle = 'Pour l\'amour\ndu jeu ';
+  static String spadesTitle = 'Pour une\ncoloc poker';
+  static String diamondTitle = 'Pour le\nbusiness';
+  static String clubTitle = 'Pour faire\ndes soirées poker';
 
   List<Map<String, String>> mytabs = [
-    {'title': clubTitle, 'icon': 'assets/icons/club.svg'},
     {'title': heartTitle, 'icon': 'assets/icons/heart.svg'},
-    {'title': diamondTitle, 'icon': 'assets/icons/diamond.svg'},
     {'title': spadesTitle, 'icon': 'assets/icons/spades.svg'},
+    {'title': diamondTitle, 'icon': 'assets/icons/diamond.svg'},
+    {'title': clubTitle, 'icon': 'assets/icons/club.svg'},
   ];
 
   List<Map<String, Color>> myIconColor = [
-    {clubTitle: Colors.red},
-    {heartTitle: Colors.black},
+    {heartTitle: Colors.red},
+    {clubTitle: Colors.black},
     {diamondTitle: Colors.red},
     {spadesTitle: Colors.black},
   ];

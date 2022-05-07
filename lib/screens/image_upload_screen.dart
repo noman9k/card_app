@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../constant/colors.dart';
+
 class ImageUploadScreen extends StatefulWidget {
   ImageUploadScreen({Key? key}) : super(key: key);
 
@@ -19,86 +21,84 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          // body: Column(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   mainAxisSize: MainAxisSize.max,
-          //
-          //   // ignore: prefer_const_literals_to_create_immutables
-          //   children: [
-          //     Row(
-          //       mainAxisSize: MainAxisSize.max,
-          //     ),
-          //     Text('Image Upload Screen'),
-          //     ElevatedButton(
-          //       onPressed: () {
-          //         //Get.toNamed('/home-screen');
-          //       },
-          //       child: Text('Go to Home'),
-          //     ),
-          //   ],
-          // ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(() {
-              return controller.selectedImagePath.value != ''
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: double.infinity,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[
-                          Image.file(File(controller.selectedImagePath.value)),
-                          //if (widget.customPaint != null) widget.customPaint!,
-                        ],
-                      ),
-                    )
-                  : Icon(
-                      Icons.image,
-                      size: 200,
-                    );
-            }),
-            SizedBox(height: 10,),
-            Container(
-              height: 40,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: ElevatedButton(
-                child: Text(
-                  'From Gallery',
-                  style: TextStyle(fontSize: 20),
+        body: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Sélectionner une photo de profil avec votre visage dessus',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: MyColors.textColor,
                 ),
-                onPressed: () {
-                  controller.getImage(ImageSource.gallery);
-                },
               ),
-            ),
-            SizedBox(height: 10,),
-            Obx(() {
-              return controller.faces.length > 0
-                  ? Container(
-                      height: 40,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16),
-                      child: ElevatedButton(
-                        child: controller.isLoading.value
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
+              Obx(() {
+                return controller.selectedImagePath.value != ''
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        width: double.infinity,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            Image.file(
+                                File(controller.selectedImagePath.value)),
+                            //if (widget.customPaint != null) widget.customPaint!,
+                          ],
+                        ),
+                      )
+                    : const Icon(
+                        Icons.image,
+                        size: 200,
+                      );
+              }),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 40,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ElevatedButton(
+                  child: const Text(
+                    'IMPORTER',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    controller.getImage(ImageSource.gallery);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Obx(() {
+                return controller.faces.length > 0
+                    ? Container(
+                        height: 40,
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: ElevatedButton(
+                          child: controller.isLoading.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(
+                                  'Upload Image',
+                                  style: TextStyle(fontSize: 20),
                                 ),
-                              )
-                            : Text(
-                                'Upload Image',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                        onPressed: () {
-                          controller.loadPic();
-                        },
-                      ),
-                    )
-                  : Container();
-            }),
-          ],
+                          onPressed: () {
+                            controller.loadPic();
+                          },
+                        ),
+                      )
+                    : Container();
+              }),
+            ],
+          ),
         ),
       ),
     );

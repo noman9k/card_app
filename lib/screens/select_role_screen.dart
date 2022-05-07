@@ -28,9 +28,10 @@ class SelectRoleScreen extends StatelessWidget {
                   width: Get.width,
                   child: Center(
                     child: Text(
-                      'Choisissez le signe qui vous\ncorrespond le plus! ',
+                      'Choisissez le signe qui correspond \nle plus à vos attentes !',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: MyColors.backgroundColor),
                     ),
@@ -79,9 +80,24 @@ class SelectRoleScreen extends StatelessWidget {
                     Text(
                       roleController
                           .rolesList[roleController.selectedRoleIndex.value]
-                          .name,
+                          .name
+                          .split('*')
+                          .first,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    Text(
+                      roleController
+                          .rolesList[roleController.selectedRoleIndex.value]
+                          .name
+                          .split('*')
+                          .last,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 23,
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
                     ),
@@ -110,11 +126,11 @@ class SelectRoleScreen extends StatelessWidget {
                             primary: MyColors.backgroundColor,
                             onSurface: Color.fromARGB(0, 219, 49, 49),
                             shadowColor: Color.fromARGB(0, 92, 5, 5),
-                            fixedSize: Size(250, 50),
+                            fixedSize: Size(150, 50),
                           ),
                           onPressed: () => roleController.saveToDB(),
                           child: Text(
-                            'Continue With The Selection',
+                            'Suivant',
                             style: TextStyle(color: MyColors.newTextColor),
                           ),
                         ),

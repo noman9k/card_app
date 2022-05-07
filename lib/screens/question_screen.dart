@@ -15,11 +15,18 @@ class QuestionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: Text('Question'),
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.white,
+      //   centerTitle: true,
+      //   title: Text(
+      //     'Dernière étape',
+      //     style: TextStyle(
+      //       color: MyColors.textColor,
+      //     ),
+      //   ),
+      // ),
+
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -27,6 +34,16 @@ class QuestionScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            Center(
+              child: Text(
+                'Dernière étape',
+                style: TextStyle(
+                  color: MyColors.textColor,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             Form(
               key: questionController.questionFormKey,
               child: Column(
@@ -61,7 +78,7 @@ class QuestionScreen extends StatelessWidget {
                 fixedSize: Size(150, 50),
               ),
               child: Text(
-                'Submit',
+                'Terminer',
                 style: TextStyle(color: MyColors.newTextColor),
               ),
               onPressed: () => questionController.submitAnswers(),
@@ -84,6 +101,7 @@ Widget myTextFormFiled({
     decoration: InputDecoration(
       floatingLabelBehavior: FloatingLabelBehavior.never,
       labelText: text,
+      labelStyle: TextStyle(color: MyColors.textColor),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: MyColors.backgroundColor,
@@ -104,9 +122,10 @@ Widget _buildQuestion(int index) {
     children: [
       SizedBox(height: 16),
       Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            'Q${index + 1} : ',
+            '${index + 1} : ',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -114,10 +133,9 @@ Widget _buildQuestion(int index) {
           ),
           SizedBox(
             width: Get.width * 0.8,
-            child: FittedBox(
-              child: Text(questionController.questionList[index],
-                  style: TextStyle(fontSize: 20)),
-            ),
+            height: 20,
+            child: Text(questionController.questionList[index],
+                style: TextStyle(fontSize: 15)),
           ),
         ],
       ),

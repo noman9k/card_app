@@ -22,27 +22,27 @@ class RoleController extends GetxController {
 
   final List<Role> rolesList = [
     Role(
-      name: 'Coeur Pour\nl\'amour du jeu ',
-      description: 'Parler poker et faire des parties en ligne entre passionné',
+      name: 'Coeur*Pour l\'amour du jeu ',
+      description: 'Parler poker et rencontrer d\'autres passionnés comme moi',
       image: 'assets/icons/heart.svg',
       color: Colors.red,
     ),
     Role(
-      name: 'Pique\nPourune coloc Poker ',
+      name: 'Treffle*Pour faire des soirées poker',
       description:
-          'M\'entourer de joueurs de poker pour avancer ensemble dans la même direction',
+          'Rencontrer des joueurs près de chez moi pour faire des soirées poker entre potes',
       image: 'assets/icons/club.svg',
       color: Colors.black,
     ),
     Role(
-      name: 'Trèfle\nPour des soirées Poker',
+      name: 'Pique*Pour une coloc Poker',
       description:
-          'Rencontrer des joueurs près de chez moi pour faire des soirées poker entre potes',
+          'Je recherche une coloc poker pour m\'entourer de joueurs comme moi qui veulent avancer dans la même direction',
       image: 'assets/icons/spades.svg',
       color: Colors.black,
     ),
     Role(
-      name: 'Carreau\nPour le business',
+      name: 'Carreau*Pour le business',
       description:
           'Discuter projets et travailler son jeu avec des joueurs ambitieux qui souhaitent vivre du Poker',
       image: 'assets/icons/diamond.svg',

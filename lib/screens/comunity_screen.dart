@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/screens/profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/comunity_controller.dart';
-import 'splash_screen.dart';
 
 class ComunityScreen extends StatelessWidget {
   ComunityScreen({Key? key}) : super(key: key);
@@ -25,40 +25,42 @@ class ComunityScreen extends StatelessWidget {
           return <Widget>[
             Obx(
               () => SliverAppBar(
+                toolbarHeight: 50,
+                backgroundColor: Color.fromARGB(255, 139, 135, 135),
                 floating: true,
                 pinned: true,
-                title: Text('Cards App'),
+                title: Text(
+                  'Dreeam',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
                 automaticallyImplyLeading: false,
                 bottom: TabBar(
                   indicatorPadding: EdgeInsets.all(0),
-
                   onTap: (index) => homeController.tabColor.value =
                       homeController.myTabColor[index],
                   indicatorColor: homeController.tabColor.value,
                   indicatorWeight: 5,
                   automaticIndicatorColorAdjustment: true,
-                  labelColor: Colors.blue,
+                  labelColor: MyColors.textColor,
                   indicatorSize: TabBarIndicatorSize.label,
                   unselectedLabelColor: Colors.white,
-                  labelStyle: TextStyle(fontSize: 10),
+                  labelStyle: TextStyle(
+                    fontSize: 10,
+                  ),
                   isScrollable: true,
-                  // dragStartBehavior: DragStartBehavior.down,
-                  // indicator: BoxDecoration(
-                  //   borderRadius: BorderRadius.only(
-                  //       topLeft: Radius.circular(20),
-                  //       topRight: Radius.circular(20)),
-                  //   color: homeController.tabColor.value,
-                  // ),
+                  dragStartBehavior: DragStartBehavior.down,
                   controller: homeController.tabController,
                   enableFeedback: false,
-
                   tabs: homeController.mytabs
                       .map((Map<String, String> tab) => Tab(
+                            height: 70,
                             text: tab['title'],
                             icon: SvgPicture.asset(
                               tab['icon']!,
-                              width: 40.0,
-                              height: 40.0,
+                              width: 35.0,
+                              height: 35.0,
                               color: homeController.myIconColor[
                                       homeController.mytabs.indexOf(tab)]
                                   [tab['title']!],
@@ -73,10 +75,10 @@ class ComunityScreen extends StatelessWidget {
         body: TabBarView(
           controller: homeController.tabController,
           children: [
-            _comunityList('club'),
             _comunityList('heart'),
-            _comunityList('diamond'),
             _comunityList('spades'),
+            _comunityList('diamond'),
+            _comunityList('club'),
           ],
         ),
       ),
@@ -179,16 +181,16 @@ class ComunityScreen extends StatelessWidget {
                     height: 30,
                     child: SvgPicture.asset(
                       'assets/images/like.svg',
-                      color: profileController.likes.value > 0
+                      color: doc["likes"].length - 1 > 0
                           ? Color.fromARGB(255, 2, 63, 124)
-                          : Colors.black,
+                          : Color.fromARGB(169, 92, 81, 81),
                     ),
                   ),
                   SizedBox(
                     width: 5,
                   ),
                   Text(
-                    doc["likes"].length.toString(),
+                    (doc["likes"].length - 1).toString(),
                     style: TextStyle(
                       fontSize: 15,
                     ),

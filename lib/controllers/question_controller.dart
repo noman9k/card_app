@@ -19,9 +19,9 @@ class QuestionController extends GetxController {
       FirebaseFirestore.instance.collection('users');
 
   final questionList = [
-    'What are your Ambisionsin Poker?',
-    'What Kind Of Player you want ?',
-    'What Kind Of Player you want ?'
+    ' Qu\'elles sont vos ambitions dans le poker',
+    'Qu\'elles sont vos faiblesses',
+    'Qu\'elles sont forces '
   ];
   var nextScreenRoute = '/image-upload-screen';
 
