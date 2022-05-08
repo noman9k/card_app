@@ -70,6 +70,7 @@ class ProfileScreen extends StatelessWidget {
                   fit: StackFit.loose,
                   clipBehavior: Clip.none,
                   children: [
+                    //flag
                     Positioned(
                       top: 10,
                       left: 10,
@@ -82,6 +83,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    //Like
                     Positioned(
                       top: 10,
                       right: 5,
@@ -117,6 +119,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    //Role
                     Positioned(
                       bottom: 30,
                       right: 10,
@@ -125,7 +128,8 @@ class ProfileScreen extends StatelessWidget {
                         height: 50,
                         child: InkWell(
                           onTap: () {
-                            if (userItself) {
+                            if (userItself &&
+                                !profileController.roleEdited.value) {
                               roleController.updateReturnRoute('/home-screen');
                               Get.toNamed('/select-role-screen');
                             }
@@ -135,6 +139,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // Image
                     Align(
                       alignment: Alignment.center,
                       child: Column(
@@ -169,36 +174,47 @@ class ProfileScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    //Description
                     Positioned(
                       bottom: -20,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                                color: Colors.grey[500],
-                              ),
-                              width: Get.width - 20,
-                              height: 50,
-                              padding: const EdgeInsets.all(7),
-                              child: Text(
-                                profileController.description.value,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  overflow: TextOverflow.visible,
-                                ),
-                              ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(30),
                             ),
-                          ],
+                            color: Colors.grey[500],
+                          ),
+                          width: Get.width - 20,
+                          height: 50,
+                          padding: const EdgeInsets.all(7),
+                          child: Text(
+                            profileController.description.value,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
                         ),
                       ),
-                    )
+                    ),
+                    // Edit Descriprion
+
+                    Positioned(
+                      bottom: -15,
+                      right: 10,
+                      child: userItself &&
+                              !profileController.descriptionEdited.value
+                          ? IconButton(
+                              onPressed: () {
+                                profileController.setDescription();
+                              },
+                              icon: Icon(Icons.edit),
+                            )
+                          : Container(),
+                    ),
                   ],
                 ),
               ),
@@ -222,9 +238,8 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 10),
-                        !userItself
-                            ? Container()
-                            : IconButton(
+                        !profileController.questionEdited.value && userItself
+                            ? IconButton(
                                 onPressed: () {
                                   questionController.setControllerValues(
                                     profileController.answer1.value,
@@ -237,7 +252,8 @@ class ProfileScreen extends StatelessWidget {
                                   Get.toNamed('/question-screen');
                                 },
                                 icon: Icon(Icons.edit),
-                              ),
+                              )
+                            : Container()
                       ],
                     ),
                     Divider(

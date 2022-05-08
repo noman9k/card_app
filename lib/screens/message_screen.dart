@@ -7,27 +7,25 @@ import '../chat_functionality/widgets/message_stream.dart';
 
 // ignore: must_be_immutable
 class MessageScreen extends StatefulWidget {
-
   @override
   State<MessageScreen> createState() => _MessageScreenState();
 }
 
 class _MessageScreenState extends State<MessageScreen> {
-
-
   var userData = Get.arguments;
   final TextEditingController _messageBodyController = TextEditingController();
   final FocusNode _messageFocus = FocusNode();
   String? message;
 
-  CollectionReference _messageReferences = FirebaseFirestore.instance.collection("message");
-  CollectionReference _contactReferences = FirebaseFirestore.instance.collection("contact");
+  CollectionReference _messageReferences =
+      FirebaseFirestore.instance.collection("message");
+  CollectionReference _contactReferences =
+      FirebaseFirestore.instance.collection("contact");
 
   //var arguments = Get.arguments;
   String messageSenderId = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> uploadMessage() async {
-
     String messageReceiverId = userData[0];
     Map<String, dynamic> map = {
       'text': message,
@@ -49,59 +47,67 @@ class _MessageScreenState extends State<MessageScreen> {
         .collection(messageSenderId)
         .add(map);
 
-
-    _contactReferences.doc(messageSenderId).collection("contacts").doc(messageReceiverId).set({
+    _contactReferences
+        .doc(messageSenderId)
+        .collection("contacts")
+        .doc(messageReceiverId)
+        .set({
       'name': userData[1],
       'lastMsg': message,
-      'image' : userData[2],
-      'lastMsgTime' : DateTime.now().millisecondsSinceEpoch,
-      'uid' : messageReceiverId
+      'image': userData[2],
+      'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
+      'uid': messageReceiverId
     });
 
-    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid)
-    .get().then((DocumentSnapshot snapshot){
-
-       if(snapshot!=null){
-         _contactReferences.doc(messageReceiverId).collection("contacts").doc(messageSenderId).set({
-           'name': snapshot['userName'],
-           'lastMsg': message,
-           'image' : userData[2],
-           'lastMsgTime' : DateTime.now().millisecondsSinceEpoch,
-           'uid' : messageSenderId
-         });
-       }
-
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      if (snapshot != null) {
+        _contactReferences
+            .doc(messageReceiverId)
+            .collection("contacts")
+            .doc(messageSenderId)
+            .set({
+          'name': snapshot['userName'],
+          'lastMsg': message,
+          'image': userData[2],
+          'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
+          'uid': messageSenderId
+        });
+      }
     });
     // if(isFirstMsg){
     // }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             userData[2] == ''
                 ? Container(
-              //  padding: EdgeInsets.all(8),
-              //  decoration: BoxDecoration(
-              //    color: Colors.white,
-              //    shape: BoxShape.circle,
-              //  ),
-              // child: Text(name.substring(0,1).toUpperCase(),style: TextStyle(color: Colors.black),),
-            )
+                    //  padding: EdgeInsets.all(8),
+                    //  decoration: BoxDecoration(
+                    //    color: Colors.white,
+                    //    shape: BoxShape.circle,
+                    //  ),
+                    // child: Text(name.substring(0,1).toUpperCase(),style: TextStyle(color: Colors.black),),
+                    )
                 : CircleAvatar(
-              backgroundImage: NetworkImage(userData[2]),
-            ),
+                    backgroundImage: NetworkImage(userData[2]),
+                  ),
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('${userData[1]}',style: TextStyle(color: Colors.white),))
+                child: Text(
+                  '${userData[1]}',
+                  style: TextStyle(color: Colors.white),
+                ))
           ],
         ),
       ),
@@ -126,7 +132,7 @@ class _MessageScreenState extends State<MessageScreen> {
                       color: Colors.grey[350],
                     ),
                     child: TextField(
-                      scrollPadding: EdgeInsets.only(bottom:40),
+                      scrollPadding: EdgeInsets.only(bottom: 40),
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
@@ -144,15 +150,23 @@ class _MessageScreenState extends State<MessageScreen> {
                   ),
                 ),
                 IconButton(
-                  onPressed: (){
-                    FocusScope.of(context).requestFocus(FocusNode());
+                  onPressed: () {
+                    // FocusScope.of(context).unfocus();
+                    // FocusScope.of(context).requestFocus(FocusNode());
                     message = _messageBodyController.text.toString().trim();
-                    if(_messageBodyController.text.toString().trim().isNotEmpty) {
+                    if (_messageBodyController.text
+                        .toString()
+                        .trim()
+                        .isNotEmpty) {
                       uploadMessage();
                       _messageBodyController.clear();
                     }
                   },
-                  icon: Icon(Icons.send, color: Colors.black38, size: 30,),
+                  icon: Icon(
+                    Icons.send,
+                    color: Colors.black38,
+                    size: 30,
+                  ),
                 ),
               ],
             ),

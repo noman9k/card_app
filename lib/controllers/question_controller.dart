@@ -45,8 +45,13 @@ class QuestionController extends GetxController {
     return usersReference.doc(uId).update({
       'question.answer1': answer0,
       'question.answer2': answer1,
-      'question.answer3': answer2
-    }).then((value) => profileController.getProfileData());
+      'question.answer3': answer2,
+      'number_of_edits.question':
+          nextScreenRoute == '/image-upload-screen' ? '0' : '1',
+    }).then((value) {
+      profileController.getnumberofEdits();
+      profileController.getProfileData();
+    });
   }
 
   void setControllerValues(String answer1, String answer2, String answer3) {

@@ -68,9 +68,13 @@ class RoleController extends GetxController {
 
       await usersReference.doc(uId).update({
         'role': role,
+        'number_of_edits.role': nextScreenRoute == '/question-screen'?'0': '1', 
       });
 
+      profileController.getnumberofEdits();
+
       profileController.getProfileData();
+
       print(nextScreenRoute);
       Get.offNamed(nextScreenRoute);
 

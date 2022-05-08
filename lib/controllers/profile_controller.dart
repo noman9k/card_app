@@ -6,7 +6,9 @@ class ProfileController extends GetxController {
   var uId = FirebaseAuth.instance.currentUser!.uid;
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
-
+  var descriptionEdited = true.obs;
+  var roleEdited = true.obs;
+  var questionEdited = true.obs;
   var name = ''.obs;
   var flag = ''.obs;
   var description = ''.obs;
@@ -28,6 +30,17 @@ class ProfileController extends GetxController {
     super.onInit();
     getProfileData();
     getLikes(null);
+    getnumberofEdits();
+  }
+
+  Future<void> getnumberofEdits() async {
+    await usersReference.doc(uId).get().then((value) {
+      descriptionEdited.value =
+          value['number_of_edits.description'] == '1' ? true : false;
+      roleEdited.value = value['number_of_edits.role'] == '1' ? true : false;
+      questionEdited.value =
+          value['number_of_edits.question'] == '1' ? true : false;
+    });
   }
 
   Future<void> getProfileData() async {
@@ -110,6 +123,28 @@ class ProfileController extends GetxController {
       await usersReference.doc(uId ?? this.uId).update({
         'likes': [uId],
       });
+    }
+  }
+
+  void setDescription() async {
+    var pastDescription = '';
+    var pastLikes = [];
+
+    try {
+      await usersReference.doc(uId).get().then((value) {
+        pastDescription = value['p_description'];
+        pastLikes =
+            value['p_likes'].map<String>((value) => value.toString()).toList();
+      });
+    } catch (e) {
+      pastDescription = description.value;
+      await usersReference.doc(uId).get().then((value) {
+        pastLikes =
+            value['likes'].map<String>((value) => value.toString()).toList();
+      });
+    } finally {
+      Get.toNamed('/edit-description-screen',
+          arguments: [pastDescription, pastLikes]);
     }
   }
 }

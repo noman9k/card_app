@@ -7,26 +7,29 @@ import '../modals/chat_model.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatelessWidget {
-
-  CollectionReference _messageReferences = FirebaseFirestore.instance.collection("message");
-  CollectionReference _contactReferences = FirebaseFirestore.instance.collection("contact");
+  CollectionReference _messageReferences =
+      FirebaseFirestore.instance.collection("message");
+  CollectionReference _contactReferences =
+      FirebaseFirestore.instance.collection("contact");
   String messageSenderId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),centerTitle: true,
+        automaticallyImplyLeading: false,
+        title: Text('Chat'),
+        centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("contact")
+        stream: FirebaseFirestore.instance
+            .collection("contact")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .collection("contacts")
             .orderBy("lastMsgTime", descending: true)
             .snapshots(),
-        builder: (context , snapshot){
-
-          if(!snapshot.hasData){
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
 
@@ -35,10 +38,12 @@ class ChatScreen extends StatelessWidget {
               var dt = snapshot.data!.docs[index];
               return Slidable(
                 child: GestureDetector(
-                  onTap: (){
-                    FirebaseFirestore.instance.collection("users")
-                    .doc(dt.id).get()
-                    .then((DocumentSnapshot documentSnapshot){
+                  onTap: () {
+                    FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(dt.id)
+                        .get()
+                        .then((DocumentSnapshot documentSnapshot) {
                       Get.toNamed(
                         '/message-screen',
                         arguments: [
@@ -51,10 +56,10 @@ class ChatScreen extends StatelessWidget {
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    margin: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+                    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      border: Border.all(color: Colors.black12,width: 1),
+                      border: Border.all(color: Colors.black12, width: 1),
                       borderRadius: BorderRadius.circular(20),
                       //  boxShadow: [
                       //    BoxShadow(
@@ -69,34 +74,39 @@ class ChatScreen extends StatelessWidget {
                       children: [
                         snapshot.data!.docs[index]['image'] == ''
                             ? Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                           // color: kPrimaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            snapshot.data!.docs[index]['name']
-                                .substring(0, 1)
-                                .toUpperCase(),
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  // color: kPrimaryColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Text(
+                                  snapshot.data!.docs[index]['name']
+                                      .substring(0, 1)
+                                      .toUpperCase(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
                             : CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              snapshot.data!.docs[index]['image']),
+                                backgroundImage: NetworkImage(
+                                    snapshot.data!.docs[index]['image']),
+                              ),
+                        SizedBox(
+                          width: 10,
                         ),
-                        SizedBox(width: 10,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               snapshot.data!.docs[index]['name'],
-                              style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                               maxLines: 1,
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 2,),
+                            SizedBox(
+                              height: 2,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.max,
@@ -105,14 +115,15 @@ class ChatScreen extends StatelessWidget {
                                   snapshot.data!.docs[index]['lastMsg'],
                                   style: TextStyle(fontSize: 16),
                                 ),
-                                SizedBox(width: 16,),
+                                SizedBox(
+                                  width: 16,
+                                ),
                                 //  Text(
                                 //   snapshot.data!.docs[index]['lastMsg'],
                                 //    style: TextStyle(fontSize: 16),
                                 // ),
                               ],
                             ),
-
                           ],
                         )
                       ],
@@ -120,21 +131,24 @@ class ChatScreen extends StatelessWidget {
                   ),
                 ),
                 // The end action pane is the one at the right or the bottom side.
-                endActionPane:  ActionPane(
+                endActionPane: ActionPane(
                   motion: ScrollMotion(),
                   children: [
                     SlidableAction(
                       onPressed: (conext) {
-
-                        _contactReferences.doc(messageSenderId)
+                        _contactReferences
+                            .doc(messageSenderId)
                             .collection("contacts")
-                            .doc(dt.id).delete();
+                            .doc(dt.id)
+                            .delete();
 
-                        final WriteBatch batch = FirebaseFirestore.instance.batch();
+                        final WriteBatch batch =
+                            FirebaseFirestore.instance.batch();
                         _messageReferences
                             .doc(messageSenderId)
-                            .collection(dt.id).get()
-                            .then((snap) async{
+                            .collection(dt.id)
+                            .get()
+                            .then((snap) async {
                           for (var doc in snap.docs) {
                             batch.delete(doc.reference);
                           }

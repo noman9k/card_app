@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'screens/comunity_screen.dart';
+import 'screens/edit_description_screen.dart';
 import 'screens/get_userdata_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/image_upload_screen.dart';
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/home-screen', page: () => HomeScreen()),
         GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
         GetPage(name: '/message-screen', page: () => MessageScreen()),
+        GetPage(
+            name: '/edit-description-screen',
+            page: () => EditDescriptionScreen()),
       ],
     );
   }

@@ -111,7 +111,8 @@ class LoginController extends GetxController {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          Get.toNamed('/home-screen');
+          Get.offNamed('/home-screen');
+          return;
         }
         throw Exception('User not found');
       });
@@ -131,13 +132,18 @@ class LoginController extends GetxController {
           'level': '',
           'cash': '',
         },
+        'number_of_edits': {
+          'description': '0',
+          'question': '0',
+          'role': '0',
+        },
         'question': {
           'answer1': '',
           'answer2': '',
           'answer3': '0',
         },
       }).then(
-        (value) => Get.toNamed('/userdata-screen'),
+        (value) => Get.offNamed('/userdata-screen'),
       );
     }
   }
