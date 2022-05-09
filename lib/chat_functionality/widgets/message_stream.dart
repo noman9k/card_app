@@ -10,24 +10,40 @@ import 'message_bubble.dart';
 
 class MessageStream extends StatelessWidget {
 
-  final String id;
-  MessageStream(this.id, {Key? key}) : super(key: key);
+  final String idd;
+  MessageStream(this.idd, {Key? key}) : super(key: key);
 
   CollectionReference _messageReferences = FirebaseFirestore.instance.collection("message");
+  CollectionReference _contactReferences = FirebaseFirestore.instance.collection("contact");
   var arguments = Get.arguments;
   String messageSenderId = FirebaseAuth.instance.currentUser!.uid;
 
-  updateDatabase(String id) {
+  updateDatabase(String id,String receiverId) {
+
+    print('eeeeeeeeeeeeeeeeeeeeeeeeee');
+    print(messageSenderId);
+    print(idd);
+    print(id);
     _messageReferences
         .doc(messageSenderId)
-        .collection(id)
+        .collection(idd)
         .doc(id)
         .update({'isMessageRead': true});
     _messageReferences
-        .doc(id)
+        .doc(idd)
         .collection(messageSenderId)
         .doc(id)
-        .update({'isMessageRead': true});
+        .update({
+         'isMessageRead': true,
+        });
+
+    _contactReferences
+        .doc(messageSenderId)
+        .collection("contacts")
+        .doc(idd)
+        .update({
+      "unread" : 0,
+    });
   }
 
   @override
@@ -36,7 +52,7 @@ class MessageStream extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: _messageReferences
           .doc(messageSenderId)
-          .collection(id)
+          .collection(idd)
           .orderBy('sendAt')
           .snapshots(),
       builder: (context, snapshot) {
@@ -114,8 +130,12 @@ class MessageStream extends StatelessWidget {
                     isMessageRead: msg['isMessageRead'],
                     type: msg['type']);
 
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                print(messageSenderId);
+                print(msg['receiverId']);
                 if (messageSenderId == msg['receiverId']) {
-                  updateDatabase(msg.id);
+                  print(msg.id);
+                  updateDatabase(msg.id,msg['receiverId']);
                 }
                 // listMsg.add(MessageBubble(
                 //   message: m,

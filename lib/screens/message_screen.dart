@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,14 +40,22 @@ class _MessageScreenState extends State<MessageScreen> {
 
     // _messageReferences.doc(messageSenderId).collection("messages").doc(messageReceiverId).set(map);
     // _messageReferences.doc(messageReceiverId).collection("messages").doc(messageSenderId).set(map);
+    const _chars ='AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    String randomStr = String.fromCharCodes(Iterable.generate(
+        8, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
     _messageReferences
         .doc(messageSenderId)
         .collection(messageReceiverId)
-        .add(map);
+        .doc(randomStr)
+        .set(map);
     _messageReferences
         .doc(messageReceiverId)
         .collection(messageSenderId)
-        .add(map);
+        .doc(randomStr)
+        .set(map);
+
 
     _contactReferences
         .doc(messageSenderId)
@@ -56,7 +66,8 @@ class _MessageScreenState extends State<MessageScreen> {
       'lastMsg': message,
       'image': userData[2],
       'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
-      'uid': messageReceiverId
+      'uid': messageReceiverId,
+      'unread' : 0,
     });
 
     FirebaseFirestore.instance
@@ -74,9 +85,26 @@ class _MessageScreenState extends State<MessageScreen> {
           'lastMsg': message,
           'image': userData[2],
           'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
-          'uid': messageSenderId
+          'uid': messageSenderId,
+          'unread' : 0,
         });
       }
+    });
+
+    _contactReferences
+        .doc(messageReceiverId)
+        .collection("contacts")
+        .doc(messageSenderId)
+        .get().then((DocumentSnapshot documentSnapshot){
+          int unRead = documentSnapshot['unread'] + 1;
+
+          _contactReferences
+              .doc(messageReceiverId)
+              .collection("contacts")
+              .doc(messageSenderId)
+              .update({
+            "unread" : unRead,
+          });
     });
     // if(isFirstMsg){
     // }
