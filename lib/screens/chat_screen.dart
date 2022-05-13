@@ -17,8 +17,9 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 139, 135, 135),
         automaticallyImplyLeading: false,
-        title: Text('Chat'),
+        title: const Text('Chat'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -56,11 +57,11 @@ class ChatScreen extends StatelessWidget {
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                   // margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    // margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(color: Colors.black12, width: 1),
-                     // borderRadius: BorderRadius.circular(20),
+                      // borderRadius: BorderRadius.circular(20),
                       //  boxShadow: [
                       //    BoxShadow(
                       //      color: Colors.black,
@@ -127,17 +128,22 @@ class ChatScreen extends StatelessWidget {
                           ],
                         ),
                         Spacer(),
-                        dt['unread'] == 0 ? Container() : Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsetsDirectional.all(14),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle
-                                ),
-                                child: Center(child: Text(dt['unread'].toString(),style: TextStyle(color: Colors.white),))),
-                          ],
-                        ),
+                        dt['unread'] == 0
+                            ? Container()
+                            : Row(
+                                children: [
+                                  Container(
+                                      padding: EdgeInsetsDirectional.all(14),
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle),
+                                      child: Center(
+                                          child: Text(
+                                        dt['unread'].toString(),
+                                        style: TextStyle(color: Colors.white),
+                                      ))),
+                                ],
+                              ),
                       ],
                     ),
                   ),

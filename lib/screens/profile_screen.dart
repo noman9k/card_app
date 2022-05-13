@@ -18,6 +18,7 @@ class ProfileScreen extends StatelessWidget {
   QuestionController questionController = Get.put(QuestionController());
   var personData = Get.arguments;
   var userItself = true;
+  var userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class ProfileScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 139, 135, 135),
           leading: userItself
               ? Container()
               : IconButton(
@@ -79,46 +81,33 @@ class ProfileScreen extends StatelessWidget {
                         height: 50,
                         child: Text(
                           profileController.flag.value,
-                          style: TextStyle(fontSize: 30),
+                          style: TextStyle(fontSize: 40),
                         ),
                       ),
                     ),
-                    //Like
-                    Positioned(
-                      top: 10,
-                      right: 5,
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                profileController.setLikes(personData['uId']);
+                    //msg
+                    userItself
+                        ? Container()
+                        : Positioned(
+                            bottom: 30,
+                            left: 10,
+                            child: IconButton(
+                              onPressed: () {
+                                Get.toNamed(
+                                  '/message-screen',
+                                  arguments: [
+                                    personData['uId'],
+                                    personData['userName'],
+                                    personData['image'],
+                                  ],
+                                );
                               },
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: SvgPicture.asset(
-                                  'assets/images/like.svg',
-                                  color: profileController.likes.value - 1 > 0
-                                      ? Color.fromARGB(255, 2, 63, 124)
-                                      : Color.fromARGB(169, 92, 81, 81),
-                                ),
+                              icon: Icon(
+                                Icons.message,
+                                size: 30,
+                                color: Color.fromARGB(232, 80, 75, 75),
                               ),
-                            ),
-                            Text(
-                              (profileController.likes.value - 1).toString(),
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                            )),
                     //Role
                     Positioned(
                       bottom: 30,
@@ -146,8 +135,8 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           const SizedBox(height: 15),
                           SizedBox(
-                            width: 100,
-                            height: 100,
+                            width: 140,
+                            height: 140,
                             child: ClipRRect(
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(30),
@@ -231,7 +220,7 @@ class ProfileScreen extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'About ${profileController.name.value}',
+                          'À propos de ${profileController.name.value}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -253,7 +242,107 @@ class ProfileScreen extends StatelessWidget {
                                 },
                                 icon: Icon(Icons.edit),
                               )
-                            : Container()
+                            : Container(),
+                        Spacer(),
+                        // FutureBuilder<List?>(
+                        //     future: profileController.likedList(
+                        //         userItself ? null : personData['uId']),
+                        //     builder: (context, snapshot) {
+                        //       var data = snapshot.data;
+                        //       var isLiked =
+                        //           data?.contains(personData['uId']) ?? false;
+                        //       if (snapshot.hasError) {
+                        //         return Text('Error: ${snapshot.error}');
+                        //       }
+                        //       if (snapshot.connectionState ==
+                        //           ConnectionState.waiting) {
+                        //         return Center(
+                        //           child: SizedBox(
+                        //               height: 20,
+                        //               width: 20,
+                        //               child: CircularProgressIndicator(
+                        //                 strokeWidth: 1,
+                        //                 color: Color.fromARGB(255, 2, 63, 124),
+                        //               )),
+                        //         );
+                        //       }
+                        //       if (data == null) {
+                        //         return Center(
+                        //           child: Text('No Data Found'),
+                        //         );
+                        //       }
+
+                        //       if (snapshot.hasData) {}
+                        //       return Row(
+                        //         crossAxisAlignment: CrossAxisAlignment.center,
+                        //         children: [
+                        //           Text(
+                        //             '${data.length - 1}',
+                        //             style: TextStyle(
+                        //               fontSize: 20,
+                        //               fontWeight: FontWeight.bold,
+                        //               color: isLiked
+                        //                   ? Color.fromARGB(255, 2, 63, 124)
+                        //                   : Color.fromARGB(169, 92, 81, 81),
+                        //             ),
+                        //           ),
+                        //           SizedBox(
+                        //             width: 5,
+                        //           ),
+                        //           SizedBox(
+                        //             width: 30,
+                        //             height: 30,
+                        //             child: GestureDetector(
+                        //               onTap: () {
+                        //                 profileController
+                        //                     .setLikes(personData['uId']);
+                        //               },
+                        //               child: SvgPicture.asset(
+                        //                 'assets/images/like.svg',
+                        //                 color: isLiked
+                        //                     ? Color.fromARGB(255, 2, 63, 124)
+                        //                     : Color.fromARGB(169, 92, 81, 81),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       );
+                        //     }),
+
+                        SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                (profileController.likes.value - 1).toString(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(169, 92, 81, 81),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              GestureDetector(
+                                onTap: () {
+                                  profileController.setLikes(personData['uId']);
+                                },
+                                child: SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: SvgPicture.asset(
+                                    'assets/images/like.svg',
+                                    color: profileController.blueLike.value
+                                        ? Color.fromARGB(255, 2, 63, 124)
+                                        : Color.fromARGB(169, 92, 81, 81),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 3),
                       ],
                     ),
                     Divider(
@@ -293,17 +382,16 @@ class ProfileScreen extends StatelessWidget {
                             height: Get.height * 0.15,
                             decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
+                                  BorderRadius.all(Radius.circular(10)),
                               color: MyColors.backgroundColor.withOpacity(0.7),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 _rowItem(
-                                    'Plays In ', profileController.game.value),
-                                _rowItem(
-                                    'Level ', profileController.level.value),
-                                _rowItem('Cash',
+                                    'Niveau', profileController.level.value),
+                                _rowItem('Mode ', profileController.game.value),
+                                _rowItem('Joueur',
                                     '\$${profileController.cash.value}'),
                               ],
                             )),
@@ -315,21 +403,6 @@ class ProfileScreen extends StatelessWidget {
             )
           ],
         ),
-        floatingActionButton: userItself
-            ? Container()
-            : FloatingActionButton(
-                onPressed: () {
-                  Get.toNamed(
-                    '/message-screen',
-                    arguments: [
-                      personData['uId'],
-                      personData['userName'],
-                      personData['image'],
-                    ],
-                  );
-                },
-                child: Icon(Icons.message),
-              ),
       ),
     );
   }
@@ -339,21 +412,35 @@ class ProfileScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(title,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                color: MyColors.newTextColor)),
         Container(
           height: 50,
-          width: 50,
+          width: 70,
+          padding: EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(50)),
+            // color: Colors.grey[200],
+            color: MyColors.backgroundColor.withOpacity(0.7),
+          ),
+          child: Center(
+            child: Text(title,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: MyColors.newTextColor)),
+          ),
+        ),
+        Container(
+          height: 50,
+          width: 70,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
             color: Colors.grey[200],
           ),
           child: Center(
             child: FittedBox(
+              fit: BoxFit.fitHeight,
               child: Text(data,
+                  maxLines: 2,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   )),

@@ -40,7 +40,8 @@ class _MessageScreenState extends State<MessageScreen> {
 
     // _messageReferences.doc(messageSenderId).collection("messages").doc(messageReceiverId).set(map);
     // _messageReferences.doc(messageReceiverId).collection("messages").doc(messageSenderId).set(map);
-    const _chars ='AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     Random _rnd = Random();
     String randomStr = String.fromCharCodes(Iterable.generate(
         8, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
@@ -56,7 +57,6 @@ class _MessageScreenState extends State<MessageScreen> {
         .doc(randomStr)
         .set(map);
 
-
     _contactReferences
         .doc(messageSenderId)
         .collection("contacts")
@@ -67,7 +67,7 @@ class _MessageScreenState extends State<MessageScreen> {
       'image': userData[2],
       'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
       'uid': messageReceiverId,
-      'unread' : 0,
+      'unread': 0,
     });
 
     FirebaseFirestore.instance
@@ -86,7 +86,7 @@ class _MessageScreenState extends State<MessageScreen> {
           'image': userData[2],
           'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
           'uid': messageSenderId,
-          'unread' : 0,
+          'unread': 0,
         });
       }
     });
@@ -95,16 +95,17 @@ class _MessageScreenState extends State<MessageScreen> {
         .doc(messageReceiverId)
         .collection("contacts")
         .doc(messageSenderId)
-        .get().then((DocumentSnapshot documentSnapshot){
-          int unRead = documentSnapshot['unread'] + 1;
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      int unRead = documentSnapshot['unread'] + 1;
 
-          _contactReferences
-              .doc(messageReceiverId)
-              .collection("contacts")
-              .doc(messageSenderId)
-              .update({
-            "unread" : unRead,
-          });
+      _contactReferences
+          .doc(messageReceiverId)
+          .collection("contacts")
+          .doc(messageSenderId)
+          .update({
+        "unread": unRead,
+      });
     });
     // if(isFirstMsg){
     // }
@@ -115,6 +116,7 @@ class _MessageScreenState extends State<MessageScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 139, 135, 135),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

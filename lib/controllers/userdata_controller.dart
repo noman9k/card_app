@@ -7,11 +7,14 @@ class UserDataController extends GetxController {
   final userDataFormKey = GlobalKey<FormState>();
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
+  TextEditingController city = TextEditingController();
   TextEditingController game = TextEditingController();
   TextEditingController level = TextEditingController();
   TextEditingController cash = TextEditingController();
   String uId = FirebaseAuth.instance.currentUser!.uid;
   // ProfileController profileController = Get.put(ProfileController());
+
+  // var locationDetails = ''.obs;
 
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
@@ -25,10 +28,15 @@ class UserDataController extends GetxController {
     Get.offNamed('/select-role-screen');
   }
 
-  Future<void> _saveUserData() {
+  Future<void> _saveUserData() async {
+    String country = await usersReference.doc(uId).get().then((value) {
+      return value['locationDetails'];
+    });
+
     return usersReference.doc(uId).update({
       'userName': name.text,
       'description': description.text,
+      'locationDetails': '${city.text}_$country',
       'details.game': game.text,
       'details.level': level.text,
       'details.cash': cash.text
@@ -54,6 +62,14 @@ class UserDataController extends GetxController {
   gameValidation() {
     if (game.text.isEmpty) {
       'You need to specify a game you plays';
+    } else {
+      return null;
+    }
+  }
+
+  cityValidation() {
+    if (city.text.isEmpty) {
+      'You need to specify a city';
     } else {
       return null;
     }

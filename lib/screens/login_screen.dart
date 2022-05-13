@@ -32,9 +32,20 @@ class LoginScreen extends StatelessWidget {
                       height: Get.height * 0.01,
                     ),
                     SizedBox(
-                        height: Get.height * 0.15,
-                        child: Center(
-                            child: Image.asset('assets/images/logo.png'))),
+                      height: Get.height * 0.15,
+                      child: Center(
+                        child: Text(
+                          'Dreeam',
+                          style: TextStyle(
+                            color: MyColors.newTextColor,
+                            fontSize: Get.height * 0.05,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        // child: Image.asset('assets/images/logo.png'),
+                      ),
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
