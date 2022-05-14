@@ -21,8 +21,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   CollectionReference _messageReferences =
       FirebaseFirestore.instance.collection("message");
-  CollectionReference _contactReferences =
-      FirebaseFirestore.instance.collection("contact");
+  CollectionReference _contactReferences = FirebaseFirestore.instance.collection("contact");
 
   //var arguments = Get.arguments;
   String messageSenderId = FirebaseAuth.instance.currentUser!.uid;
@@ -67,15 +66,53 @@ class _MessageScreenState extends State<MessageScreen> {
       'image': userData[2],
       'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
       'uid': messageReceiverId,
-      'unread' : 0,
+     // 'unread' : 0,
     });
 
     FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
-        .then((DocumentSnapshot snapshot) {
-      if (snapshot != null) {
+        .then((DocumentSnapshot snapshot) async {
+
+      int unRead = 0;
+      var docc = await _contactReferences
+          .doc(messageReceiverId)
+          .collection("contacts")
+          .doc(messageSenderId)
+          .get();
+
+      if(docc.exists){
+        Map<String,dynamic> map = docc.data()!;
+         if(map.containsKey("unread")){
+           unRead = docc['unread'] + 1;
+           await _contactReferences
+               .doc(messageReceiverId)
+               .collection("contacts")
+               .doc(messageSenderId)
+               .set({
+             'name': docc['name'],
+             'lastMsg': message,
+             'image': userData[2],
+             'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
+             'uid': messageSenderId,
+             'unread' : unRead,
+               });
+        }else{
+           await _contactReferences
+               .doc(messageReceiverId)
+               .collection("contacts")
+               .doc(messageSenderId)
+               .set({
+             'name': docc['name'],
+             'lastMsg': message,
+             'image': userData[2],
+             'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
+             'uid': messageSenderId,
+             'unread' : 1,
+           });
+         }
+      }else{
         _contactReferences
             .doc(messageReceiverId)
             .collection("contacts")
@@ -86,28 +123,14 @@ class _MessageScreenState extends State<MessageScreen> {
           'image': userData[2],
           'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
           'uid': messageSenderId,
-          'unread' : 0,
+          // 'unread' : 0,
         });
       }
+
     });
 
-    _contactReferences
-        .doc(messageReceiverId)
-        .collection("contacts")
-        .doc(messageSenderId)
-        .get().then((DocumentSnapshot documentSnapshot){
-          int unRead = documentSnapshot['unread'] + 1;
 
-          _contactReferences
-              .doc(messageReceiverId)
-              .collection("contacts")
-              .doc(messageSenderId)
-              .update({
-            "unread" : unRead,
-          });
-    });
-    // if(isFirstMsg){
-    // }
+
   }
 
   @override
