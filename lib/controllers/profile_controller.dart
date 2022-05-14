@@ -21,7 +21,7 @@ class ProfileController extends GetxController {
   var level = ''.obs;
   var cash = ''.obs;
   var likersList = [].obs;
-  var blueColor = false.obs;
+  var blueLike = false.obs;
 
   var likes = 0.obs;
 
@@ -80,9 +80,19 @@ class ProfileController extends GetxController {
 
   Future<int> getLikes(uId) async {
     try {
-      await usersReference.doc(uId ?? this.uId).get().then((value) => {
+      await usersReference.doc(uId).get().then((value) => {
             likes.value = value['likes'].length,
+            if (value['likes'] != null)
+              {
+                likersList.value = value['likes']
+                    .map<String>((value) => value.toString())
+                    .toList(),
+                likersList.contains(uId)
+                    ? blueLike.value = true
+                    : blueLike.value = false
+              }
           });
+
       return likes.value;
     } catch (e) {
       setLikes(null);
@@ -102,7 +112,6 @@ class ProfileController extends GetxController {
               .toList();
 
           if (likersList.contains(uId)) {
-            // blueColor.value = false;
             usersReference.doc(uId ?? this.uId).update({
               'likes': FieldValue.arrayRemove([uId])
             });
@@ -146,5 +155,14 @@ class ProfileController extends GetxController {
       Get.toNamed('/edit-description-screen',
           arguments: [pastDescription, pastLikes]);
     }
+  }
+
+  Future<List?> likedList(String? uId) async {
+    var list = [];
+    await usersReference.doc(uId ?? this.uId).get().then((value) {
+      list = value['likes'].map<String>((value) => value.toString()).toList();
+    });
+
+    return list;
   }
 }

@@ -126,6 +126,7 @@ class LoginController extends GetxController {
         'phone': phoneNumber.value,
         'image': '',
         'country': selectedCountry.value.flagEmoji,
+        'locationDetails': selectedCountry.value.name,
         'role': '0',
         'details': {
           'game': '',

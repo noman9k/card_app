@@ -66,6 +66,12 @@ class UserDataScreen extends StatelessWidget {
                       ),
                       SizedBox(height: height * 0.04),
                       myTextFormFiled(
+                        text: ' Dans quelle ville habitez-vous ? ',
+                        controller: userDataController.city,
+                        validator: userDataController.cityValidation(),
+                      ),
+                      SizedBox(height: height * 0.04),
+                      myTextFormFiled(
                         text: 'Votre niveau de jeu en un mot ',
                         controller: userDataController.game,
                         validator: userDataController.gameValidation(),

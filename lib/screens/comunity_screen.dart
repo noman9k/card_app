@@ -4,6 +4,7 @@ import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/screens/profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +17,7 @@ class ComunityScreen extends StatelessWidget {
 
   ComunityController homeController = Get.put(ComunityController());
   ProfileController profileController = Get.put(ProfileController());
+  String? userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +125,7 @@ class ComunityScreen extends StatelessWidget {
       },
       child: Card(
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -161,13 +163,27 @@ class ComunityScreen extends StatelessWidget {
                   SizedBox(
                     height: 37,
                     width: Get.width * 0.6,
-                    child: Text(
-                      doc['description'],
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          doc['description'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '${doc['locationDetails'].split('_')[0]},${doc['locationDetails'].split('_')[1]} ${doc['country']}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -176,25 +192,70 @@ class ComunityScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: SvgPicture.asset(
-                      'assets/images/like.svg',
-                      color: doc["likes"].length - 1 > 0
-                          ? Color.fromARGB(255, 2, 63, 124)
-                          : Color.fromARGB(169, 92, 81, 81),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    (doc["likes"].length - 1).toString(),
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
+                  FutureBuilder<List?>(
+                      future: profileController.likedList(
+                        doc["uId"],
+                      ),
+                      builder: (context, snapshot) {
+                        var data = snapshot.data;
+                        var isLiked = data?.contains(doc["uId"]) ?? false;
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 1,
+                                  color: Color.fromARGB(255, 2, 63, 124),
+                                )),
+                          );
+                        }
+                        if (data == null) {
+                          return Center(
+                            child: Text('No Data Found'),
+                          );
+                        }
+
+                        if (snapshot.hasData) {}
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: GestureDetector(
+                                onTap: () {
+                                  profileController.setLikes(doc["uId"]);
+                                },
+                                child: SvgPicture.asset(
+                                  'assets/images/like.svg',
+                                  color: isLiked
+                                      ? Color.fromARGB(255, 2, 63, 124)
+                                      : Color.fromARGB(169, 92, 81, 81),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              '${data.length - 1}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: isLiked
+                                    ? Color.fromARGB(255, 2, 63, 124)
+                                    : Color.fromARGB(169, 92, 81, 81),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                 ],
               )
             ],
