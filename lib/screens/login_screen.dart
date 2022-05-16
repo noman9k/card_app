@@ -210,6 +210,8 @@ class LoginScreen extends StatelessWidget {
                                           Color.fromARGB(255, 255, 255, 255)),
                                 ),
                       onButtonPressed: () {
+                        loginController.isLoading.value = true;
+
                         loginController.codeSended.value
                             ? loginController.verifyNumber()
                             : loginController.sendCode();

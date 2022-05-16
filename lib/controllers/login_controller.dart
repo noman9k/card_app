@@ -68,7 +68,7 @@ class LoginController extends GetxController {
       await auth.verifyPhoneNumber(
           phoneNumber:
               '+${selectedCountry.value.phoneCode} ${phoneNumberController.text}',
-          timeout: const Duration(seconds: 5),
+          timeout: const Duration(seconds: 60),
           verificationCompleted: verificationCompleted,
           verificationFailed: verificationFailed,
           codeSent: codeSent,
@@ -144,7 +144,11 @@ class LoginController extends GetxController {
           'answer3': '0',
         },
       }).then(
-        (value) => Get.offNamed('/userdata-screen'),
+        (value) {
+          isLoading.value = false;
+
+          Get.offNamed('/userdata-screen');
+        },
       );
     }
   }
