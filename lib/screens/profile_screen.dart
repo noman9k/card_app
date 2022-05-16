@@ -94,7 +94,8 @@ class ProfileScreen extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsetsDirectional.all(8),
                               decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                border: Border.all(color: Colors.black),
+                                  color: Colors.white,
                                   shape: BoxShape.circle
                               ),
                               child: IconButton(
@@ -108,26 +109,46 @@ class ProfileScreen extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                icon: Image.asset("assets/icons/chat.png"),
+                                icon: Icon(Icons.chat_bubble),
                               ),
                             )),
                     //Role
                     Positioned(
                       bottom: 30,
                       right: 10,
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: InkWell(
-                          onTap: () {
-                            if (userItself &&
-                                !profileController.roleEdited.value) {
-                              roleController.updateReturnRoute('/home-screen');
-                              Get.toNamed('/select-role-screen',arguments: [true]);
-                            }
-                          },
-                          child: SvgPicture.asset(
-                              'assets/icons/${profileController.role.value}.svg'),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                left: 10,
+                                bottom: 60,
+                                child: Text('Team',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.black),)),
+                            Positioned(
+                              bottom: 5,
+                              right: 35,
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                  decoration : BoxDecoration(
+                                    border: Border.all(width: 3, color: MyColors.backgroundColor),
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                child: InkWell(
+                                  onTap: () {
+                                    if (userItself &&
+                                        !profileController.roleEdited.value) {
+                                      roleController.updateReturnRoute('/home-screen');
+                                      Get.toNamed('/select-role-screen',arguments: [true]);
+                                    }
+                                  },
+                                  child: SvgPicture.asset(
+                                      'assets/icons/${profileController.role.value}.svg'),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -157,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                 ),
                               ),
-                              Positioned(
+                              userItself ?Positioned(
                                 bottom: 0,
                                 right: 4,
                                 child: GestureDetector(
@@ -173,7 +194,7 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              ),
+                              ) : Positioned(child: SizedBox()),
                             ],
                           ),
                           const SizedBox(height: 5),
@@ -189,7 +210,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     //Description
                     Positioned(
-                      bottom: -20,
+                      bottom: -30,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Container(
@@ -200,14 +221,20 @@ class ProfileScreen extends StatelessWidget {
                             color: Colors.grey[500],
                           ),
                           width: Get.width - 20,
-                          height: 50,
+                          height: 60,
                           padding: const EdgeInsets.all(7),
-                          child: Text(
-                            profileController.description.value,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              overflow: TextOverflow.visible,
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                profileController.description.value,
+                               // maxLines: 6,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -344,7 +371,9 @@ class ProfileScreen extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(169, 92, 81, 81),
+                                  color: profileController.blueLike.value
+                                      ? Color.fromARGB(255, 2, 63, 124)
+                                      : Color.fromARGB(169, 92, 81, 81),
                                 ),
                               ),
                               SizedBox(width: 5),
@@ -416,7 +445,7 @@ class ProfileScreen extends StatelessWidget {
                                     'Niveau', profileController.level.value),
                                 _rowItem('Mode ', profileController.game.value),
                                 _rowItem('Joueur',
-                                    '\$${profileController.cash.value}'),
+                                    ' ${profileController.cash.value}'),
                               ],
                             )),
                       ),

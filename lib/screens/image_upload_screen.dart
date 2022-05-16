@@ -88,7 +88,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                                   ),
                                 )
                               : Text(
-                                  'Upload Image',
+                                  'Télécharger une image',
                                   style: TextStyle(fontSize: 20),
                                 ),
                           onPressed: () {

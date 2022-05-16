@@ -21,9 +21,9 @@ class ComunityController extends GetxController
 
   List<Map<String, Color>> myIconColor = [
     {heartTitle: Colors.red},
-    {clubTitle: Colors.red},
+    {clubTitle: Colors.black},
     {diamondTitle: Colors.red},
-    {spadesTitle: Colors.red},
+    {spadesTitle: Colors.black},
   ];
 
   List myTabColor = const [

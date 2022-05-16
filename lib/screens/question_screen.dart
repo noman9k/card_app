@@ -85,7 +85,7 @@ class QuestionScreen extends StatelessWidget {
                     'Terminer',
                     style: TextStyle(color: MyColors.newTextColor),
                   ),
-                  onPressed: () => questionController.submitAnswers(true),
+                  onPressed: () => questionController.submitAnswers(arguments[0]),
                 ),
               ],
             ),

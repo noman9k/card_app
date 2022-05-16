@@ -31,7 +31,7 @@ class SelectRoleScreen extends StatelessWidget {
                     child: Text(
                       arguments[0]
                       ? 'Vous pouvez changer de signe seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?'
-                      : 'Choisissez le signe qui correspond \nle plus à vos attentes !',
+                      : 'Choisissez votre team !',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 22,
@@ -154,32 +154,23 @@ Widget _gridItem(
     {required Role role,
     required bool isSelected,
     required bool userSelectedRole}) {
-  return Stack(
-    children: [
-      isSelected
-          ? Positioned(
-          left: 55,
-          child: Text('Team',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),))
-          : Text(''),
-      Padding(
-        padding: const EdgeInsets.all(28.0),
-        child: Container(
-          decoration: userSelectedRole && isSelected
-              ? BoxDecoration(
-                  border: Border.all(width: 3, color: MyColors.backgroundColor),
-                  borderRadius: BorderRadius.circular(100),
-                )
-              : null,
-          child: Center(
-            child: SvgPicture.asset(
-              role.image,
-              color: role.color,
-              height: 80,
-              width: 80,
-            ),
-          ),
+  return Padding(
+    padding: const EdgeInsets.all(28.0),
+    child: Container(
+      decoration: userSelectedRole && isSelected
+          ? BoxDecoration(
+              border: Border.all(width: 3, color: MyColors.backgroundColor),
+              borderRadius: BorderRadius.circular(100),
+            )
+          : null,
+      child: Center(
+        child: SvgPicture.asset(
+          role.image,
+          color: role.color,
+          height: 80,
+          width: 80,
         ),
       ),
-    ],
+    ),
   );
 }

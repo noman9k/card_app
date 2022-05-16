@@ -32,9 +32,11 @@ class _SplashScreenState extends State<SplashScreen> {
           if (documentSnapshot['userName'] == '0') {
             return Get.offNamed('/userdata-screen');
           } else if (documentSnapshot['role'] == '0') {
-            return Get.offNamed('/select-role-screen');
+            return Get.offNamed('/select-role-screen',arguments: [false]);
           } else if (documentSnapshot['question.answer3'] == '0') {
-            return Get.offNamed('/question-screen');
+            return Get.offNamed('/question-screen',arguments: [false]);
+          } else if (documentSnapshot['image'] == '0') {
+            return Get.offNamed('/image-upload-screen',arguments: [false]);
           } else {
             return Get.offNamed('/home-screen');
           }
