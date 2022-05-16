@@ -11,79 +11,85 @@ class QuestionScreen extends StatelessWidget {
   QuestionScreen({Key? key}) : super(key: key);
 
   QuestionController questionController = Get.put(QuestionController());
+  var arguments = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   backgroundColor: Colors.white,
-      //   centerTitle: true,
-      //   title: Text(
-      //     'Dernière étape',
-      //     style: TextStyle(
-      //       color: MyColors.textColor,
-      //     ),
-      //   ),
-      // ),
+    return SafeArea(
+      child: Scaffold(
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   backgroundColor: Colors.white,
+        //   centerTitle: true,
+        //   title: Text(
+        //     'Dernière étape',
+        //     style: TextStyle(
+        //       color: MyColors.textColor,
+        //     ),
+        //   ),
+        // ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Center(
-              child: Text(
-                'Dernière étape',
-                style: TextStyle(
-                  color: MyColors.textColor,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+        body: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Center(
+                  child: Text(
+                    arguments[0] ? 'Vous pouvez changer vos réponses seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?' :
+                    'Dernière étape',
+                    style: TextStyle(
+                      color: MyColors.textColor,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Form(
-              key: questionController.questionFormKey,
-              child: Column(
-                children: [
-                  _buildQuestion(0),
-                  myTextFormFiled(
-                    text: questionController.questionList[0],
-                    controller: questionController.q0Controller,
-                    validator: questionController.q0validate,
+                Form(
+                  key: questionController.questionFormKey,
+                  child: Column(
+                    children: [
+                      _buildQuestion(0),
+                      myTextFormFiled(
+                        text: questionController.questionList[0],
+                        controller: questionController.q0Controller,
+                        validator: questionController.q0validate,
+                      ),
+                      _buildQuestion(1),
+                      myTextFormFiled(
+                        text: questionController.questionList[1],
+                        controller: questionController.q1Controller,
+                        validator: questionController.q1validate,
+                      ),
+                      _buildQuestion(2),
+                      myTextFormFiled(
+                        text: questionController.questionList[2],
+                        controller: questionController.q2Controller,
+                        validator: questionController.q2validate,
+                      ),
+                    ],
                   ),
-                  _buildQuestion(1),
-                  myTextFormFiled(
-                    text: questionController.questionList[1],
-                    controller: questionController.q1Controller,
-                    validator: questionController.q1validate,
+                ),
+                 SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: MyColors.backgroundColor,
+                    onSurface: Color.fromARGB(0, 219, 49, 49),
+                    shadowColor: Color.fromARGB(0, 92, 5, 5),
+                    fixedSize: Size(150, 50),
                   ),
-                  _buildQuestion(2),
-                  myTextFormFiled(
-                    text: questionController.questionList[2],
-                    controller: questionController.q2Controller,
-                    validator: questionController.q2validate,
+                  child: Text(
+                    'Terminer',
+                    style: TextStyle(color: MyColors.newTextColor),
                   ),
-                ],
-              ),
+                  onPressed: () => questionController.submitAnswers(arguments[0]),
+                ),
+              ],
             ),
-            // SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: MyColors.backgroundColor,
-                onSurface: Color.fromARGB(0, 219, 49, 49),
-                shadowColor: Color.fromARGB(0, 92, 5, 5),
-                fixedSize: Size(150, 50),
-              ),
-              child: Text(
-                'Terminer',
-                style: TextStyle(color: MyColors.newTextColor),
-              ),
-              onPressed: () => questionController.submitAnswers(),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -131,7 +137,8 @@ Widget _buildQuestion(int index) {
               fontSize: 20,
             ),
           ),
-          SizedBox(
+          Container(
+            margin: EdgeInsetsDirectional.only(top: 8),
             width: Get.width * 0.8,
             height: 20,
             child: Text(questionController.questionList[index],

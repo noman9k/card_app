@@ -11,7 +11,7 @@ import '../modals/role_model.dart';
 class RoleController extends GetxController {
   var selectedRoleIndex = 0.obs;
   var selectedRole;
-  var userSelectedRole = false.obs;
+  var userSelectedRole = true.obs;
   var uId = FirebaseAuth.instance.currentUser!.uid;
   ProfileController profileController = Get.put(ProfileController());
 
@@ -28,17 +28,17 @@ class RoleController extends GetxController {
       color: Colors.red,
     ),
     Role(
-      name: 'Treffle*Pour faire des soirées poker',
+      name: 'Tréfle*Pour faire des soirées poker',
       description:
           'Rencontrer des joueurs près de chez moi pour faire des soirées poker entre potes',
-      image: 'assets/icons/club.svg',
+      image: 'assets/icons/spades.svg',
       color: Colors.black,
     ),
     Role(
       name: 'Pique*Pour une coloc Poker',
       description:
           'Je recherche une coloc poker pour m\'entourer de joueurs comme moi qui veulent avancer dans la même direction',
-      image: 'assets/icons/spades.svg',
+      image: 'assets/icons/club.svg',
       color: Colors.black,
     ),
     Role(
@@ -76,7 +76,7 @@ class RoleController extends GetxController {
       profileController.getProfileData();
 
       print(nextScreenRoute);
-      Get.offNamed(nextScreenRoute);
+      Get.offNamed(nextScreenRoute,arguments: [false]);
 
       return;
     }

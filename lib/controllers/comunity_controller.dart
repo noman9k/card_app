@@ -8,9 +8,9 @@ class ComunityController extends GetxController
   late TabController tabController;
 
   static String heartTitle = 'Pour l\'amour\ndu jeu ';
-  static String spadesTitle = 'Pour une\ncoloc poker';
+  static String clubTitle = 'Pour une\ncoloc poker';
   static String diamondTitle = 'Pour le\nbusiness';
-  static String clubTitle = 'Pour faire\ndes soirées poker';
+  static String spadesTitle = 'Pour faire\ndes soirées poker';
 
   List<Map<String, String>> mytabs = [
     {'title': heartTitle, 'icon': 'assets/icons/heart.svg'},

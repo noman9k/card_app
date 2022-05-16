@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Phone Number',
+                          'Numéro de téléphone',
                           style: TextStyle(
                               color: MyColors.newTextColor, fontSize: 16),
                         ),
@@ -61,10 +61,10 @@ class LoginScreen extends StatelessWidget {
                             controller: loginController.phoneNumberController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your phone number';
+                                return 'Veuillez entrer votre numéro de téléphone';
                               } else if (!loginController
                                   .isCountrySelected.value) {
-                                return 'Please select your country first';
+                                return 'Veuillez d\'abord sélectionner votre pays';
                               }
                               loginController.isLoading.value = true;
                               return null;
@@ -79,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                                   color: MyColors.newTextColor,
                                 ),
                               ),
-                              labelText: 'Phone Number',
+                              labelText: 'Numéro de téléphone',
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
                               labelStyle:
@@ -108,10 +108,10 @@ class LoginScreen extends StatelessWidget {
                                             borderSide: BorderSide(
                                                 color: MyColors.newTextColor),
                                           ),
-                                          hintText: 'Search in french',
+                                          hintText: 'Recherche en français',
                                           labelStyle: TextStyle(
                                               color: MyColors.newTextColor),
-                                          labelText: 'Search in french',
+                                          labelText: 'Recherche en français',
                                           hintStyle: TextStyle(
                                             color: MyColors.newTextColor,
                                           ),
@@ -154,7 +154,7 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(height: 10),
                         loginController.codeSended.value
                             ? Text(
-                                'Code you received',
+                                'Code que vous avez reçu',
                                 style: TextStyle(
                                     color: MyColors.newTextColor, fontSize: 16),
                               )
@@ -193,17 +193,17 @@ class LoginScreen extends StatelessWidget {
                     MyElevatedButton(
                       child: loginController.codeSended.value
                           ? Text(
-                              'Verify Phone Number',
+                              'Vérifier le numéro de téléphone',
                               style: const TextStyle(
                                   fontSize: 18,
-                                  color: Color.fromARGB(255, 59, 42, 35)),
+                                  color: Colors.white),
                             )
                           : loginController.isLoading.value
                               ? CircularProgressIndicator(
                                   color: MyColors.newTextColor,
                                 )
                               : Text(
-                                  'Send Code',
+                                  'Envoyer le code',
                                   style: const TextStyle(
                                       fontSize: 18,
                                       color:
@@ -220,7 +220,7 @@ class LoginScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () => loginController.sendCode(),
                       child: Text(
-                        'Resend Code ?',
+                        'Renvoyer le code ?',
                         style: TextStyle(color: MyColors.newTextColor),
                       ),
                     ),
