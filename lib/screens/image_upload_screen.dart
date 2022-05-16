@@ -16,6 +16,7 @@ class ImageUploadScreen extends StatefulWidget {
 
 class _ImageUploadScreenState extends State<ImageUploadScreen> {
   FaceDetectorColtroller controller = Get.put(FaceDetectorColtroller());
+  var arguments = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                                   style: TextStyle(fontSize: 20),
                                 ),
                           onPressed: () {
-                            controller.loadPic();
+                            controller.loadPic(arguments[0]);
                           },
                         ),
                       )

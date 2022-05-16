@@ -19,9 +19,9 @@ class QuestionController extends GetxController {
       FirebaseFirestore.instance.collection('users');
 
   final questionList = [
-    ' Qu\'elles sont vos ambitions dans le poker',
-    'Qu\'elles sont vos faiblesses',
-    'Qu\'elles sont forces '
+    ' Qu\'elles sont vos ambitions dans le poker ?',
+    'Qu\'elles sont vos faiblesses ?',
+    'Qu\'elles sont vos forces ?'
   ];
   var nextScreenRoute = '/image-upload-screen';
 
@@ -29,7 +29,7 @@ class QuestionController extends GetxController {
     nextScreenRoute = route;
   }
 
-  submitAnswers() async {
+  submitAnswers(bool load) async {
     if (!questionFormKey.currentState!.validate()) {
       print('Form is invalid');
       return;
@@ -37,7 +37,8 @@ class QuestionController extends GetxController {
 
     await _saveAnswersData(
         q0Controller.text, q1Controller.text, q2Controller.text);
-    Get.offNamed(nextScreenRoute);
+    load ? Get.offNamed('/home-screen')
+    : Get.offNamed(nextScreenRoute,arguments: [false]);
   }
 
   Future<void> _saveAnswersData(

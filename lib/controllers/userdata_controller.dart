@@ -25,7 +25,7 @@ class UserDataController extends GetxController {
 
   void upload() async {
     await _saveUserData();
-    Get.offNamed('/select-role-screen');
+    Get.offNamed('/select-role-screen',arguments: [false]);
   }
 
   Future<void> _saveUserData() async {

@@ -77,7 +77,7 @@ class FaceDetectorColtroller extends GetxController{
     return downloadURL;
   }
 
-  Future<void> loadPic() async{
+  Future<void> loadPic(bool load) async{
     isLoading.value = true;
     uploadFile(selectedImagePath.value).then((url){
         if(url != null){
@@ -85,7 +85,8 @@ class FaceDetectorColtroller extends GetxController{
               .update({
             "image" : url
           });
-          Get.offAllNamed('/home-screen');
+
+           load ? Get.offNamed('/home-screen') : Get.offAllNamed('/home-screen');
            isLoading = false.obs;
         }else{
            isLoading = false.obs;

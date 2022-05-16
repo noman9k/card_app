@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/profile-screen', page: () => ProfileScreen()),
         GetPage(name: '/question-screen', page: () => QuestionScreen()),
         GetPage(name: '/image-upload-screen', page: () => ImageUploadScreen()),
-        GetPage(name: '/home-screen', page: () => HomeScreen()),
+        GetPage(name: '/git status', page: () => HomeScreen()),
         GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
         GetPage(name: '/message-screen', page: () => MessageScreen()),
         GetPage(

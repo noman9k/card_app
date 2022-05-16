@@ -91,21 +91,24 @@ class ProfileScreen extends StatelessWidget {
                         : Positioned(
                             bottom: 30,
                             left: 10,
-                            child: IconButton(
-                              onPressed: () {
-                                Get.toNamed(
-                                  '/message-screen',
-                                  arguments: [
-                                    personData['uId'],
-                                    personData['userName'],
-                                    personData['image'],
-                                  ],
-                                );
-                              },
-                              icon: Icon(
-                                Icons.message,
-                                size: 30,
-                                color: Color.fromARGB(232, 80, 75, 75),
+                            child: Container(
+                              margin: EdgeInsetsDirectional.all(8),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  Get.toNamed(
+                                    '/message-screen',
+                                    arguments: [
+                                      personData['uId'],
+                                      personData['userName'],
+                                      personData['image'],
+                                    ],
+                                  );
+                                },
+                                icon: Image.asset("assets/icons/chat.png"),
                               ),
                             )),
                     //Role
@@ -120,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
                             if (userItself &&
                                 !profileController.roleEdited.value) {
                               roleController.updateReturnRoute('/home-screen');
-                              Get.toNamed('/select-role-screen');
+                              Get.toNamed('/select-role-screen',arguments: [true]);
                             }
                           },
                           child: SvgPicture.asset(
@@ -134,23 +137,44 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           const SizedBox(height: 15),
-                          SizedBox(
-                            width: 140,
-                            height: 140,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(30),
+                          Stack(
+                            children: [
+                              SizedBox(
+                                width: 120,
+                                height: 120,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(100),
+                                  ),
+                                  child: profileController.picture.value == ''
+                                      ? Image.asset(
+                                          'assets/images/logo.png',
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          profileController.picture.value,
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
                               ),
-                              child: profileController.picture.value == ''
-                                  ? Image.asset(
-                                      'assets/images/logo.png',
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.network(
-                                      profileController.picture.value,
-                                      fit: BoxFit.cover,
+                              Positioned(
+                                bottom: 0,
+                                right: 4,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed('/image-upload-screen',arguments: [true]);
+                                  },
+                                  child: ClipOval(
+                                    child: Container(
+                                      color: Colors.black,
+                                      padding: EdgeInsetsDirectional.all(8),
+                                      child: Icon(Icons.add_a_photo,
+                                          size: 30, color: Colors.white),
                                     ),
-                            ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 5),
                           Text(
@@ -238,7 +262,7 @@ class ProfileScreen extends StatelessWidget {
 
                                   questionController
                                       .updateReturnRoute('/home-screen');
-                                  Get.toNamed('/question-screen');
+                                  Get.toNamed('/question-screen',arguments: [true]);
                                 },
                                 icon: Icon(Icons.edit),
                               )
