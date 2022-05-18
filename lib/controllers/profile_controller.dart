@@ -29,8 +29,8 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     getProfileData();
-    getLikes(null);
     getnumberofEdits();
+    getLikes(null);
   }
 
   Future<void> getnumberofEdits() async {

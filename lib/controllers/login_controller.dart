@@ -77,6 +77,7 @@ class LoginController extends GetxController {
   }
 
   void verifyNumber() async {
+    isLoading.value = true;
     AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: _verificationId,
       smsCode: codeController.text,
@@ -84,9 +85,9 @@ class LoginController extends GetxController {
     await auth
         .signInWithCredential(credential)
         .then((value) => saveUserToDb())
-        .onError((error, stackTrace) => Get.snackbar('Error', error.toString(),
+        .onError((error, stackTrace) => Get.snackbar('Oups !', 'Erreur OTP',
             backgroundColor: MyColors.newTextColor,
-            snackPosition: SnackPosition.TOP));
+            snackPosition: SnackPosition.BOTTOM));
 
     print('signin');
     if (auth.currentUser == null) {
@@ -111,6 +112,8 @@ class LoginController extends GetxController {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
+          isLoading.value = false;
+
           Get.offNamed('/home-screen');
           return;
         }

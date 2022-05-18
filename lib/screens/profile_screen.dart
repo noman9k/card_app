@@ -94,10 +94,9 @@ class ProfileScreen extends StatelessWidget {
                             child: Container(
                               margin: EdgeInsetsDirectional.all(8),
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
+                                  border: Border.all(color: Colors.black),
                                   color: Colors.white,
-                                  shape: BoxShape.circle
-                              ),
+                                  shape: BoxShape.circle),
                               child: IconButton(
                                 onPressed: () {
                                   Get.toNamed(
@@ -124,23 +123,33 @@ class ProfileScreen extends StatelessWidget {
                             Positioned(
                                 left: 10,
                                 bottom: 60,
-                                child: Text('Team',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.black),)),
+                                child: Text(
+                                  'Team',
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )),
                             Positioned(
                               bottom: 5,
                               right: 35,
                               child: Container(
                                 width: 50,
                                 height: 50,
-                                  decoration : BoxDecoration(
-                                    border: Border.all(width: 3, color: MyColors.backgroundColor),
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 3,
+                                      color: MyColors.backgroundColor),
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
                                 child: InkWell(
                                   onTap: () {
                                     if (userItself &&
                                         !profileController.roleEdited.value) {
-                                      roleController.updateReturnRoute('/home-screen');
-                                      Get.toNamed('/select-role-screen',arguments: [true]);
+                                      roleController
+                                          .updateReturnRoute('/home-screen');
+                                      Get.toNamed('/select-role-screen',
+                                          arguments: [true]);
                                     }
                                   },
                                   child: SvgPicture.asset(
@@ -178,23 +187,27 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                 ),
                               ),
-                              userItself ?Positioned(
-                                bottom: 0,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed('/image-upload-screen',arguments: [true]);
-                                  },
-                                  child: ClipOval(
-                                    child: Container(
-                                      color: Colors.black,
-                                      padding: EdgeInsetsDirectional.all(8),
-                                      child: Icon(Icons.add_a_photo,
-                                          size: 30, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ) : Positioned(child: SizedBox()),
+                              userItself
+                                  ? Positioned(
+                                      bottom: 0,
+                                      right: 4,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed('/image-upload-screen',
+                                              arguments: [true]);
+                                        },
+                                        child: ClipOval(
+                                          child: Container(
+                                            color: Colors.black,
+                                            padding:
+                                                EdgeInsetsDirectional.all(8),
+                                            child: Icon(Icons.add_a_photo,
+                                                size: 30, color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Positioned(child: SizedBox()),
                             ],
                           ),
                           const SizedBox(height: 5),
@@ -228,7 +241,7 @@ class ProfileScreen extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 profileController.description.value,
-                               // maxLines: 6,
+                                // maxLines: 6,
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
@@ -289,7 +302,8 @@ class ProfileScreen extends StatelessWidget {
 
                                   questionController
                                       .updateReturnRoute('/home-screen');
-                                  Get.toNamed('/question-screen',arguments: [true]);
+                                  Get.toNamed('/question-screen',
+                                      arguments: [true]);
                                 },
                                 icon: Icon(Icons.edit),
                               )
@@ -297,11 +311,15 @@ class ProfileScreen extends StatelessWidget {
                         Spacer(),
                         // FutureBuilder<List?>(
                         //     future: profileController.likedList(
-                        //         userItself ? null : personData['uId']),
+                        //       userItself ? userId : personData["uId"],
+                        //     ),
                         //     builder: (context, snapshot) {
                         //       var data = snapshot.data;
-                        //       var isLiked =
-                        //           data?.contains(personData['uId']) ?? false;
+                        //       var isLiked = data?.contains(userItself
+                        //               ? userId
+                        //               : personData["uId"]) ??
+                        //           false;
+
                         //       if (snapshot.hasError) {
                         //         return Text('Error: ${snapshot.error}');
                         //       }
@@ -323,12 +341,11 @@ class ProfileScreen extends StatelessWidget {
                         //         );
                         //       }
 
-                        //       if (snapshot.hasData) {}
                         //       return Row(
                         //         crossAxisAlignment: CrossAxisAlignment.center,
                         //         children: [
                         //           Text(
-                        //             '${data.length - 1}',
+                        //             '${profileController.likes - 1}',
                         //             style: TextStyle(
                         //               fontSize: 20,
                         //               fontWeight: FontWeight.bold,
@@ -345,8 +362,9 @@ class ProfileScreen extends StatelessWidget {
                         //             height: 30,
                         //             child: GestureDetector(
                         //               onTap: () {
-                        //                 profileController
-                        //                     .setLikes(personData['uId']);
+                        //                 profileController.setLikes(userItself
+                        //                     ? userId
+                        //                     : personData["uId"]);
                         //               },
                         //               child: SvgPicture.asset(
                         //                 'assets/images/like.svg',
@@ -369,32 +387,39 @@ class ProfileScreen extends StatelessWidget {
                               Text(
                                 (profileController.likes.value - 1).toString(),
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: profileController.blueLike.value
-                                      ? Color.fromARGB(255, 2, 63, 124)
-                                      : Color.fromARGB(169, 92, 81, 81),
-                                ),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 2, 63, 124)
+                                    //  profileController.blueLike.value
+                                    //     ?
+                                    //      Color.fromARGB(255, 2, 63, 124)
+                                    //     : Color.fromARGB(169, 92, 81, 81),
+                                    ),
                               ),
                               SizedBox(width: 5),
                               GestureDetector(
                                 onTap: () {
-                                  profileController.setLikes(personData['uId']);
+                                  profileController.setLikes(
+                                      userItself ? userId : personData['uId']);
+                                  profileController.getLikes(
+                                      userItself ? userId : personData['uId']);
                                 },
                                 child: SizedBox(
                                   width: 30,
                                   height: 30,
                                   child: SvgPicture.asset(
-                                    'assets/images/like.svg',
-                                    color: profileController.blueLike.value
-                                        ? Color.fromARGB(255, 2, 63, 124)
-                                        : Color.fromARGB(169, 92, 81, 81),
-                                  ),
+                                      'assets/images/like.svg',
+                                      color: Color.fromARGB(255, 2, 63, 124)
+                                      //  profileController.blueLike.value
+                                      //     ? Color.fromARGB(255, 2, 63, 124)
+                                      //     : Color.fromARGB(169, 92, 81, 81),
+                                      ),
                                 ),
                               ),
                             ],
                           ),
                         ),
+
                         SizedBox(width: 3),
                       ],
                     ),

@@ -231,6 +231,7 @@ class ComunityScreen extends StatelessWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   profileController.setLikes(doc["uId"]);
+                                  profileController.getLikes(userId);
                                 },
                                 child: SvgPicture.asset(
                                   'assets/images/like.svg',
