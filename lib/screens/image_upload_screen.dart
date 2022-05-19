@@ -28,15 +28,18 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Sélectionner une photo de profil avec votre visage dessus',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: MyColors.textColor,
-                ),
-              ),
+              Obx((){
+                return controller.faces.length == 0 ?
+                Text(
+                  'Sélectionner une photo de profil avec votre visage dessus',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.textColor,
+                  ),
+                ) : SizedBox.shrink();
+              }),
               Obx(() {
                 return controller.selectedImagePath.value != ''
                     ? SizedBox(

@@ -47,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
                     }),
           ],
           centerTitle: true,
-          title: const Text('Profile'),
+          title: const Text('Profil'),
         ),
         body: Column(
           children: [
@@ -89,33 +89,76 @@ class ProfileScreen extends StatelessWidget {
                     userItself
                         ? Container()
                         : Positioned(
-                            bottom: 30,
+                            bottom: 50,
                             left: 10,
-                            child: Container(
-                              margin: EdgeInsetsDirectional.all(8),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  color: Colors.white,
-                                  shape: BoxShape.circle),
-                              child: IconButton(
-                                onPressed: () {
-                                  Get.toNamed(
-                                    '/message-screen',
-                                    arguments: [
-                                      personData['uId'],
-                                      personData['userName'],
-                                      personData['image'],
-                                    ],
-                                  );
-                                },
-                                icon: Icon(Icons.chat_bubble),
-                              ),
-                            )),
+                      child: SizedBox(
+                        width: 120,
+                        height: 100,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                left: 0,
+                                bottom: 60,
+                                child: Text(
+                                  'Message',
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )),
+                            Positioned(
+                              bottom: -2,
+                              right: 35,
+                              child: Container(
+                                  margin: EdgeInsetsDirectional.all(8),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black,width: 3),
+                                      //color: Colors.white,
+                                      shape: BoxShape.circle),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Get.toNamed(
+                                        '/message-screen',
+                                        arguments: [
+                                          personData['uId'],
+                                          personData['userName'],
+                                          personData['image'],
+                                        ],
+                                      );
+                                    },
+                                    icon: Icon(Icons.chat_bubble),
+                                  ),
+                                )
+                            ),
+                          ],
+                        ),
+                      ),
+                            // child: Container(
+                            //   margin: EdgeInsetsDirectional.all(8),
+                            //   decoration: BoxDecoration(
+                            //       border: Border.all(color: Colors.black,width: 3),
+                            //       //color: Colors.white,
+                            //       shape: BoxShape.circle),
+                            //   child: IconButton(
+                            //     onPressed: () {
+                            //       Get.toNamed(
+                            //         '/message-screen',
+                            //         arguments: [
+                            //           personData['uId'],
+                            //           personData['userName'],
+                            //           personData['image'],
+                            //         ],
+                            //       );
+                            //     },
+                            //     icon: Icon(Icons.chat_bubble),
+                            //   ),
+                            // )
+                      ),
                     //Role
                     Positioned(
-                      bottom: 30,
+                      bottom: 50,
                       right: 10,
-                      child: Container(
+                      child: SizedBox(
                         width: 100,
                         height: 100,
                         child: Stack(
@@ -170,8 +213,8 @@ class ProfileScreen extends StatelessWidget {
                           Stack(
                             children: [
                               SizedBox(
-                                width: 120,
-                                height: 120,
+                                width: 100,
+                                height: 100,
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.all(
                                     Radius.circular(100),
@@ -234,7 +277,7 @@ class ProfileScreen extends StatelessWidget {
                             color: Colors.grey[500],
                           ),
                           width: Get.width - 20,
-                          height: 60,
+                          height: 80,
                           padding: const EdgeInsets.all(7),
                           child: SingleChildScrollView(
                             child: Padding(
@@ -466,11 +509,9 @@ class ProfileScreen extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                _rowItem(
-                                    'Niveau', profileController.level.value),
-                                _rowItem('Mode ', profileController.game.value),
-                                _rowItem('Joueur',
-                                    ' ${profileController.cash.value}'),
+                                _rowItem('Niveau', profileController.game.value),
+                                _rowItem('Table', ' ${profileController.cash.value}'),
+                                _rowItem('Mode ', profileController.level.value),
                               ],
                             )),
                       ),

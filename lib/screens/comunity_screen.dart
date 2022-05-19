@@ -19,8 +19,10 @@ class ComunityScreen extends StatelessWidget {
   ProfileController profileController = Get.put(ProfileController());
   String? userId = FirebaseAuth.instance.currentUser!.uid;
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -161,14 +163,14 @@ class ComunityScreen extends StatelessWidget {
                     height: 5,
                   ),
                   SizedBox(
-                    height: 37,
+                    height: 65,
                     width: Get.width * 0.6,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           doc['description'],
-                          maxLines: 1,
+                          maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 15,
@@ -230,6 +232,8 @@ class ComunityScreen extends StatelessWidget {
                               height: 30,
                               child: GestureDetector(
                                 onTap: () {
+                                  print('ddddddddddddddddddddddddddddddddddddddddddddd');
+                                  print(doc['uId']);
                                   profileController.setLikes(doc["uId"]);
                                   profileController.getLikes(userId);
                                 },

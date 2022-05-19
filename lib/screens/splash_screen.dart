@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -69,11 +70,32 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
-      body: Center(
-        child: SizedBox(
-            height: 200,
-            width: 200,
-            child: Image.asset('assets/images/logo.png')),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Dreeam',
+                style: TextStyle(
+                  color: MyColors.newTextColor,
+                  fontSize: Get.height * 0.14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Row(
+                children: [
+                  SvgPicture.asset('assets/icons/heart.svg'),
+                  SvgPicture.asset('assets/icons/spades.svg',color: Colors.white,),
+                  SvgPicture.asset('assets/icons/diamond.svg'),
+                  SvgPicture.asset('assets/icons/club.svg',color: Colors.white,),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

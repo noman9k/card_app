@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                           'Dreeam',
                           style: TextStyle(
                             color: MyColors.newTextColor,
-                            fontSize: Get.height * 0.05,
+                            fontSize: Get.height * 0.12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
