@@ -9,9 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   RoleController roleController = Get.put(RoleController());
 
   ProfileController profileController = Get.put(ProfileController());
@@ -19,11 +24,10 @@ class ProfileScreen extends StatelessWidget {
   var personData = Get.arguments;
   var userItself = true;
   var userId = FirebaseAuth.instance.currentUser!.uid;
-
+  
   @override
   Widget build(BuildContext context) {
     userItself = personData == null ? true : false;
-
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -352,117 +356,220 @@ class ProfileScreen extends StatelessWidget {
                               )
                             : Container(),
                         Spacer(),
-                        // FutureBuilder<List?>(
-                        //     future: profileController.likedList(
-                        //       userItself ? userId : personData["uId"],
-                        //     ),
-                        //     builder: (context, snapshot) {
-                        //       var data = snapshot.data;
-                        //       var isLiked = data?.contains(userItself
-                        //               ? userId
-                        //               : personData["uId"]) ??
-                        //           false;
+                        FutureBuilder<List?>(
+                            future: profileController.likedList(
+                              userItself ? userId : personData["uId"],
+                            ),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                  child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 1,
+                                        color: Color.fromARGB(255, 2, 63, 124),
+                                      )),
+                                );
+                              }
+                              if (snapshot.data == null) {
+                                return Center(
+                                  child: Text('No Data Found'),
+                                );
+                              }
 
-                        //       if (snapshot.hasError) {
-                        //         return Text('Error: ${snapshot.error}');
-                        //       }
-                        //       if (snapshot.connectionState ==
-                        //           ConnectionState.waiting) {
-                        //         return Center(
-                        //           child: SizedBox(
-                        //               height: 20,
-                        //               width: 20,
-                        //               child: CircularProgressIndicator(
-                        //                 strokeWidth: 1,
-                        //                 color: Color.fromARGB(255, 2, 63, 124),
-                        //               )),
-                        //         );
-                        //       }
-                        //       if (data == null) {
-                        //         return Center(
-                        //           child: Text('No Data Found'),
-                        //         );
-                        //       }
+                              var data = snapshot.data;
+                              profileController.blueLike.value = data?.contains(FirebaseAuth.instance.currentUser!.uid) ?? false;
+                              print('ssssssssssssssssssssssssssssssssssssssssssss');
+                              print('${profileController.blueLike.value}');
 
-                        //       return Row(
-                        //         crossAxisAlignment: CrossAxisAlignment.center,
-                        //         children: [
-                        //           Text(
-                        //             '${profileController.likes - 1}',
-                        //             style: TextStyle(
-                        //               fontSize: 20,
-                        //               fontWeight: FontWeight.bold,
-                        //               color: isLiked
-                        //                   ? Color.fromARGB(255, 2, 63, 124)
-                        //                   : Color.fromARGB(169, 92, 81, 81),
-                        //             ),
-                        //           ),
-                        //           SizedBox(
-                        //             width: 5,
-                        //           ),
-                        //           SizedBox(
-                        //             width: 30,
-                        //             height: 30,
-                        //             child: GestureDetector(
-                        //               onTap: () {
-                        //                 profileController.setLikes(userItself
-                        //                     ? userId
-                        //                     : personData["uId"]);
-                        //               },
-                        //               child: SvgPicture.asset(
-                        //                 'assets/images/like.svg',
-                        //                 color: isLiked
-                        //                     ? Color.fromARGB(255, 2, 63, 124)
-                        //                     : Color.fromARGB(169, 92, 81, 81),
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       );
-                        //     }),
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // Text(
+                                    //   '${profileController.likes - 1}',
+                                    //   style: TextStyle(
+                                    //     fontSize: 20,
+                                    //     fontWeight: FontWeight.bold,
+                                    //     color: isLiked
+                                    //         ? Color.fromARGB(255, 2, 63, 124)
+                                    //         : Color.fromARGB(169, 92, 81, 81),
+                                    //   ),
+                                    // ),
+                                    // SizedBox(
+                                    //   width: 5,
+                                    // ),
+                                    // SizedBox(
+                                    //   width: 40,
+                                    //   height: 40,
+                                    //   child: GestureDetector(
+                                    //     onTap: () {
+                                    //       print('dddddddddddddddddddddddddddddddddddddddddd');
+                                    //       print('dddddddddddddddddddddddddddddddddddddddddd');
+                                    //       print('dddddddddddddddddddddddddddddddddddddddddd');
+                                    //
+                                    //       profileController.setLikes(userItself ? userId : personData['uId']);
+                                    //       profileController.getLikes(userItself ? userId : personData['uId']);
+                                    //     },
+                                    //     child: SvgPicture.asset(
+                                    //       'assets/images/like.svg',
+                                    //       width: 30,
+                                    //       height: 30,
+                                    //       color: isLiked
+                                    //           ? Color.fromARGB(255, 2, 63, 124)
+                                    //           : Color.fromARGB(169, 92, 81, 81),
+                                    //     ),
+                                    //   ),
+                                    // ),
 
-                        SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                (profileController.likes.value - 1).toString(),
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 2, 63, 124)
-                                    //  profileController.blueLike.value
-                                    //     ?
-                                    //      Color.fromARGB(255, 2, 63, 124)
-                                    //     : Color.fromARGB(169, 92, 81, 81),
-                                    ),
-                              ),
-                              SizedBox(width: 5),
-                              GestureDetector(
-                                onTap: () {
-                                  profileController.setLikes(
-                                      userItself ? userId : personData['uId']);
-                                  profileController.getLikes(
-                                      userItself ? userId : personData['uId']);
-                                },
-                                child: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: SvgPicture.asset(
-                                      'assets/images/like.svg',
-                                      color: Color.fromARGB(255, 2, 63, 124)
-                                      //  profileController.blueLike.value
-                                      //     ? Color.fromARGB(255, 2, 63, 124)
-                                      //     : Color.fromARGB(169, 92, 81, 81),
+                                    SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                         userItself
+                                          ? Text(
+                                            (profileController.likes.value - 1).toString(),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: userItself ? Color.fromARGB(169, 92, 81, 81) : (
+                                                  profileController.blueLike.value ?
+                                                  Color.fromARGB(255, 2, 63, 124)
+                                                      : Color.fromARGB(169, 92, 81, 81)
+                                              ),
+                                            ),
+                                          )
+                                          : Obx((){
+                                            return Text(
+                                              (profileController.likes.value - 1).toString(),
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: userItself ? Color.fromARGB(169, 92, 81, 81) : (
+                                                    profileController.blueLike.value ?
+                                                    Color.fromARGB(255, 2, 63, 124)
+                                                        : Color.fromARGB(169, 92, 81, 81)
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                          SizedBox(width: 5),
+                                          userItself
+                                            ? SizedBox(
+                                               width: 30,
+                                               height: 30,
+                                               child: SvgPicture.asset(
+                                                 'assets/images/like.svg',
+                                                 color: userItself ? Color.fromARGB(169, 92, 81, 81)  : (
+                                                     profileController.blueLike.value
+                                                         ? Color.fromARGB(255, 2, 63, 124)
+                                                         : Color.fromARGB(169, 92, 81, 81)
+                                                 ),
+                                               ),
+                                             )
+                                            : Obx((){
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  print('cccccccccccccccccccccccccccccc1');
+                                                  print('${profileController.blueLike.value}');
+                                                  print('${profileController.likes.value}');
+
+                                                  profileController.setLikes(
+                                                      userItself ? userId : personData['uId']);
+                                                  profileController.getLikes(
+                                                      userItself ? userId : personData['uId']);
+
+                                                  if(profileController.blueLike.value == true){
+                                                    profileController.likes.value--;
+                                                    profileController.blueLike.value = false;
+                                                  }else if(profileController.blueLike.value == false){
+                                                    profileController.likes.value++;
+                                                    profileController.blueLike.value = true;
+                                                  }
+
+
+                                                  print('cccccccccccccccccccccccccccccc2');
+                                                  print('${profileController.blueLike.value}');
+                                                  print('${profileController.likes.value}');
+
+                                                },
+                                                child: SizedBox(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: SvgPicture.asset(
+                                                    'assets/images/like.svg',
+                                                    color: userItself ? Color.fromARGB(169, 92, 81, 81)  : (
+                                                        profileController.blueLike.value
+                                                            ? Color.fromARGB(255, 2, 63, 124)
+                                                            : Color.fromARGB(169, 92, 81, 81)
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                          }),
+                                        ],
                                       ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              );
+                            }),
 
+                        // SizedBox(
+                        //   width: 50,
+                        //   height: 50,
+                        //   child: Row(
+                        //     mainAxisSize: MainAxisSize.min,
+                        //     children: [
+                        //       Text(
+                        //         (profileController.likes.value - 1).toString(),
+                        //         style: TextStyle(
+                        //             fontSize: 16,
+                        //             fontWeight: FontWeight.bold,
+                        //             color: userItself ? Color.fromARGB(169, 92, 81, 81) : (
+                        //                 profileController.blueLike.value ?
+                        //                 Color.fromARGB(255, 2, 63, 124)
+                        //                     : Color.fromARGB(169, 92, 81, 81)
+                        //             ),
+                        //             ),
+                        //       ),
+                        //       SizedBox(width: 5),
+                        //       GestureDetector(
+                        //         onTap: () {
+                        //           // if(profileController.blueLike.value == false){
+                        //           //   profileController.blueLike.value = true;
+                        //           // }else if(profileController.blueLike.value == true){
+                        //           //   profileController.blueLike.value = false;
+                        //           // }
+                        //           profileController.setLikes(
+                        //               userItself ? userId : personData['uId']);
+                        //           profileController.getLikes(
+                        //               userItself ? userId : personData['uId']);
+                        //         },
+                        //         child: SizedBox(
+                        //           width: 30,
+                        //           height: 30,
+                        //           child: SvgPicture.asset(
+                        //             'assets/images/like.svg',
+                        //             color: userItself ? Color.fromARGB(169, 92, 81, 81)  : (
+                        //                 profileController.blueLike.value
+                        //                     ? Color.fromARGB(255, 2, 63, 124)
+                        //                     : Color.fromARGB(169, 92, 81, 81)
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         SizedBox(width: 3),
                       ],
                     ),

@@ -12,13 +12,20 @@ import 'package:get/get.dart';
 
 import '../controllers/comunity_controller.dart';
 
-class ComunityScreen extends StatelessWidget {
+class ComunityScreen extends StatefulWidget {
   ComunityScreen({Key? key}) : super(key: key);
 
-  ComunityController homeController = Get.put(ComunityController());
-  ProfileController profileController = Get.put(ProfileController());
-  String? userId = FirebaseAuth.instance.currentUser!.uid;
+  @override
+  State<ComunityScreen> createState() => _ComunityScreenState();
+}
 
+class _ComunityScreenState extends State<ComunityScreen> {
+  ComunityController homeController = Get.put(ComunityController());
+
+  ProfileController profileController = Get.put(ProfileController());
+
+  String? userId = FirebaseAuth.instance.currentUser!.uid;
+  var isLiked;
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +127,12 @@ class ComunityScreen extends StatelessWidget {
   }
 
   Widget _myListTile(QueryDocumentSnapshot<Object?> doc) {
+    if (doc['uId'] == FirebaseAuth.instance.currentUser!.uid) {
+      return SizedBox.shrink();
+    }
     return InkWell(
       onTap: () {
+        print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
         profileController.setProfileData(doc);
         Get.toNamed('/profile-screen', arguments: doc);
       },
@@ -200,7 +211,9 @@ class ComunityScreen extends StatelessWidget {
                       ),
                       builder: (context, snapshot) {
                         var data = snapshot.data;
-                        var isLiked = data?.contains(doc["uId"]) ?? false;
+                        isLiked = data?.contains(FirebaseAuth.instance.currentUser!.uid) ?? false;
+                       // profileController.blueLike.value = isLiked;
+
                         if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         }
@@ -222,7 +235,6 @@ class ComunityScreen extends StatelessWidget {
                           );
                         }
 
-                        if (snapshot.hasData) {}
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -232,9 +244,7 @@ class ComunityScreen extends StatelessWidget {
                               height: 30,
                               child: GestureDetector(
                                 onTap: () {
-                                  print('ddddddddddddddddddddddddddddddddddddddddddddd');
-                                  print(doc['uId']);
-                                  profileController.setLikes(doc["uId"]);
+                                  profileController.setLikes(doc['uId']);
                                   profileController.getLikes(userId);
                                 },
                                 child: SvgPicture.asset(

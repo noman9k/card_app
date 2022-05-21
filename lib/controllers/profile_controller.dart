@@ -103,7 +103,7 @@ class ProfileController extends GetxController {
   Future<void> setLikes(String? uId) async {
     try {
       await usersReference
-          .doc(uId ?? this.uId)
+          .doc(uId)
           .get()
           .then((DocumentSnapshot<Object?> documentSnapshot) async {
         if (documentSnapshot['likes'] != null) {
@@ -111,15 +111,15 @@ class ProfileController extends GetxController {
               .map<String>((value) => value.toString())
               .toList();
 
-          if (likersList.contains(uId)) {
-            usersReference.doc(uId ?? this.uId).update({
-              'likes': FieldValue.arrayRemove([uId])
+          if (likersList.contains(this.uId)) {
+            usersReference.doc(uId).update({
+              'likes': FieldValue.arrayRemove([this.uId])
             });
           } else {
             // blueColor.value = true;
 
-            usersReference.doc(uId ?? this.uId).update({
-              'likes': FieldValue.arrayUnion([uId])
+            usersReference.doc(uId).update({
+              'likes': FieldValue.arrayUnion([this.uId])
             });
           }
 
@@ -129,8 +129,8 @@ class ProfileController extends GetxController {
     } catch (e) {
       getLikes(uId);
 
-      await usersReference.doc(uId ?? this.uId).update({
-        'likes': [uId],
+      await usersReference.doc(uId).update({
+        'likes': [this.uId],
       });
     }
   }
