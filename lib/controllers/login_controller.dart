@@ -87,14 +87,18 @@ class LoginController extends GetxController {
         .then((value) => saveUserToDb())
         .onError((error, stackTrace) => Get.snackbar('Oups !', 'Erreur OTP',
             backgroundColor: MyColors.newTextColor,
-            snackPosition: SnackPosition.BOTTOM));
+            snackPosition: SnackPosition.BOTTOM,
+      margin: EdgeInsets.all(20)));
 
     print('signin');
     if (auth.currentUser == null) {
       Get.snackbar(
-        'Signin Failed',
-        'Please check your code',
-        backgroundColor: Colors.red,
+        'Fallo al iniciar sesion',
+        'Por favor revisa tu código',
+        colorText: Colors.black,
+        backgroundColor: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(20),
       );
       return;
     }

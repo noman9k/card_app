@@ -6,6 +6,9 @@ class ProfileController extends GetxController {
   var uId = FirebaseAuth.instance.currentUser!.uid;
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
+  // CollectionReference likeRef = FirebaseFirestore.instance.collection("users")
+  // .doc()
+  
   var descriptionEdited = true.obs;
   var roleEdited = true.obs;
   var questionEdited = true.obs;

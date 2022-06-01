@@ -3,15 +3,23 @@
 import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/role_controller.dart';
 import 'package:card_app/widgets/my_widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/login_controller.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   LoginController loginController = Get.put(LoginController());
+  bool agree = false;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +166,7 @@ class LoginScreen extends StatelessWidget {
                                 style: TextStyle(
                                     color: MyColors.newTextColor, fontSize: 16),
                               )
-                            : SizedBox(),
+                            : SizedBox.shrink(),
                         SizedBox(height: 5),
                         loginController.codeSended.value
                             ? TextFormField(
@@ -187,7 +195,11 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : SizedBox.shrink(),
+                        SizedBox(height: 5),
+                        loginController.codeSended.value
+                            ? privacyPolicyLinkAndTermsOfService()
+                            : SizedBox.shrink(),
                       ],
                     ),
                     MyElevatedButton(
@@ -213,7 +225,10 @@ class LoginScreen extends StatelessWidget {
                         loginController.isLoading.value = true;
 
                         loginController.codeSended.value
-                            ? loginController.verifyNumber()
+                            ? (agree ? loginController.verifyNumber() :
+                              Get.snackbar("Warning", "Please accept our Terms and Conditions", snackPosition: SnackPosition.BOTTOM,
+                              colorText: Colors.white,margin: EdgeInsets.all(20),
+                              backgroundColor: Colors.white))
                             : loginController.sendCode();
                       },
                     ),
@@ -232,6 +247,67 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget privacyPolicyLinkAndTermsOfService() {
+    return Row(
+      children: [
+        Checkbox(
+          checkColor: Colors.black,
+          side: BorderSide(color: Colors.white),
+          value: agree,
+          onChanged: (value) {
+            setState(() {
+              agree = value ?? false;
+            });
+          },
+        ),
+        Expanded(
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(10),
+            child: Center(
+                child: Text.rich(
+                    TextSpan(
+                        text: 'By continuing, you agree to our ', style: TextStyle(
+                        fontSize: 16, color: Colors.white
+                    ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Terms of Service', style: TextStyle(
+                            fontSize: 16, color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  await launchUrl(Uri.parse("https://github.com/shehzadraheem/Dreeam_Terms-Conditions"));
+                                }
+                          ),
+                          TextSpan(
+                              text: ' and ', style: TextStyle(
+                              fontSize: 18, color: Colors.white
+                          ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: 'Privacy Policy', style: TextStyle(
+                                    fontSize: 18, color: Colors.white,
+                                    decoration: TextDecoration.underline
+                                ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async{
+                                        await launchUrl(Uri.parse("https://github.com/shehzadraheem/Privacy-Policy"));
+                                      }
+                                )
+                              ]
+                          )
+                        ]
+                    )
+                )
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
