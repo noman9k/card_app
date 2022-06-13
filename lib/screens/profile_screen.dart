@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var personData = Get.arguments;
   var userItself = true;
   var userId = FirebaseAuth.instance.currentUser!.uid;
-  
+
   @override
   Widget build(BuildContext context) {
     userItself = personData == null ? true : false;
@@ -95,48 +95,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         : Positioned(
                             bottom: 50,
                             left: 10,
-                      child: SizedBox(
-                        width: 120,
-                        height: 100,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                                left: 0,
-                                bottom: 60,
-                                child: Text(
-                                  'Message',
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                )),
-                            Positioned(
-                              bottom: -2,
-                              right: 35,
-                              child: Container(
-                                  margin: EdgeInsetsDirectional.all(8),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black,width: 3),
-                                      //color: Colors.white,
-                                      shape: BoxShape.circle),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Get.toNamed(
-                                        '/message-screen',
-                                        arguments: [
-                                          personData['uId'],
-                                          personData['userName'],
-                                          personData['image'],
-                                        ],
-                                      );
-                                    },
-                                    icon: Icon(Icons.chat_bubble),
-                                  ),
-                                )
+                            child: SizedBox(
+                              width: 120,
+                              height: 100,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      left: 0,
+                                      bottom: 60,
+                                      child: Text(
+                                        'Message',
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      )),
+                                  Positioned(
+                                      bottom: -2,
+                                      right: 35,
+                                      child: Container(
+                                        margin: EdgeInsetsDirectional.all(8),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black, width: 3),
+                                            //color: Colors.white,
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            Get.toNamed(
+                                              '/message-screen',
+                                              arguments: [
+                                                personData['uId'],
+                                                personData['userName'],
+                                                personData['image'],
+                                              ],
+                                            );
+                                          },
+                                          icon: Icon(Icons.chat_bubble),
+                                        ),
+                                      )),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
                             // child: Container(
                             //   margin: EdgeInsetsDirectional.all(8),
                             //   decoration: BoxDecoration(
@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             //     icon: Icon(Icons.chat_bubble),
                             //   ),
                             // )
-                      ),
+                          ),
                     //Role
                     Positioned(
                       bottom: 50,
@@ -362,7 +362,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
+                                // return Text('Error: ${snapshot.error}');
+                                return Text('Error');
                               }
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -383,8 +384,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               }
 
                               var data = snapshot.data;
-                              profileController.blueLike.value = data?.contains(FirebaseAuth.instance.currentUser!.uid) ?? false;
-                              print('ssssssssssssssssssssssssssssssssssssssssssss');
+                              profileController.blueLike.value = data?.contains(
+                                      FirebaseAuth.instance.currentUser!.uid) ??
+                                  false;
+                              print(
+                                  'ssssssssssssssssssssssssssssssssssssssssssss');
                               print('${profileController.blueLike.value}');
 
                               return Padding(
@@ -434,87 +438,152 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                         userItself
-                                          ? Text(
-                                            (profileController.likes.value - 1).toString(),
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: userItself ? Color.fromARGB(169, 92, 81, 81) : (
-                                                  profileController.blueLike.value ?
-                                                  Color.fromARGB(255, 2, 63, 124)
-                                                      : Color.fromARGB(169, 92, 81, 81)
-                                              ),
-                                            ),
-                                          )
-                                          : Obx((){
-                                            return Text(
-                                              (profileController.likes.value - 1).toString(),
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: userItself ? Color.fromARGB(169, 92, 81, 81) : (
-                                                    profileController.blueLike.value ?
-                                                    Color.fromARGB(255, 2, 63, 124)
-                                                        : Color.fromARGB(169, 92, 81, 81)
-                                                ),
-                                              ),
-                                            );
-                                          }),
+                                          userItself
+                                              ? Text(
+                                                  (profileController
+                                                              .likes.value -
+                                                          1)
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: userItself
+                                                        ? Color.fromARGB(
+                                                            169, 92, 81, 81)
+                                                        : (profileController
+                                                                .blueLike.value
+                                                            ? Color.fromARGB(
+                                                                255, 2, 63, 124)
+                                                            : Color.fromARGB(
+                                                                169,
+                                                                92,
+                                                                81,
+                                                                81)),
+                                                  ),
+                                                )
+                                              : Obx(() {
+                                                  return Text(
+                                                    (profileController
+                                                                .likes.value -
+                                                            1)
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: userItself
+                                                          ? Color.fromARGB(
+                                                              169, 92, 81, 81)
+                                                          : (profileController
+                                                                  .blueLike
+                                                                  .value
+                                                              ? Color.fromARGB(
+                                                                  255,
+                                                                  2,
+                                                                  63,
+                                                                  124)
+                                                              : Color.fromARGB(
+                                                                  169,
+                                                                  92,
+                                                                  81,
+                                                                  81)),
+                                                    ),
+                                                  );
+                                                }),
                                           SizedBox(width: 5),
                                           userItself
-                                            ? SizedBox(
-                                               width: 30,
-                                               height: 30,
-                                               child: SvgPicture.asset(
-                                                 'assets/images/like.svg',
-                                                 color: userItself ? Color.fromARGB(169, 92, 81, 81)  : (
-                                                     profileController.blueLike.value
-                                                         ? Color.fromARGB(255, 2, 63, 124)
-                                                         : Color.fromARGB(169, 92, 81, 81)
-                                                 ),
-                                               ),
-                                             )
-                                            : Obx((){
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  print('cccccccccccccccccccccccccccccc1');
-                                                  print('${profileController.blueLike.value}');
-                                                  print('${profileController.likes.value}');
-
-                                                  profileController.setLikes(
-                                                      userItself ? userId : personData['uId']);
-                                                  profileController.getLikes(
-                                                      userItself ? userId : personData['uId']);
-
-                                                  if(profileController.blueLike.value == true){
-                                                    profileController.likes.value--;
-                                                    profileController.blueLike.value = false;
-                                                  }else if(profileController.blueLike.value == false){
-                                                    profileController.likes.value++;
-                                                    profileController.blueLike.value = true;
-                                                  }
-
-
-                                                  print('cccccccccccccccccccccccccccccc2');
-                                                  print('${profileController.blueLike.value}');
-                                                  print('${profileController.likes.value}');
-
-                                                },
-                                                child: SizedBox(
+                                              ? SizedBox(
                                                   width: 30,
                                                   height: 30,
                                                   child: SvgPicture.asset(
                                                     'assets/images/like.svg',
-                                                    color: userItself ? Color.fromARGB(169, 92, 81, 81)  : (
-                                                        profileController.blueLike.value
-                                                            ? Color.fromARGB(255, 2, 63, 124)
-                                                            : Color.fromARGB(169, 92, 81, 81)
-                                                    ),
+                                                    color: userItself
+                                                        ? Color.fromARGB(
+                                                            169, 92, 81, 81)
+                                                        : (profileController
+                                                                .blueLike.value
+                                                            ? Color.fromARGB(
+                                                                255, 2, 63, 124)
+                                                            : Color.fromARGB(
+                                                                169,
+                                                                92,
+                                                                81,
+                                                                81)),
                                                   ),
-                                                ),
-                                              );
-                                          }),
+                                                )
+                                              : Obx(() {
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      print(
+                                                          'cccccccccccccccccccccccccccccc1');
+                                                      print(
+                                                          '${profileController.blueLike.value}');
+                                                      print(
+                                                          '${profileController.likes.value}');
+
+                                                      profileController
+                                                          .setLikes(userItself
+                                                              ? userId
+                                                              : personData[
+                                                                  'uId']);
+                                                      profileController
+                                                          .getLikes(userItself
+                                                              ? userId
+                                                              : personData[
+                                                                  'uId']);
+
+                                                      if (profileController
+                                                              .blueLike.value ==
+                                                          true) {
+                                                        profileController
+                                                            .likes.value--;
+                                                        profileController
+                                                            .blueLike
+                                                            .value = false;
+                                                      } else if (profileController
+                                                              .blueLike.value ==
+                                                          false) {
+                                                        profileController
+                                                            .likes.value++;
+                                                        profileController
+                                                            .blueLike
+                                                            .value = true;
+                                                      }
+
+                                                      print(
+                                                          'cccccccccccccccccccccccccccccc2');
+                                                      print(
+                                                          '${profileController.blueLike.value}');
+                                                      print(
+                                                          '${profileController.likes.value}');
+                                                    },
+                                                    child: SizedBox(
+                                                      width: 30,
+                                                      height: 30,
+                                                      child: SvgPicture.asset(
+                                                        'assets/images/like.svg',
+                                                        color: userItself
+                                                            ? Color.fromARGB(
+                                                                169, 92, 81, 81)
+                                                            : (profileController
+                                                                    .blueLike
+                                                                    .value
+                                                                ? Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        2,
+                                                                        63,
+                                                                        124)
+                                                                : Color
+                                                                    .fromARGB(
+                                                                        169,
+                                                                        92,
+                                                                        81,
+                                                                        81)),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
                                         ],
                                       ),
                                     ),
@@ -616,9 +685,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                _rowItem('Niveau', profileController.game.value),
-                                _rowItem('Table', ' ${profileController.cash.value}'),
-                                _rowItem('Mode ', profileController.level.value),
+                                _rowItem(
+                                    'Niveau', profileController.game.value),
+                                _rowItem('Table',
+                                    ' ${profileController.cash.value}'),
+                                _rowItem(
+                                    'Mode ', profileController.level.value),
                               ],
                             )),
                       ),
