@@ -89,7 +89,6 @@ class LoginController extends GetxController {
             backgroundColor: MyColors.newTextColor,
             snackPosition: SnackPosition.BOTTOM));
 
-    print('signin');
     if (auth.currentUser == null) {
       Get.snackbar(
         'Signin Failed',
