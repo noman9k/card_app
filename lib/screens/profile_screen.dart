@@ -4,6 +4,7 @@ import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/controllers/question_controller.dart';
 import 'package:card_app/controllers/role_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -356,11 +357,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               )
                             : Container(),
                         Spacer(),
-                        FutureBuilder<List?>(
-                            future: profileController.likedList(
-                              userItself ? userId : personData["uId"],
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: StreamBuilder<
+                              DocumentSnapshot<Map<String, dynamic>>>(
+                            stream: FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(userItself ? userId : personData['uId'])
+                                .snapshots(),
                             builder: (context, snapshot) {
+                              var data = snapshot.data;
                               if (snapshot.hasError) {
                                 // return Text('Error: ${snapshot.error}');
                                 return Text('Error');
@@ -368,277 +374,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
                                 return Center(
-                                  child: SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 1,
-                                        color: Color.fromARGB(255, 2, 63, 124),
-                                      )),
+                                  child: CircularProgressIndicator(),
                                 );
                               }
-                              if (snapshot.data == null) {
+                              if (data == null) {
                                 return Center(
                                   child: Text('No Data Found'),
                                 );
                               }
-
-                              var data = snapshot.data;
-                              profileController.blueLike.value = data?.contains(
-                                      FirebaseAuth.instance.currentUser!.uid) ??
-                                  false;
-                              print(
-                                  'ssssssssssssssssssssssssssssssssssssssssssss');
-                              print('${profileController.blueLike.value}');
-
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 8),
+                              return GestureDetector(
+                                onTap: () {
+                                  profileController
+                                      .setLikes(data.data()!['uId']);
+                                  profileController.getLikes(userId);
+                                },
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    // Text(
-                                    //   '${profileController.likes - 1}',
-                                    //   style: TextStyle(
-                                    //     fontSize: 20,
-                                    //     fontWeight: FontWeight.bold,
-                                    //     color: isLiked
-                                    //         ? Color.fromARGB(255, 2, 63, 124)
-                                    //         : Color.fromARGB(169, 92, 81, 81),
-                                    //   ),
-                                    // ),
-                                    // SizedBox(
-                                    //   width: 5,
-                                    // ),
-                                    // SizedBox(
-                                    //   width: 40,
-                                    //   height: 40,
-                                    //   child: GestureDetector(
-                                    //     onTap: () {
-                                    //       print('dddddddddddddddddddddddddddddddddddddddddd');
-                                    //       print('dddddddddddddddddddddddddddddddddddddddddd');
-                                    //       print('dddddddddddddddddddddddddddddddddddddddddd');
-                                    //
-                                    //       profileController.setLikes(userItself ? userId : personData['uId']);
-                                    //       profileController.getLikes(userItself ? userId : personData['uId']);
-                                    //     },
-                                    //     child: SvgPicture.asset(
-                                    //       'assets/images/like.svg',
-                                    //       width: 30,
-                                    //       height: 30,
-                                    //       color: isLiked
-                                    //           ? Color.fromARGB(255, 2, 63, 124)
-                                    //           : Color.fromARGB(169, 92, 81, 81),
-                                    //     ),
-                                    //   ),
-                                    // ),
-
+                                    SvgPicture.asset(
+                                      "assets/images/like.svg",
+                                      width: 30,
+                                      height: 30,
+                                      color:
+                                          data.data()!['likes'].contains(userId)
+                                              ? Color.fromARGB(255, 2, 63, 124)
+                                              : Colors.grey,
+                                    ),
                                     SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          userItself
-                                              ? Text(
-                                                  (profileController
-                                                              .likes.value -
-                                                          1)
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: userItself
-                                                        ? Color.fromARGB(
-                                                            169, 92, 81, 81)
-                                                        : (profileController
-                                                                .blueLike.value
-                                                            ? Color.fromARGB(
-                                                                255, 2, 63, 124)
-                                                            : Color.fromARGB(
-                                                                169,
-                                                                92,
-                                                                81,
-                                                                81)),
-                                                  ),
-                                                )
-                                              : Obx(() {
-                                                  return Text(
-                                                    (profileController
-                                                                .likes.value -
-                                                            1)
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: userItself
-                                                          ? Color.fromARGB(
-                                                              169, 92, 81, 81)
-                                                          : (profileController
-                                                                  .blueLike
-                                                                  .value
-                                                              ? Color.fromARGB(
-                                                                  255,
-                                                                  2,
-                                                                  63,
-                                                                  124)
-                                                              : Color.fromARGB(
-                                                                  169,
-                                                                  92,
-                                                                  81,
-                                                                  81)),
-                                                    ),
-                                                  );
-                                                }),
-                                          SizedBox(width: 5),
-                                          userItself
-                                              ? SizedBox(
-                                                  width: 30,
-                                                  height: 30,
-                                                  child: SvgPicture.asset(
-                                                    'assets/images/like.svg',
-                                                    color: userItself
-                                                        ? Color.fromARGB(
-                                                            169, 92, 81, 81)
-                                                        : (profileController
-                                                                .blueLike.value
-                                                            ? Color.fromARGB(
-                                                                255, 2, 63, 124)
-                                                            : Color.fromARGB(
-                                                                169,
-                                                                92,
-                                                                81,
-                                                                81)),
-                                                  ),
-                                                )
-                                              : Obx(() {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      print(
-                                                          'cccccccccccccccccccccccccccccc1');
-                                                      print(
-                                                          '${profileController.blueLike.value}');
-                                                      print(
-                                                          '${profileController.likes.value}');
-
-                                                      profileController
-                                                          .setLikes(userItself
-                                                              ? userId
-                                                              : personData[
-                                                                  'uId']);
-                                                      profileController
-                                                          .getLikes(userItself
-                                                              ? userId
-                                                              : personData[
-                                                                  'uId']);
-
-                                                      if (profileController
-                                                              .blueLike.value ==
-                                                          true) {
-                                                        profileController
-                                                            .likes.value--;
-                                                        profileController
-                                                            .blueLike
-                                                            .value = false;
-                                                      } else if (profileController
-                                                              .blueLike.value ==
-                                                          false) {
-                                                        profileController
-                                                            .likes.value++;
-                                                        profileController
-                                                            .blueLike
-                                                            .value = true;
-                                                      }
-
-                                                      print(
-                                                          'cccccccccccccccccccccccccccccc2');
-                                                      print(
-                                                          '${profileController.blueLike.value}');
-                                                      print(
-                                                          '${profileController.likes.value}');
-                                                    },
-                                                    child: SizedBox(
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: SvgPicture.asset(
-                                                        'assets/images/like.svg',
-                                                        color: userItself
-                                                            ? Color.fromARGB(
-                                                                169, 92, 81, 81)
-                                                            : (profileController
-                                                                    .blueLike
-                                                                    .value
-                                                                ? Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        2,
-                                                                        63,
-                                                                        124)
-                                                                : Color
-                                                                    .fromARGB(
-                                                                        169,
-                                                                        92,
-                                                                        81,
-                                                                        81)),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                        ],
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      '${data.data()!['likes'].length - 1}',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: data
+                                                .data()!['likes']
+                                                .contains(userId)
+                                            ? Color.fromARGB(255, 2, 63, 124)
+                                            : Colors.grey,
                                       ),
                                     ),
                                   ],
                                 ),
                               );
-                            }),
-
-                        // SizedBox(
-                        //   width: 50,
-                        //   height: 50,
-                        //   child: Row(
-                        //     mainAxisSize: MainAxisSize.min,
-                        //     children: [
-                        //       Text(
-                        //         (profileController.likes.value - 1).toString(),
-                        //         style: TextStyle(
-                        //             fontSize: 16,
-                        //             fontWeight: FontWeight.bold,
-                        //             color: userItself ? Color.fromARGB(169, 92, 81, 81) : (
-                        //                 profileController.blueLike.value ?
-                        //                 Color.fromARGB(255, 2, 63, 124)
-                        //                     : Color.fromARGB(169, 92, 81, 81)
-                        //             ),
-                        //             ),
-                        //       ),
-                        //       SizedBox(width: 5),
-                        //       GestureDetector(
-                        //         onTap: () {
-                        //           // if(profileController.blueLike.value == false){
-                        //           //   profileController.blueLike.value = true;
-                        //           // }else if(profileController.blueLike.value == true){
-                        //           //   profileController.blueLike.value = false;
-                        //           // }
-                        //           profileController.setLikes(
-                        //               userItself ? userId : personData['uId']);
-                        //           profileController.getLikes(
-                        //               userItself ? userId : personData['uId']);
-                        //         },
-                        //         child: SizedBox(
-                        //           width: 30,
-                        //           height: 30,
-                        //           child: SvgPicture.asset(
-                        //             'assets/images/like.svg',
-                        //             color: userItself ? Color.fromARGB(169, 92, 81, 81)  : (
-                        //                 profileController.blueLike.value
-                        //                     ? Color.fromARGB(255, 2, 63, 124)
-                        //                     : Color.fromARGB(169, 92, 81, 81)
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                            },
+                          ),
+                        ),
                         SizedBox(width: 3),
                       ],
                     ),

@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:like_button/like_button.dart';
 
 import '../controllers/comunity_controller.dart';
 
@@ -25,7 +26,8 @@ class _ComunityScreenState extends State<ComunityScreen> {
   ProfileController profileController = Get.put(ProfileController());
 
   String? userId = FirebaseAuth.instance.currentUser!.uid;
-  var isLiked;
+  //var liked;
+  var id;
 
   @override
   Widget build(BuildContext context) {
@@ -132,12 +134,12 @@ class _ComunityScreenState extends State<ComunityScreen> {
     }
     return InkWell(
       onTap: () {
-        print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
         profileController.setProfileData(doc);
         Get.toNamed('/profile-screen', arguments: doc);
       },
       child: Card(
         child: Container(
+          //color: Colors.red,
           padding: EdgeInsets.all(8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,7 +177,7 @@ class _ComunityScreenState extends State<ComunityScreen> {
                   ),
                   SizedBox(
                     height: 65,
-                    width: Get.width * 0.6,
+                    width: Get.width * 0.5,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -201,82 +203,68 @@ class _ComunityScreenState extends State<ComunityScreen> {
                   ),
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // ignore: prefer_const_literals_to_create_immutables
-                children: [
-                  FutureBuilder<List?>(
-                      future: profileController.likedList(
-                        doc["uId"],
-                      ),
-                      builder: (context, snapshot) {
-                        var data = snapshot.data;
-                        isLiked = data?.contains(FirebaseAuth.instance.currentUser!.uid) ?? false;
-                       // profileController.blueLike.value = isLiked;
-
-                        if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                            child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 1,
-                                  color: Color.fromARGB(255, 2, 63, 124),
-                                )),
-                          );
-                        }
-                        if (data == null) {
-                          return Center(
-                            child: Text('No Data Found'),
-                          );
-                        }
-
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: GestureDetector(
-                                onTap: () {
-                                  profileController.setLikes(doc['uId']);
-                                  profileController.getLikes(userId);
-                                },
-                                child: SvgPicture.asset(
-                                  'assets/images/like.svg',
-                                  color: isLiked
-                                      ? Color.fromARGB(255, 2, 63, 124)
-                                      : Color.fromARGB(169, 92, 81, 81),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              '${data.length - 1}',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: isLiked
-                                    ? Color.fromARGB(255, 2, 63, 124)
-                                    : Color.fromARGB(169, 92, 81, 81),
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
-                ],
-              )
+              GestureDetector(
+                onTap: (){
+                  profileController.setLikes(doc['uId']);
+                  profileController.getLikes(userId);
+                },
+                child: Row(
+                  children: [
+                    SvgPicture.asset("assets/images/like.svg",width: 30,height: 30,
+                    color: doc['likes'].contains(userId) ? Color.fromARGB(255, 2, 63, 124) : Colors.grey,),
+                    SizedBox(width: 4,),
+                    Text('${doc['likes'].length - 1}',style: TextStyle(
+                      fontSize: 18,
+                      color: doc['likes'].contains(userId) ? Color.fromARGB(255, 2, 63, 124) : Colors.grey,
+                    ),),
+                  ],
+                ),
+              ),
+              // Container(
+              //    width: 50,
+              //    height: 50,
+              //   child: LikeButton(
+              //     onTap: onLikeButtonTapped,
+              //     size: 20,
+              //     circleColor:
+              //     CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+              //     bubblesColor: BubblesColor(
+              //       dotPrimaryColor: Color(0xff33b5e5),
+              //       dotSecondaryColor: Color(0xff0099cc),
+              //     ),
+              //     likeBuilder: (bool isLiked) {
+              //       //liked = isLiked;
+              //       isLiked = doc['likes'].contains(FirebaseAuth.instance.currentUser!.uid);
+              //       return Icon(
+              //         Icons.home,
+              //         color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+              //         size: 20,
+              //       );
+              //     },
+              //     likeCount: doc['likes'].length - 1,
+              //     countBuilder: (int? count, bool isLiked, String text) {
+              //       //liked = isLiked;
+              //       var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
+              //       Widget result;
+              //       if (count == 0) {
+              //         result = Text(
+              //           "0",
+              //           style: TextStyle(color: color),
+              //         );
+              //       } else
+              //         result = Text(
+              //           text,
+              //           style: TextStyle(color: color),
+              //         );
+              //       return result;
+              //     },
+              //   ),
+              // )
             ],
           ),
         ),
       ),
     );
   }
+
 }
