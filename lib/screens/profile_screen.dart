@@ -4,6 +4,7 @@ import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/controllers/question_controller.dart';
 import 'package:card_app/controllers/role_controller.dart';
+import 'package:card_app/widgets/like_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: Text(
                                         'Message',
                                         style: TextStyle(
-                                            fontSize: 30,
+                                            fontSize: 25,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black),
                                       )),
@@ -357,67 +358,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               )
                             : Container(),
                         Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: StreamBuilder<
-                              DocumentSnapshot<Map<String, dynamic>>>(
-                            stream: FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(userItself ? userId : personData['uId'])
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              var data = snapshot.data;
-                              if (snapshot.hasError) {
-                                // return Text('Error: ${snapshot.error}');
-                                return Text('Error');
-                              }
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              if (data == null) {
-                                return Center(
-                                  child: Text('No Data Found'),
-                                );
-                              }
-                              return GestureDetector(
-                                onTap: () {
-                                  profileController
-                                      .setLikes(data.data()!['uId']);
-                                  profileController.getLikes(userId);
-                                },
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/images/like.svg",
-                                      width: 30,
-                                      height: 30,
-                                      color:
-                                          data.data()!['likes'].contains(userId)
-                                              ? Color.fromARGB(255, 2, 63, 124)
-                                              : Colors.grey,
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      '${data.data()!['likes'].length - 1}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: data
-                                                .data()!['likes']
-                                                .contains(userId)
-                                            ? Color.fromARGB(255, 2, 63, 124)
-                                            : Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
+                        MyLikeButton(
+                          userId: userItself ? userId : personData['uId'],
                         ),
                         SizedBox(width: 3),
                       ],

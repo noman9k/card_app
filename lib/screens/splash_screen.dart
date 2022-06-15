@@ -81,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 'Dreeam',
                 style: TextStyle(
                   color: MyColors.newTextColor,
-                  fontSize: Get.height * 0.14,
+                  fontSize: Get.width * 0.24,
                   fontWeight: FontWeight.bold,
                 ),
               ),

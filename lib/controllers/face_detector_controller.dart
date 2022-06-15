@@ -9,7 +9,7 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as imglib;
+// import 'package:image/image.dart' as imglib;
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:path_provider/path_provider.dart';
 

@@ -8,7 +8,7 @@ class ProfileController extends GetxController {
       FirebaseFirestore.instance.collection('users');
   // CollectionReference likeRef = FirebaseFirestore.instance.collection("users")
   // .doc()
-  
+
   var descriptionEdited = true.obs;
   var roleEdited = true.obs;
   var questionEdited = true.obs;
@@ -33,7 +33,6 @@ class ProfileController extends GetxController {
     super.onInit();
     getProfileData();
     getnumberofEdits();
-    getLikes(null);
   }
 
   Future<void> getnumberofEdits() async {
@@ -62,7 +61,6 @@ class ProfileController extends GetxController {
       answer1.value = documentSnapshot['question.answer1'];
       answer2.value = documentSnapshot['question.answer2'];
       answer3.value = documentSnapshot['question.answer3'];
-      likes.value = documentSnapshot['likes'].length;
     });
   }
 
@@ -78,64 +76,6 @@ class ProfileController extends GetxController {
     answer1.value = doc['question.answer1'];
     answer2.value = doc['question.answer2'];
     answer3.value = doc['question.answer3'];
-    likes.value = doc['likes'].length;
-  }
-
-  Future<int> getLikes(uId) async {
-    try {
-      await usersReference.doc(uId).get().then((value) => {
-            likes.value = value['likes'].length,
-            if (value['likes'] != null)
-              {
-                likersList.value = value['likes']
-                    .map<String>((value) => value.toString())
-                    .toList(),
-                likersList.contains(uId)
-                    ? blueLike.value = true
-                    : blueLike.value = false
-              }
-          });
-
-      return likes.value;
-    } catch (e) {
-      setLikes(null);
-      return 0;
-    }
-  }
-
-  Future<void> setLikes(String? uId) async {
-    try {
-      await usersReference
-          .doc(uId)
-          .get()
-          .then((DocumentSnapshot<Object?> documentSnapshot) async {
-        if (documentSnapshot['likes'] != null) {
-          likersList.value = documentSnapshot['likes']
-              .map<String>((value) => value.toString())
-              .toList();
-
-          if (likersList.contains(this.uId)) {
-            usersReference.doc(uId).update({
-              'likes': FieldValue.arrayRemove([this.uId])
-            });
-          } else {
-            // blueColor.value = true;
-
-            usersReference.doc(uId).update({
-              'likes': FieldValue.arrayUnion([this.uId])
-            });
-          }
-
-          getLikes(uId);
-        }
-      });
-    } catch (e) {
-      getLikes(uId);
-
-      await usersReference.doc(uId).update({
-        'likes': [this.uId],
-      });
-    }
   }
 
   void setDescription() async {
