@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -81,16 +82,16 @@ class _SplashScreenState extends State<SplashScreen> {
                 'Dreeam',
                 style: TextStyle(
                   color: MyColors.newTextColor,
-                  fontSize: Get.height * 0.14,
+                  fontSize: 0.3.sw,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Row(
                 children: [
-                  SvgPicture.asset('assets/icons/heart.svg'),
-                  SvgPicture.asset('assets/icons/spades.svg',color: Colors.white,),
-                  SvgPicture.asset('assets/icons/diamond.svg'),
-                  SvgPicture.asset('assets/icons/club.svg',color: Colors.white,),
+                  SvgPicture.asset('assets/icons/heart.svg',width: 0.2.sw,),
+                  SvgPicture.asset('assets/icons/spades.svg',color: Colors.white,width: 0.25.sw,),
+                  SvgPicture.asset('assets/icons/diamond.svg',width: 0.25.sw,),
+                  SvgPicture.asset('assets/icons/club.svg',color: Colors.white,width: 0.25.sw,),
                 ],
               ),
             ],

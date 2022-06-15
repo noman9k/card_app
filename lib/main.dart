@@ -5,6 +5,7 @@ import 'package:card_app/constant/colors.dart';
 import 'package:card_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'screens/comunity_screen.dart';
@@ -23,6 +24,7 @@ List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await ScreenUtil.ensureScreenSize();
   cameras = await availableCameras();
   runApp(const MyApp());
 }
@@ -32,29 +34,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Card App',
-      theme: ThemeData(
-        primarySwatch: MyColors.backgrnd,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: SplashScreen(),
-      // home: SelectRoleScreen(),
-      getPages: [
-        GetPage(name: '/', page: () => LoginScreen()),
-        GetPage(name: '/userdata-screen', page: () => UserDataScreen()),
-        GetPage(name: '/select-role-screen', page: () => SelectRoleScreen()),
-        GetPage(name: '/profile-screen', page: () => ProfileScreen()),
-        GetPage(name: '/question-screen', page: () => QuestionScreen()),
-        GetPage(name: '/image-upload-screen', page: () => ImageUploadScreen()),
-        GetPage(name: '/home-screen', page: () => HomeScreen()),
-        GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
-        GetPage(name: '/message-screen', page: () => MessageScreen()),
-        GetPage(
-            name: '/edit-description-screen',
-            page: () => EditDescriptionScreen()),
-      ],
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      builder: (BuildContext context, Widget? child) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Card App',
+          theme: ThemeData(
+            primarySwatch: MyColors.backgrnd,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: SplashScreen(),
+          // home: SelectRoleScreen(),
+          getPages: [
+            GetPage(name: '/', page: () => LoginScreen()),
+            GetPage(name: '/userdata-screen', page: () => UserDataScreen()),
+            GetPage(name: '/select-role-screen', page: () => SelectRoleScreen()),
+            GetPage(name: '/profile-screen', page: () => ProfileScreen()),
+            GetPage(name: '/question-screen', page: () => QuestionScreen()),
+            GetPage(name: '/image-upload-screen', page: () => ImageUploadScreen()),
+            GetPage(name: '/home-screen', page: () => HomeScreen()),
+            GetPage(name: '/comunity-screen', page: () => ComunityScreen()),
+            GetPage(name: '/message-screen', page: () => MessageScreen()),
+            GetPage(
+                name: '/edit-description-screen',
+                page: () => EditDescriptionScreen()),
+          ],
+        );
+      }
     );
   }
 }
