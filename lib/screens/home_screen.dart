@@ -28,6 +28,8 @@ class HomeScreen extends StatelessWidget {
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.tabIndex,
             onTap: controller.changeTabIndex,
+            selectedItemColor: Colors.green,
+            unselectedItemColor: Colors.black,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.people_alt_outlined),
@@ -41,6 +43,7 @@ class HomeScreen extends StatelessWidget {
                 icon: Icon(Icons.person),
                 label: 'Profil',
               ),
+
             ],
           ),
           body: IndexedStack(

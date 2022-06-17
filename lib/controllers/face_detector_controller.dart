@@ -9,12 +9,14 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:image_picker/image_picker.dart';
+// import 'package:image/image.dart' as imglib;
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:path_provider/path_provider.dart';
 
-class FaceDetectorColtroller extends GetxController{
-
+class FaceDetectorColtroller extends GetxController {
   FirebaseStorage _storage = FirebaseStorage.instance;
-  CollectionReference usersReference = FirebaseFirestore.instance.collection('users');
+  CollectionReference usersReference =
+      FirebaseFirestore.instance.collection('users');
 
   File? image;
   File? compressedFile;
@@ -31,23 +33,59 @@ class FaceDetectorColtroller extends GetxController{
   var isLoading = false.obs;
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _faceDetector.close();
   }
 
   Future getImage(ImageSource source) async {
-    final pickedFile = await imagePicker.pickImage(source: source);
-    if (pickedFile != null) {
+    try {
+      final pickedFile = await imagePicker.pickImage(
+        source: source,
+      );
+      if (pickedFile == null) return;
+
+      if (Platform.isIOS) {
+        await Future.delayed(const Duration(milliseconds: 1000));
+      }
       _processPickedFile(pickedFile);
+
+      if (faces.isEmpty) {
+        throw Exception('Nenhum rosto foi detectado na imagem!');
+      }
+
+      return faces;
+    } catch (e) {
+      throw Exception('$e');
     }
+
+    // final pickedFile = await imagePicker.pickImage(source: source);
+    // if (pickedFile != null) {
+    //   _processPickedFile(pickedFile);
+    // }
   }
 
   Future _processPickedFile(XFile? pickedFile) async {
     final path = pickedFile?.path;
     if (path == null) {
+      Get.snackbar('title', path!);
       return;
     }
+    // if (Platform.isIOS) {
+    //   final directory = await getApplicationDocumentsDirectory();
+    //   final path = directory.path;
+    //   final filename = DateTime.now().millisecondsSinceEpoch.toString();
+
+    //   final imglib.Image capturedImage =
+    //       imglib.decodeImage(await File(pickedFile!.path).readAsBytes())!;
+
+    //   final imglib.Image orientedImage = imglib.bakeOrientation(capturedImage);
+
+    //   final imageToBeProcessed = await File('$path/$filename')
+    //       .writeAsBytes(imglib.encodeJpg(orientedImage));
+
+    //   return imageToBeProcessed;
+    // }
 
     selectedImagePath.value = path;
     compressedFile = await FlutterNativeImage.compressImage(path, quality: 50);
@@ -56,7 +94,6 @@ class FaceDetectorColtroller extends GetxController{
     final inputImage = InputImage.fromFilePath(path);
     faces.value = await _faceDetector.processImage(inputImage);
   }
-
 
   Future<String?> uploadFile(filePath) async {
     File file = File(compressedFile!.path);
@@ -70,30 +107,32 @@ class FaceDetectorColtroller extends GetxController{
       await _storage.ref('uploads/user/${randomStr}').putFile(file);
     } on FirebaseException catch (e) {
       // e.g, e.code == 'canceled'
-     // error = e.code;
+      // error = e.code;
     }
-    String downloadURL = await _storage.ref('uploads/user/${randomStr}').getDownloadURL();
+    String downloadURL =
+        await _storage.ref('uploads/user/${randomStr}').getDownloadURL();
 
     return downloadURL;
   }
 
-  Future<void> loadPic(bool load) async{
+  Future<void> loadPic(bool load) async {
     isLoading.value = true;
-    uploadFile(selectedImagePath.value).then((url){
-        if(url != null){
-          usersReference.doc(FirebaseAuth.instance.currentUser!.uid)
-              .update({
-            "image" : url
-          });
+    uploadFile(selectedImagePath.value).then((url) {
+      if (url != null) {
+        usersReference
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({"image": url});
 
-           load ? Get.offNamed('/home-screen') : Get.offAllNamed('/home-screen');
-           isLoading = false.obs;
-        }else{
-           isLoading = false.obs;
-          Get.snackbar("Alert", "Image not uploaded , Try again later",
-              margin: EdgeInsets.all(16),snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.white,colorText: Colors.black);
-        }
+        load ? Get.offNamed('/home-screen') : Get.offAllNamed('/home-screen');
+        isLoading = false.obs;
+      } else {
+        isLoading = false.obs;
+        Get.snackbar("Alert", "Image not uploaded , Try again later",
+            margin: EdgeInsets.all(16),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.white,
+            colorText: Colors.black);
+      }
     });
   }
 }

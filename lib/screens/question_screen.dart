@@ -2,6 +2,7 @@
 
 import 'package:card_app/constant/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../controllers/question_controller.dart';
@@ -37,13 +38,14 @@ class QuestionScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                70.verticalSpace,
                 Center(
                   child: Text(
                     arguments[0] ? 'Vous pouvez changer vos réponses seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?' :
                     'Dernière étape',
                     style: TextStyle(
                       color: MyColors.textColor,
-                      fontSize: 30,
+                      fontSize: 40.r,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

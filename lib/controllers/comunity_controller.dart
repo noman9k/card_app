@@ -27,12 +27,16 @@ class ComunityController extends GetxController
   ];
 
   List myTabColor = const [
-    Color.fromARGB(255, 21, 135, 228),
-    Color.fromARGB(255, 24, 38, 236),
-    Color.fromARGB(255, 21, 135, 228),
-    Color.fromARGB(255, 24, 38, 236),
+    // Color.fromARGB(255, 21, 135, 228),
+    // Color.fromARGB(255, 24, 38, 236),
+    // Color.fromARGB(255, 21, 135, 228),
+    // Color.fromARGB(255, 24, 38, 236),
+    Colors.green,
+    Colors.green,
+    Colors.green,
+    Colors.green,
   ];
-  var tabColor = const Color.fromARGB(255, 21, 135, 228).obs;
+  var tabColor = Colors.green.obs;
 
   @override
   void onInit() {

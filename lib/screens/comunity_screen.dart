@@ -3,10 +3,12 @@
 import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/screens/profile_screen.dart';
+import 'package:card_app/widgets/like_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -31,7 +33,6 @@ class _ComunityScreenState extends State<ComunityScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -39,13 +40,14 @@ class _ComunityScreenState extends State<ComunityScreen> {
             Obx(
               () => SliverAppBar(
                 toolbarHeight: 50,
-                backgroundColor: Color.fromARGB(255, 139, 135, 135),
+                backgroundColor: Colors.white,
                 floating: true,
                 pinned: true,
                 title: Text(
                   'Dreeam',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 30.r,
+                    color: Colors.green
                   ),
                 ),
                 automaticallyImplyLeading: false,
@@ -57,8 +59,8 @@ class _ComunityScreenState extends State<ComunityScreen> {
                   indicatorWeight: 5,
                   automaticIndicatorColorAdjustment: true,
                   labelColor: MyColors.textColor,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  unselectedLabelColor: Colors.white,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  unselectedLabelColor: Colors.black,
                   labelStyle: TextStyle(
                     fontSize: 10,
                   ),
@@ -129,6 +131,7 @@ class _ComunityScreenState extends State<ComunityScreen> {
   }
 
   Widget _myListTile(QueryDocumentSnapshot<Object?> doc) {
+    print(doc['uId']);
     if (doc['uId'] == FirebaseAuth.instance.currentUser!.uid) {
       return SizedBox.shrink();
     }
@@ -183,7 +186,7 @@ class _ComunityScreenState extends State<ComunityScreen> {
                       children: [
                         Text(
                           doc['description'],
-                          maxLines: 3,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 15,
@@ -203,68 +206,15 @@ class _ComunityScreenState extends State<ComunityScreen> {
                   ),
                 ],
               ),
-              GestureDetector(
-                onTap: (){
-                  profileController.setLikes(doc['uId']);
-                  profileController.getLikes(userId);
-                },
-                child: Row(
-                  children: [
-                    SvgPicture.asset("assets/images/like.svg",width: 30,height: 30,
-                    color: doc['likes'].contains(userId) ? Color.fromARGB(255, 2, 63, 124) : Colors.grey,),
-                    SizedBox(width: 4,),
-                    Text('${doc['likes'].length - 1}',style: TextStyle(
-                      fontSize: 18,
-                      color: doc['likes'].contains(userId) ? Color.fromARGB(255, 2, 63, 124) : Colors.grey,
-                    ),),
-                  ],
-                ),
+              MyLikeButton(
+                userId: doc['uId'],
+                status: doc['status'],
+
               ),
-              // Container(
-              //    width: 50,
-              //    height: 50,
-              //   child: LikeButton(
-              //     onTap: onLikeButtonTapped,
-              //     size: 20,
-              //     circleColor:
-              //     CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
-              //     bubblesColor: BubblesColor(
-              //       dotPrimaryColor: Color(0xff33b5e5),
-              //       dotSecondaryColor: Color(0xff0099cc),
-              //     ),
-              //     likeBuilder: (bool isLiked) {
-              //       //liked = isLiked;
-              //       isLiked = doc['likes'].contains(FirebaseAuth.instance.currentUser!.uid);
-              //       return Icon(
-              //         Icons.home,
-              //         color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-              //         size: 20,
-              //       );
-              //     },
-              //     likeCount: doc['likes'].length - 1,
-              //     countBuilder: (int? count, bool isLiked, String text) {
-              //       //liked = isLiked;
-              //       var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
-              //       Widget result;
-              //       if (count == 0) {
-              //         result = Text(
-              //           "0",
-              //           style: TextStyle(color: color),
-              //         );
-              //       } else
-              //         result = Text(
-              //           text,
-              //           style: TextStyle(color: color),
-              //         );
-              //       return result;
-              //     },
-              //   ),
-              // )
             ],
           ),
         ),
       ),
     );
   }
-
 }

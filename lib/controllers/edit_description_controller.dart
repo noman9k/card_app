@@ -8,8 +8,7 @@ class EditDescriptionController extends GetxController {
   ProfileController profileController = Get.find();
   var uId = FirebaseAuth.instance.currentUser!.uid;
 
-  CollectionReference usersReference =
-      FirebaseFirestore.instance.collection('users');
+  CollectionReference usersReference = FirebaseFirestore.instance.collection('users');
   TextEditingController descriptionController = TextEditingController();
   var previousDescription = false.obs;
 
@@ -21,10 +20,12 @@ class EditDescriptionController extends GetxController {
   }
 
   Future<void> updateDescription(
-      String text, String pDescription, List likes) async {
+      String text, String pDescription, int likes) async {
     FocusScope.of(Get.context!).unfocus();
 
+    FirebaseFirestore.instance.collection("users").doc(uId).collection("newLikes");
     await usersReference.doc(uId).update({
+      'status':'newLikes',
       'p_description': pDescription,
       'p_likes': likes,
       'description': text,

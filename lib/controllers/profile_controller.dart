@@ -8,7 +8,7 @@ class ProfileController extends GetxController {
       FirebaseFirestore.instance.collection('users');
   // CollectionReference likeRef = FirebaseFirestore.instance.collection("users")
   // .doc()
-  
+
   var descriptionEdited = true.obs;
   var roleEdited = true.obs;
   var questionEdited = true.obs;
@@ -25,6 +25,7 @@ class ProfileController extends GetxController {
   var cash = ''.obs;
   var likersList = [].obs;
   var blueLike = false.obs;
+  var status = ''.obs;
 
   var likes = 0.obs;
 
@@ -33,7 +34,6 @@ class ProfileController extends GetxController {
     super.onInit();
     getProfileData();
     getnumberofEdits();
-    getLikes(null);
   }
 
   Future<void> getnumberofEdits() async {
@@ -52,6 +52,7 @@ class ProfileController extends GetxController {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       name.value = documentSnapshot['userName'];
+      status.value = documentSnapshot['status'];
       role.value = documentSnapshot['role'];
       flag.value = documentSnapshot['country'];
       picture.value = documentSnapshot['image'];
@@ -62,7 +63,6 @@ class ProfileController extends GetxController {
       answer1.value = documentSnapshot['question.answer1'];
       answer2.value = documentSnapshot['question.answer2'];
       answer3.value = documentSnapshot['question.answer3'];
-      likes.value = documentSnapshot['likes'].length;
     });
   }
 
@@ -78,94 +78,58 @@ class ProfileController extends GetxController {
     answer1.value = doc['question.answer1'];
     answer2.value = doc['question.answer2'];
     answer3.value = doc['question.answer3'];
-    likes.value = doc['likes'].length;
-  }
-
-  Future<int> getLikes(uId) async {
-    try {
-      await usersReference.doc(uId).get().then((value) => {
-            likes.value = value['likes'].length,
-            if (value['likes'] != null)
-              {
-                likersList.value = value['likes']
-                    .map<String>((value) => value.toString())
-                    .toList(),
-                likersList.contains(uId)
-                    ? blueLike.value = true
-                    : blueLike.value = false
-              }
-          });
-
-      return likes.value;
-    } catch (e) {
-      setLikes(null);
-      return 0;
-    }
-  }
-
-  Future<void> setLikes(String? uId) async {
-    try {
-      await usersReference
-          .doc(uId)
-          .get()
-          .then((DocumentSnapshot<Object?> documentSnapshot) async {
-        if (documentSnapshot['likes'] != null) {
-          likersList.value = documentSnapshot['likes']
-              .map<String>((value) => value.toString())
-              .toList();
-
-          if (likersList.contains(this.uId)) {
-            usersReference.doc(uId).update({
-              'likes': FieldValue.arrayRemove([this.uId])
-            });
-          } else {
-            // blueColor.value = true;
-
-            usersReference.doc(uId).update({
-              'likes': FieldValue.arrayUnion([this.uId])
-            });
-          }
-
-          getLikes(uId);
-        }
-      });
-    } catch (e) {
-      getLikes(uId);
-
-      await usersReference.doc(uId).update({
-        'likes': [this.uId],
-      });
-    }
   }
 
   void setDescription() async {
-    var pastDescription = '';
-    var pastLikes = [];
+    // var pastDescription = '';
+    // int pastLikes = 0;
+    //
+    // try {
+    //   await usersReference.doc(uId).get().then((value) {
+    //     pastDescription = value['p_description'];
+    //     pastLikes =
+    //         value['p_likes'].map<String>((value) => value.toString()).toList();
+    //   });
+    // } catch (e) {
+    //   pastDescription = description.value;
+    //   await usersReference.doc(uId).collection("likes").get().then((value) {
+    //     //pastLikes = value['likes'].map<String>((value) => value.toString()).toList();
+    //     print(value.docs.length);
+    //     pastLikes = value.docs.length;
+    //   });
+    // } finally {
+    //   Get.toNamed('/edit-description-screen',
+    //       arguments: [pastDescription, pastLikes]);
+    // }
+    
+    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid)
+        .get().then((DocumentSnapshot documentSnapshot){
 
-    try {
-      await usersReference.doc(uId).get().then((value) {
-        pastDescription = value['p_description'];
-        pastLikes =
-            value['p_likes'].map<String>((value) => value.toString()).toList();
-      });
-    } catch (e) {
-      pastDescription = description.value;
-      await usersReference.doc(uId).get().then((value) {
-        pastLikes =
-            value['likes'].map<String>((value) => value.toString()).toList();
-      });
-    } finally {
-      Get.toNamed('/edit-description-screen',
-          arguments: [pastDescription, pastLikes]);
-    }
-  }
+          var newDes = documentSnapshot['newDescription'];
+          var status = documentSnapshot['status'];
+          if(newDes == ''){
+            FirebaseFirestore.instance.collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid).collection(status).get().then((value){
 
-  Future<List?> likedList(String? uId) async {
-    var list = [];
-    await usersReference.doc(uId ?? this.uId).get().then((value) {
-      list = value['likes'].map<String>((value) => value.toString()).toList();
+              var pastDescription = documentSnapshot['description'];
+              int pastLikes = value.docs.length;
+              Get.toNamed('/edit-description-screen', arguments: [pastDescription, pastLikes,false]);
+            });
+          }else{
+
+           // FirebaseAuth
+
+          }
+
     });
-
-    return list;
   }
+
+  // Future<List?> likedList(String? uId) async {
+  //   var list = [];
+  //   await usersReference.doc(uId ?? this.uId).get().then((value) {
+  //     list = value['likes'].map<String>((value) => value.toString()).toList();
+  //   });
+  //
+  //   return list;
+  // }
 }

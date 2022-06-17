@@ -15,6 +15,7 @@ class EditDescriptionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var description = Get.arguments[0];
+    int likes = Get.arguments[1];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Description'),
@@ -77,9 +78,9 @@ class EditDescriptionScreen extends StatelessWidget {
                             ),
                             // ignore: prefer_const_constructors
                             Text(
-                              Get.arguments[1].length == 0
+                              likes == 0
                                   ? '0'
-                                  : (Get.arguments[1].length - 1).toString(),
+                                  : '$likes',
                               style: const TextStyle(
                                 fontSize: 13,
                                 color: Colors.black,
@@ -131,7 +132,7 @@ class EditDescriptionScreen extends StatelessWidget {
                   await controller.updateDescription(
                       controller.descriptionController.text,
                       Get.arguments[0] as String,
-                      Get.arguments[1] as List);
+                      likes);
                 },
               ),
             ],

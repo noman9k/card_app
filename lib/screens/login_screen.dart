@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Dreeam',
                           style: TextStyle(
                             color: MyColors.newTextColor,
-                            fontSize: Get.height * 0.12,
+                            fontSize: Get.height * 0.10,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -207,8 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? Text(
                               'Vérifier le numéro de téléphone',
                               style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white),
+                                  fontSize: 18, color: Colors.white),
                             )
                           : loginController.isLoading.value
                               ? CircularProgressIndicator(
@@ -225,10 +224,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         loginController.isLoading.value = true;
 
                         loginController.codeSended.value
-                            ? (agree ? loginController.verifyNumber() :
-                              Get.snackbar("Warning", "Please accept our Terms and Conditions", snackPosition: SnackPosition.BOTTOM,
-                              colorText: Colors.white,margin: EdgeInsets.all(20),
-                              backgroundColor: Colors.white))
+                            ? (agree
+                                ? loginController.verifyNumber()
+                                : Get.snackbar("Warning",
+                                    "Please accept our Terms and Conditions",
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    colorText: Colors.white,
+                                    margin: EdgeInsets.all(20),
+                                    backgroundColor: Colors.white))
                             : loginController.sendCode();
                       },
                     ),
@@ -268,43 +271,39 @@ class _LoginScreenState extends State<LoginScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.all(10),
             child: Center(
-                child: Text.rich(
-                    TextSpan(
-                        text: 'By continuing, you agree to our ', style: TextStyle(
-                        fontSize: 16, color: Colors.white
-                    ),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: 'Terms of Service', style: TextStyle(
-                            fontSize: 16, color: Colors.white,
-                            decoration: TextDecoration.underline,
-                          ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () async {
-                                  await launchUrl(Uri.parse("https://github.com/shehzadraheem/Dreeam_Terms-Conditions"));
-                                }
-                          ),
-                          TextSpan(
-                              text: ' and ', style: TextStyle(
-                              fontSize: 18, color: Colors.white
-                          ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: 'Privacy Policy', style: TextStyle(
-                                    fontSize: 18, color: Colors.white,
-                                    decoration: TextDecoration.underline
-                                ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async{
-                                        await launchUrl(Uri.parse("https://github.com/shehzadraheem/Privacy-Policy"));
-                                      }
-                                )
-                              ]
-                          )
-                        ]
-                    )
-                )
-            ),
+                child: Text.rich(TextSpan(
+                    text: 'By continuing, you agree to our ',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    children: <TextSpan>[
+                  TextSpan(
+                      text: 'Terms of Service',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          await launchUrl(Uri.parse(
+                              "https://github.com/shehzadraheem/Dreeam_Terms-Conditions"));
+                        }),
+                  TextSpan(
+                      text: ' and ',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                decoration: TextDecoration.underline),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                await launchUrl(Uri.parse(
+                                    "https://github.com/shehzadraheem/Privacy-Policy"));
+                              })
+                      ])
+                ]))),
           ),
         ),
       ],

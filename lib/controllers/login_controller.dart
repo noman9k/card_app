@@ -90,7 +90,6 @@ class LoginController extends GetxController {
             snackPosition: SnackPosition.BOTTOM,
       margin: EdgeInsets.all(20)));
 
-    print('signin');
     if (auth.currentUser == null) {
       Get.snackbar(
         'Fallo al iniciar sesion',
@@ -129,12 +128,14 @@ class LoginController extends GetxController {
       await usersReference.doc(uId).set({
         'userName': '0',
         'description': '',
+        'newDescription':'',
         'uId': uId,
         'phone': phoneNumber.value,
         'image': '0',
         'country': selectedCountry.value.flagEmoji,
         'locationDetails': selectedCountry.value.name,
         'role': '0',
+        'status':'likes',
         'details': {
           'game': '',
           'level': '',

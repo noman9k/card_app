@@ -34,11 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
           if (documentSnapshot['userName'] == '0') {
             return Get.offNamed('/userdata-screen');
           } else if (documentSnapshot['role'] == '0') {
-            return Get.offNamed('/select-role-screen',arguments: [false]);
+            return Get.offNamed('/select-role-screen', arguments: [false]);
           } else if (documentSnapshot['question.answer3'] == '0') {
-            return Get.offNamed('/question-screen',arguments: [false]);
+            return Get.offNamed('/question-screen', arguments: [false]);
           } else if (documentSnapshot['image'] == '0') {
-            return Get.offNamed('/image-upload-screen',arguments: [false]);
+            return Get.offNamed('/image-upload-screen', arguments: [false]);
           } else {
             return Get.offNamed('/home-screen');
           }
@@ -82,7 +82,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 'Dreeam',
                 style: TextStyle(
                   color: MyColors.newTextColor,
-                  fontSize: 0.3.sw,
+                  fontSize: 0.25.sw,
+                  //fontSize: Get.width * 0.24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -92,6 +93,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   SvgPicture.asset('assets/icons/spades.svg',color: Colors.white,width: 0.25.sw,),
                   SvgPicture.asset('assets/icons/diamond.svg',width: 0.25.sw,),
                   SvgPicture.asset('assets/icons/club.svg',color: Colors.white,width: 0.25.sw,),
+                  // SvgPicture.asset('assets/icons/heart.svg'),
+                  // SvgPicture.asset(
+                  //   'assets/icons/spades.svg',
+                  //   color: Colors.white,
+                  // ),
+                  // SvgPicture.asset('assets/icons/diamond.svg'),
+                  // SvgPicture.asset(
+                  //   'assets/icons/club.svg',
+                  //   color: Colors.white,
+                  // ),
                 ],
               ),
             ],
