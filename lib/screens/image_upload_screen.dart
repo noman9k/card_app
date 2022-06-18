@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:card_app/controllers/face_detector_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -34,7 +35,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                   'Sélectionner une photo de profil avec votre visage dessus',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 20.r,
                     fontWeight: FontWeight.bold,
                     color: MyColors.textColor,
                   ),

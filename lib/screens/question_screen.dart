@@ -46,7 +46,7 @@ class QuestionScreen extends StatelessWidget {
                         : 'Dernière étape',
                     style: TextStyle(
                       color: MyColors.textColor,
-                      fontSize: 40.r,
+                      fontSize: 20.r,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

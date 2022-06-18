@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constant/colors.dart';
 import '../controllers/edit_description_controller.dart';
 import '../widgets/my_widgets.dart';
@@ -44,7 +44,7 @@ class _EditDescriptionScreenState extends State<EditDescriptionScreen> {
     //int likes = Get.arguments[1];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Description'),
+        title: const Text('Éditer la description'),
       ),
       // body: Padding(
       //   padding: const EdgeInsets.all(10.0),
@@ -214,7 +214,7 @@ class _EditDescriptionScreenState extends State<EditDescriptionScreen> {
             .get(),
         builder: (context,snapshot){
           if(snapshot.hasError){
-             return Center(child: Text('Something went wrong',style: TextStyle(fontSize: 16),),);
+             return Center(child: Text('Quelque chose s\'est mal passé',style: TextStyle(fontSize: 16),),);
           }
           if(snapshot.connectionState == ConnectionState.waiting){
             return Center(child: CircularProgressIndicator(),);
@@ -226,10 +226,11 @@ class _EditDescriptionScreenState extends State<EditDescriptionScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Choose Previous Description',
+                      Text(
+                      'Vous pouvez entrer une nouvelle description seulement une fois, Après ça vous pourrez seulement choisir laquelle afficher en dessous de votre profil',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: 20.r,
                       ),
                     ),
                     SizedBox(

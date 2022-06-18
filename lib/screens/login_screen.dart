@@ -226,8 +226,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         loginController.codeSended.value
                             ? (agree
                                 ? loginController.verifyNumber()
-                                : Get.snackbar("Warning",
-                                    "Please accept our Terms and Conditions",
+                                : Get.snackbar("Avertissement",
+                                    "Veuillez accepter nos termes et conditions",
                                     snackPosition: SnackPosition.BOTTOM,
                                     colorText: Colors.white,
                                     margin: EdgeInsets.all(20),

@@ -2,6 +2,7 @@
 
 import 'package:card_app/controllers/role_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class SelectRoleScreen extends StatelessWidget {
           Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.only(top: 40.0),
+                padding: const EdgeInsets.only(top: 40.0,left: 16,right: 16),
                 child: SizedBox(
                   width: Get.width,
                   child: Center(
@@ -32,9 +33,9 @@ class SelectRoleScreen extends StatelessWidget {
                       arguments[0]
                           ? 'Vous pouvez changer de signe seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?'
                           : 'Choisissez votre team !',
-                      textAlign: TextAlign.center,
+                     // textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 20.r,
                           fontWeight: FontWeight.bold,
                           color: MyColors.backgroundColor),
                     ),
