@@ -54,7 +54,7 @@ class ProfileController extends GetxController {
       name.value = documentSnapshot['userName'];
       status.value = documentSnapshot['status'];
       role.value = documentSnapshot['role'];
-      flag.value = documentSnapshot['country'];
+      // flag.value = documentSnapshot['country'];
       picture.value = documentSnapshot['image'];
       description.value = documentSnapshot['description'];
       game.value = documentSnapshot['details.game'];
@@ -101,26 +101,30 @@ class ProfileController extends GetxController {
     //   Get.toNamed('/edit-description-screen',
     //       arguments: [pastDescription, pastLikes]);
     // }
-    
-    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid)
-        .get().then((DocumentSnapshot documentSnapshot){
 
-          var newDes = documentSnapshot['newDescription'];
-          var status = documentSnapshot['status'];
-          if(newDes == ''){
-            FirebaseFirestore.instance.collection("users")
-            .doc(FirebaseAuth.instance.currentUser!.uid).collection(status).get().then((value){
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      var newDes = documentSnapshot['newDescription'];
+      var status = documentSnapshot['status'];
+      if (newDes == '') {
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection(status)
+            .get()
+            .then((value) {
+          var pastDescription = documentSnapshot['description'];
+          int pastLikes = value.docs.length;
+          Get.toNamed('/edit-description-screen',
+              arguments: [pastDescription, pastLikes, false]);
+        });
+      } else {
+        // FirebaseAuth
 
-              var pastDescription = documentSnapshot['description'];
-              int pastLikes = value.docs.length;
-              Get.toNamed('/edit-description-screen', arguments: [pastDescription, pastLikes,false]);
-            });
-          }else{
-
-           // FirebaseAuth
-
-          }
-
+      }
     });
   }
 

@@ -10,104 +10,70 @@ import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   final loginformKey = GlobalKey<FormState>();
-  final phoneNumberController = TextEditingController();
-  final codeController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
   var codeSended = false.obs;
   var isLoading = false.obs;
   RxString phoneNumber = RxString('');
-  late String _verificationId;
   var isCountrySelected = false.obs;
-  Rx<Country> selectedCountry = Country(
-          countryCode: '',
-          level: 1,
-          phoneCode: '  ',
-          name: '',
-          displayName: '',
-          displayNameNoCountryCode: '',
-          geographic: true,
-          e164Key: '',
-          e164Sc: 1,
-          example: '')
-      .obs;
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<void> sendCode() async {
-    if (loginformKey.currentState!.validate()) {
-      loginformKey.currentState!.save();
-
-      final PhoneVerificationCompleted verificationCompleted =
-          (AuthCredential phoneAuthCredential) {
-        print('verificationCompleted');
-        print(phoneAuthCredential);
-      };
-
-      final PhoneVerificationFailed verificationFailed =
-          (FirebaseAuthException authException) {
-        print('verificationFailed');
-        print(authException.message);
-      };
-
-      final PhoneCodeSent codeSent =
-          (String verificationId, [forceResendingToken]) {
-        print('codeSent');
-        print(verificationId);
-        codeSended.value = true;
-        _verificationId = verificationId;
-      };
-
-      final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-          (String verificationId) {
-        print('codeAutoRetrievalTimeout');
-        print(verificationId);
-        _verificationId = verificationId;
-      };
-
-      await auth.verifyPhoneNumber(
-          phoneNumber:
-              '+${selectedCountry.value.phoneCode} ${phoneNumberController.text}',
-          timeout: const Duration(seconds: 60),
-          verificationCompleted: verificationCompleted,
-          verificationFailed: verificationFailed,
-          codeSent: codeSent,
-          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-    }
-  }
-
-  void verifyNumber() async {
+  Future<void> emailSignUp() async {
     isLoading.value = true;
-    AuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: _verificationId,
-      smsCode: codeController.text,
-    );
-    await auth
-        .signInWithCredential(credential)
-        .then((value) => saveUserToDb())
-        .onError((error, stackTrace) => Get.snackbar('Oups !', 'Erreur OTP',
-            backgroundColor: MyColors.newTextColor,
-            snackPosition: SnackPosition.BOTTOM,
-      margin: EdgeInsets.all(20)));
-
-    if (auth.currentUser == null) {
-      Get.snackbar(
-        'Fallo al iniciar sesion',
-        'Por favor revisa tu código',
-        colorText: Colors.black,
-        backgroundColor: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: EdgeInsets.all(20),
-      );
+    if (!loginformKey.currentState!.validate()) {
+      isLoading.value = false;
       return;
     }
+
+    if (loginformKey.currentState!.validate()) {
+      try {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+              email: emailController.text,
+              password: passwordController.text,
+            )
+            .then((value) => saveUserToDb());
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          await signup();
+        } else if (e.code == 'wrong-password') {
+          Get.snackbar('Error', 'Wrong password',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.red,
+              colorText: Colors.white);
+          isLoading.value = false;
+
+          print('Wrong password provided for that user.');
+        }
+      }
+    }
   }
 
-  void setCountry(Country country) {
-    selectedCountry.value = country;
+  void resendEmail() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) =>
+          Get.showSnackbar(
+              mySnackBar('Allert', 'Please Verify Your Email', Colors.green)));
+      isLoading.value = false;
+    }
   }
+
+  // void setCountry(Country country) {
+  //   selectedCountry.value = country;
+  // }
 
   void saveUserToDb() async {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      user.sendEmailVerification().then((value) => Get.showSnackbar(
+          mySnackBar('Allert', 'Please Verify Your Email', Colors.green)));
+
+      return;
+    }
+
     try {
       String uId = FirebaseAuth.instance.currentUser!.uid;
       await usersReference
@@ -128,14 +94,14 @@ class LoginController extends GetxController {
       await usersReference.doc(uId).set({
         'userName': '0',
         'description': '',
-        'newDescription':'',
+        'newDescription': '',
         'uId': uId,
         'phone': phoneNumber.value,
         'image': '0',
-        'country': selectedCountry.value.flagEmoji,
-        'locationDetails': selectedCountry.value.name,
+        // 'country': selectedCountry.value.flagEmoji,
+        // 'locationDetails': selectedCountry.value.name,
         'role': '0',
-        'status':'likes',
+        'status': 'likes',
         'details': {
           'game': '',
           'level': '',
@@ -161,10 +127,66 @@ class LoginController extends GetxController {
     }
   }
 
+  Future<void> signup() async {
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      )
+          .then((value) {
+        isLoading.value = false;
+        var user = FirebaseAuth.instance.currentUser;
+        user!.sendEmailVerification().then((value) => Get.showSnackbar(
+            mySnackBar('Allert', 'Please Verify Your Email', Colors.green)));
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        Get.snackbar(
+          'Allert',
+          'The password provided is too weak.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          borderRadius: 10,
+          margin: const EdgeInsets.all(10),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        Get.snackbar(
+          'Allert',
+          'The email address is already in use by another account.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          borderRadius: 10,
+          margin: const EdgeInsets.all(10),
+        );
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
   // ignore: must_call_super
   void dispose() {
-    phoneNumberController.dispose();
-    codeController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+  GetSnackBar mySnackBar(String title, String message, Color backgroundColor) {
+    return GetSnackBar(
+      title: title,
+      message: message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      borderRadius: 10,
+      margin: const EdgeInsets.all(10),
+      borderColor: backgroundColor,
+      borderWidth: 2,
+      duration: const Duration(seconds: 3),
+      icon: const Icon(
+        Icons.check,
+        color: Colors.white,
+      ),
+    );
   }
 }

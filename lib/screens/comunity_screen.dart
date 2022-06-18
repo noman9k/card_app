@@ -12,7 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-
 import '../controllers/comunity_controller.dart';
 
 class ComunityScreen extends StatefulWidget {
@@ -45,10 +44,7 @@ class _ComunityScreenState extends State<ComunityScreen> {
                 pinned: true,
                 title: Text(
                   'Dreeam',
-                  style: TextStyle(
-                    fontSize: 30.r,
-                    color: Colors.green
-                  ),
+                  style: TextStyle(fontSize: 30.r, color: Colors.green),
                 ),
                 automaticallyImplyLeading: false,
                 bottom: TabBar(
@@ -193,7 +189,8 @@ class _ComunityScreenState extends State<ComunityScreen> {
                           ),
                         ),
                         Text(
-                          '${doc['locationDetails'].split('_')[0]},${doc['locationDetails'].split('_')[1]} ${doc['country']}',
+                          '${doc['locationDetails'].split('_')[0]},${doc['locationDetails'].split('_')[1]} }',
+                          // split('_')[1]} ${doc['country']}' ,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -209,7 +206,6 @@ class _ComunityScreenState extends State<ComunityScreen> {
               MyLikeButton(
                 userId: doc['uId'],
                 status: doc['status'],
-
               ),
             ],
           ),

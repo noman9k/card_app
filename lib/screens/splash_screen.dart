@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    // FirebaseAuth.instance.signOut();
     super.initState();
     Timer(const Duration(seconds: 1), () {
       Get.offNamed('/login');
