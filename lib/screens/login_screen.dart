@@ -172,6 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: MyColors.newTextColor,
                         ),
                         keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
                         decoration: InputDecoration(
                           labelText: 'Password',
                           floatingLabelBehavior: FloatingLabelBehavior.never,

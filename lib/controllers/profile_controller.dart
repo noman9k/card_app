@@ -54,7 +54,7 @@ class ProfileController extends GetxController {
       name.value = documentSnapshot['userName'];
       status.value = documentSnapshot['status'];
       role.value = documentSnapshot['role'];
-      // flag.value = documentSnapshot['country'];
+      flag.value = documentSnapshot['country'];
       picture.value = documentSnapshot['image'];
       description.value = documentSnapshot['description'];
       game.value = documentSnapshot['details.game'];

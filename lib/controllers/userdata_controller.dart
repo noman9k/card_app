@@ -12,6 +12,7 @@ class UserDataController extends GetxController {
   TextEditingController game = TextEditingController();
   TextEditingController level = TextEditingController();
   TextEditingController cash = TextEditingController();
+  TextEditingController country = TextEditingController();
   String uId = FirebaseAuth.instance.currentUser!.uid;
   var isLoading = false.obs;
   Rx<Country> selectedCountry = Country(
@@ -50,6 +51,8 @@ class UserDataController extends GetxController {
 
     return usersReference.doc(uId).update({
       'userName': name.text,
+      'country': selectedCountry.value.flagEmoji,
+      'locationDetails': selectedCountry.value.name,
       'description': description.text,
       'locationDetails': '${city.text}_$country',
       'details.game': game.text,
@@ -101,6 +104,14 @@ class UserDataController extends GetxController {
   cashValidation() {
     if (cash.text.isEmpty) {
       'Cash is required';
+    } else {
+      return null;
+    }
+  }
+
+  countryValidation() {
+    if (selectedCountry.value.name.isEmpty) {
+      'Country is required';
     } else {
       return null;
     }

@@ -2,6 +2,7 @@
 
 import 'package:card_app/controllers/userdata_controller.dart';
 import 'package:card_app/widgets/my_widgets.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,6 +57,28 @@ class UserDataScreen extends StatelessWidget {
                         text: 'Nom',
                         controller: userDataController.name,
                         validator: userDataController.nameValidation(),
+                      ),
+                      SizedBox(height: height * 0.04),
+                      myTextFormFiled(
+                        ontap: () {
+                          showCountryPicker(
+                            // ignore: prefer_const_constructors
+                            countryListTheme: CountryListThemeData(
+                                bottomSheetHeight: Get.height * 0.7,
+                                backgroundColor: Colors.grey),
+                            context: context,
+                            showPhoneCode:
+                                true, // optional. Shows phone code before the country name.
+                            onSelect: (Country country) {
+                              userDataController.country.text = country.name;
+                              userDataController.selectedCountry.value =
+                                  country;
+                            },
+                          );
+                        },
+                        text: 'Country',
+                        controller: userDataController.country,
+                        validator: userDataController.countryValidation(),
                       ),
                       SizedBox(height: height * 0.04),
                       myTextFormFiled(
@@ -127,8 +150,10 @@ Widget myTextFormFiled({
   String? Function(String?)? validator,
   int? maxlines,
   TextInputType? inputType,
+  Function()? ontap,
 }) {
   return TextFormField(
+    onTap: ontap,
     validator: validator,
     controller: controller,
     maxLines: maxlines,

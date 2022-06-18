@@ -61,15 +61,12 @@ class LoginController extends GetxController {
     }
   }
 
-  // void setCountry(Country country) {
-  //   selectedCountry.value = country;
-  // }
-
   void saveUserToDb() async {
     var user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
       user.sendEmailVerification().then((value) => Get.showSnackbar(
           mySnackBar('Allert', 'Please Verify Your Email', Colors.green)));
+      isLoading.value = false;
 
       return;
     }
@@ -98,8 +95,8 @@ class LoginController extends GetxController {
         'uId': uId,
         'phone': phoneNumber.value,
         'image': '0',
-        // 'country': selectedCountry.value.flagEmoji,
-        // 'locationDetails': selectedCountry.value.name,
+        'country': '0',
+        'locationDetails': '0',
         'role': '0',
         'status': 'likes',
         'details': {
