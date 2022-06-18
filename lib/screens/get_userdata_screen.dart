@@ -93,17 +93,23 @@ class UserDataScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: height * 0.05),
-                MyElevatedButton(
-                  child: const Text('Suivant',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: MyColors.newTextColor,
-                      )),
-                  onButtonPressed: () {
-                    if (userDataController.isValid()) {
-                      userDataController.upload();
-                    }
-                  },
+                Obx(
+                  () => MyElevatedButton(
+                    child: userDataController.isLoading.isTrue
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text('Suivant',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: MyColors.newTextColor,
+                            )),
+                    onButtonPressed: () {
+                      if (userDataController.isValid()) {
+                        userDataController.upload();
+                      }
+                    },
+                  ),
                 ),
                 const SizedBox(height: 30),
               ],

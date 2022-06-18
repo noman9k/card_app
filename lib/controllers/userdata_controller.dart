@@ -12,6 +12,7 @@ class UserDataController extends GetxController {
   TextEditingController level = TextEditingController();
   TextEditingController cash = TextEditingController();
   String uId = FirebaseAuth.instance.currentUser!.uid;
+  var isLoading = false.obs;
   // ProfileController profileController = Get.put(ProfileController());
 
   // var locationDetails = ''.obs;
@@ -24,8 +25,9 @@ class UserDataController extends GetxController {
   }
 
   void upload() async {
+    isLoading.value = true;
     await _saveUserData();
-    Get.offNamed('/select-role-screen',arguments: [false]);
+    Get.offNamed('/select-role-screen', arguments: [false]);
   }
 
   Future<void> _saveUserData() async {

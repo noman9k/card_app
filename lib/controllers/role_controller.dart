@@ -10,6 +10,7 @@ import '../modals/role_model.dart';
 
 class RoleController extends GetxController {
   var selectedRoleIndex = 0.obs;
+  var isLoading = false.obs;
   var selectedRole;
   var userSelectedRole = true.obs;
   var uId = FirebaseAuth.instance.currentUser!.uid;
@@ -62,13 +63,15 @@ class RoleController extends GetxController {
   }
 
   Future<void> saveToDB() async {
+    isLoading.value = true;
     if (userSelectedRole.value) {
       String roleImage = rolesList[selectedRoleIndex.value].image;
       String role = roleImage.split('/').last.split('.').first;
 
       await usersReference.doc(uId).update({
         'role': role,
-        'number_of_edits.role': nextScreenRoute == '/question-screen'?'0': '1', 
+        'number_of_edits.role':
+            nextScreenRoute == '/question-screen' ? '0' : '1',
       });
 
       profileController.getnumberofEdits();
@@ -76,7 +79,7 @@ class RoleController extends GetxController {
       profileController.getProfileData();
 
       print(nextScreenRoute);
-      Get.offNamed(nextScreenRoute,arguments: [false]);
+      Get.offNamed(nextScreenRoute, arguments: [false]);
 
       return;
     }

@@ -24,25 +24,32 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 1), () {
+      Get.offNamed('/login');
       if (FirebaseAuth.instance.currentUser == null) {
-        Get.offNamed('/login');
         return;
       } else {
         var uId = FirebaseAuth.instance.currentUser!.uid;
 
-        usersReference.doc(uId).get().then((DocumentSnapshot documentSnapshot) {
-          if (documentSnapshot['userName'] == '0') {
-            return Get.offNamed('/userdata-screen');
-          } else if (documentSnapshot['role'] == '0') {
-            return Get.offNamed('/select-role-screen', arguments: [false]);
-          } else if (documentSnapshot['question.answer3'] == '0') {
-            return Get.offNamed('/question-screen', arguments: [false]);
-          } else if (documentSnapshot['image'] == '0') {
-            return Get.offNamed('/image-upload-screen', arguments: [false]);
-          } else {
-            return Get.offNamed('/home-screen');
-          }
-        });
+        try {
+          usersReference
+              .doc(uId)
+              .get()
+              .then((DocumentSnapshot documentSnapshot) {
+            if (documentSnapshot['userName'] == '0') {
+              return Get.offNamed('/userdata-screen');
+            } else if (documentSnapshot['role'] == '0') {
+              return Get.offNamed('/select-role-screen', arguments: [false]);
+            } else if (documentSnapshot['question.answer3'] == '0') {
+              return Get.offNamed('/question-screen', arguments: [false]);
+            } else if (documentSnapshot['image'] == '0') {
+              return Get.offNamed('/image-upload-screen', arguments: [false]);
+            } else {
+              return Get.offNamed('/home-screen');
+            }
+          });
+        } catch (e) {
+          Get.offNamed('/login');
+        }
       }
 
       // Get.offNamed('/home-screen');
@@ -82,17 +89,31 @@ class _SplashScreenState extends State<SplashScreen> {
                 'Dreeam',
                 style: TextStyle(
                   color: MyColors.newTextColor,
-                  fontSize: 0.25.sw,
+                  fontSize: 0.22.sw,
                   //fontSize: Get.width * 0.24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Row(
                 children: [
-                  SvgPicture.asset('assets/icons/heart.svg',width: 0.2.sw,),
-                  SvgPicture.asset('assets/icons/spades.svg',color: Colors.white,width: 0.25.sw,),
-                  SvgPicture.asset('assets/icons/diamond.svg',width: 0.25.sw,),
-                  SvgPicture.asset('assets/icons/club.svg',color: Colors.white,width: 0.25.sw,),
+                  SvgPicture.asset(
+                    'assets/icons/heart.svg',
+                    width: 0.2.sw,
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/spades.svg',
+                    color: Colors.white,
+                    width: 0.25.sw,
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/diamond.svg',
+                    width: 0.25.sw,
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/club.svg',
+                    color: Colors.white,
+                    width: 0.25.sw,
+                  ),
                   // SvgPicture.asset('assets/icons/heart.svg'),
                   // SvgPicture.asset(
                   //   'assets/icons/spades.svg',

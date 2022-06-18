@@ -41,8 +41,9 @@ class QuestionScreen extends StatelessWidget {
                 70.verticalSpace,
                 Center(
                   child: Text(
-                    arguments[0] ? 'Vous pouvez changer vos réponses seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?' :
-                    'Dernière étape',
+                    arguments[0]
+                        ? 'Vous pouvez changer vos réponses seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?'
+                        : 'Dernière étape',
                     style: TextStyle(
                       color: MyColors.textColor,
                       fontSize: 40.r,
@@ -75,19 +76,26 @@ class QuestionScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                 SizedBox(height: 16),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: MyColors.backgroundColor,
-                    onSurface: Color.fromARGB(0, 219, 49, 49),
-                    shadowColor: Color.fromARGB(0, 92, 5, 5),
-                    fixedSize: Size(150, 50),
-                  ),
-                  child: Text(
-                    'Terminer',
-                    style: TextStyle(color: MyColors.newTextColor),
-                  ),
-                  onPressed: () => questionController.submitAnswers(arguments[0]),
+                SizedBox(height: 16),
+                Obx(
+                  (() => ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: MyColors.backgroundColor,
+                          onSurface: Color.fromARGB(0, 219, 49, 49),
+                          shadowColor: Color.fromARGB(0, 92, 5, 5),
+                          fixedSize: Size(150, 50),
+                        ),
+                        child: questionController.isLoading.isTrue
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                'Terminer',
+                                style: TextStyle(color: MyColors.newTextColor),
+                              ),
+                        onPressed: () =>
+                            questionController.submitAnswers(arguments[0]),
+                      )),
                 ),
               ],
             ),

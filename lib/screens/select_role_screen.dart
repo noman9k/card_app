@@ -30,8 +30,8 @@ class SelectRoleScreen extends StatelessWidget {
                   child: Center(
                     child: Text(
                       arguments[0]
-                      ? 'Vous pouvez changer de signe seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?'
-                      : 'Choisissez votre team !',
+                          ? 'Vous pouvez changer de signe seulement une fois, Êtes-vous sûr de vouloir le faire maintenant ?'
+                          : 'Choisissez votre team !',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 22,
@@ -124,17 +124,24 @@ class SelectRoleScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: MyColors.backgroundColor,
-                            onSurface: Color.fromARGB(0, 219, 49, 49),
-                            shadowColor: Color.fromARGB(0, 92, 5, 5),
-                            fixedSize: Size(150, 50),
-                          ),
-                          onPressed: () => roleController.saveToDB(),
-                          child: Text(
-                            'Suivant',
-                            style: TextStyle(color: MyColors.newTextColor),
+                        Obx(
+                          () => ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: MyColors.backgroundColor,
+                              onSurface: Color.fromARGB(0, 219, 49, 49),
+                              shadowColor: Color.fromARGB(0, 92, 5, 5),
+                              fixedSize: Size(150, 50),
+                            ),
+                            onPressed: () => roleController.saveToDB(),
+                            child: roleController.isLoading.isTrue
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    'Suivant',
+                                    style:
+                                        TextStyle(color: MyColors.newTextColor),
+                                  ),
                           ),
                         ),
                       ],

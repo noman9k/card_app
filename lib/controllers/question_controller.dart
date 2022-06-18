@@ -14,6 +14,7 @@ class QuestionController extends GetxController {
   var q2Controller = TextEditingController();
   String uId = FirebaseAuth.instance.currentUser!.uid;
   ProfileController profileController = Get.put(ProfileController());
+  var isLoading = false.obs;
 
   CollectionReference usersReference =
       FirebaseFirestore.instance.collection('users');
@@ -30,6 +31,8 @@ class QuestionController extends GetxController {
   }
 
   submitAnswers(bool load) async {
+    isLoading.value = true;
+
     if (!questionFormKey.currentState!.validate()) {
       print('Form is invalid');
       return;
@@ -37,8 +40,9 @@ class QuestionController extends GetxController {
 
     await _saveAnswersData(
         q0Controller.text, q1Controller.text, q2Controller.text);
-    load ? Get.offNamed('/home-screen')
-    : Get.offNamed(nextScreenRoute,arguments: [false]);
+    load
+        ? Get.offNamed('/home-screen')
+        : Get.offNamed(nextScreenRoute, arguments: [false]);
   }
 
   Future<void> _saveAnswersData(
