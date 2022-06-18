@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 class EditDescriptionController extends GetxController {
   ProfileController profileController = Get.find();
   var uId = FirebaseAuth.instance.currentUser!.uid;
+  var pDescription = false.obs;
+  var nDescription = false.obs;
 
   CollectionReference usersReference = FirebaseFirestore.instance.collection('users');
   TextEditingController descriptionController = TextEditingController();
@@ -19,23 +21,63 @@ class EditDescriptionController extends GetxController {
     previousDescription.value = !previousDescription.value;
   }
 
-  Future<void> updateDescription(
-      String text, String pDescription, int likes) async {
+  Future<void> updateDescription(String text, String pDescription, int likes) async {
+
     FocusScope.of(Get.context!).unfocus();
+    await usersReference.doc(uId).get().then((DocumentSnapshot snapshot){
+      var des = snapshot['number_of_edits.description'];
+      if(des == '0'){
+        FirebaseFirestore.instance.collection("users").doc(uId).collection("newLikes");
+      }
 
-    FirebaseFirestore.instance.collection("users").doc(uId).collection("newLikes");
-    await usersReference.doc(uId).update({
-      'status':'newLikes',
-      'p_description': pDescription,
-      'p_likes': likes,
-      'description': text,
-      'likes': pDescription == text ? likes : [null],
-      'number_of_edits.description': pDescription == text ? '1' : '0',
-    }).then((value) {
-      profileController.getnumberofEdits();
-      profileController.getProfileData();
+      usersReference.doc(uId).update({
+        'status':'newLikes',
+        // 'p_description': pDescription,
+        // 'p_likes': likes,
+        'description': text,
+        'pDescription' : pDescription,   // basically in newDescription I'm adding previous description
+        'number_of_edits.description': '1',
+      }).then((value) {
+        profileController.getnumberofEdits();
+        profileController.getProfileData();
 
-      Get.back();
+        Get.back();
+      });
+
+
     });
   }
+
+
+  Future<void> usePreviousDescription() async {
+
+    FocusScope.of(Get.context!).unfocus();
+    await usersReference.doc(uId).get().then((DocumentSnapshot snapshot){
+      var des = snapshot['number_of_edits.description'];
+      if(des == '0'){
+        FirebaseFirestore.instance.collection("users").doc(uId).collection("newLikes");
+      }
+
+      String str = 'likes';
+      if(snapshot['status'] == 'likes'){
+        str = 'newLikes';
+      }else if(snapshot['status'] == 'newLikes'){
+        str = 'likes';
+      }
+
+      usersReference.doc(uId).update({
+        'status': str,
+        'description': snapshot['pDescription'],
+        'pDescription' : snapshot['description'],   // basically in newDescription I'm adding previous description
+      }).then((value) {
+        profileController.getnumberofEdits();
+        profileController.getProfileData();
+
+        Get.back();
+      });
+
+
+    });
+  }
+
 }

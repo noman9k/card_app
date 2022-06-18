@@ -25,8 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
     // FirebaseAuth.instance.signOut();
     super.initState();
     Timer(const Duration(seconds: 1), () {
-      Get.offNamed('/login');
       if (FirebaseAuth.instance.currentUser == null) {
+        Get.offNamed('/login');
         return;
       } else {
         var uId = FirebaseAuth.instance.currentUser!.uid;

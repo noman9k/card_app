@@ -39,7 +39,7 @@ class ProfileController extends GetxController {
   Future<void> getnumberofEdits() async {
     await usersReference.doc(uId).get().then((value) {
       descriptionEdited.value =
-          value['number_of_edits.description'] == '1' ? true : false;
+          value['number_of_edits.description'] == '1' ? false : false;
       roleEdited.value = value['number_of_edits.role'] == '1' ? true : false;
       questionEdited.value =
           value['number_of_edits.question'] == '1' ? true : false;

@@ -189,7 +189,7 @@ class _ComunityScreenState extends State<ComunityScreen> {
                           ),
                         ),
                         Text(
-                          '${doc['locationDetails'].split('_')[0]},${doc['locationDetails'].split('_')[1]} }',
+                          '${doc['locationDetails'].split('_')[0]},${doc['locationDetails'].split('_')[1]} ,${doc['country']}',
                           // split('_')[1]} ${doc['country']}' ,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

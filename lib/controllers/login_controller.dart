@@ -91,7 +91,8 @@ class LoginController extends GetxController {
       await usersReference.doc(uId).set({
         'userName': '0',
         'description': '',
-        'newDescription': '',
+        'pDescription':
+            '', // basically in newDescription I'm adding previous description
         'uId': uId,
         'phone': phoneNumber.value,
         'image': '0',
