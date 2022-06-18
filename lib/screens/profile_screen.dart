@@ -306,12 +306,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     Positioned(
                       bottom: -15,
-                      right: 10,
-                      child: userItself &&
-                              !profileController.descriptionEdited.value
+                      right: 20,
+                      child: userItself
                           ? IconButton(
                               onPressed: () {
-                                profileController.setDescription();
+                                //profileController.setDescription();
+                                Get.toNamed('/edit-description-screen');
                               },
                               icon: Icon(Icons.edit),
                             )

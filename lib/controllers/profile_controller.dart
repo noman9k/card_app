@@ -39,7 +39,7 @@ class ProfileController extends GetxController {
   Future<void> getnumberofEdits() async {
     await usersReference.doc(uId).get().then((value) {
       descriptionEdited.value =
-          value['number_of_edits.description'] == '1' ? true : false;
+          value['number_of_edits.description'] == '1' ? false : false;
       roleEdited.value = value['number_of_edits.role'] == '1' ? true : false;
       questionEdited.value =
           value['number_of_edits.question'] == '1' ? true : false;
@@ -80,49 +80,49 @@ class ProfileController extends GetxController {
     answer3.value = doc['question.answer3'];
   }
 
-  void setDescription() async {
-    // var pastDescription = '';
-    // int pastLikes = 0;
-    //
-    // try {
-    //   await usersReference.doc(uId).get().then((value) {
-    //     pastDescription = value['p_description'];
-    //     pastLikes =
-    //         value['p_likes'].map<String>((value) => value.toString()).toList();
-    //   });
-    // } catch (e) {
-    //   pastDescription = description.value;
-    //   await usersReference.doc(uId).collection("likes").get().then((value) {
-    //     //pastLikes = value['likes'].map<String>((value) => value.toString()).toList();
-    //     print(value.docs.length);
-    //     pastLikes = value.docs.length;
-    //   });
-    // } finally {
-    //   Get.toNamed('/edit-description-screen',
-    //       arguments: [pastDescription, pastLikes]);
-    // }
-    
-    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid)
-        .get().then((DocumentSnapshot documentSnapshot){
-
-          var newDes = documentSnapshot['newDescription'];
-          var status = documentSnapshot['status'];
-          if(newDes == ''){
-            FirebaseFirestore.instance.collection("users")
-            .doc(FirebaseAuth.instance.currentUser!.uid).collection(status).get().then((value){
-
-              var pastDescription = documentSnapshot['description'];
-              int pastLikes = value.docs.length;
-              Get.toNamed('/edit-description-screen', arguments: [pastDescription, pastLikes,false]);
-            });
-          }else{
-
-           // FirebaseAuth
-
-          }
-
-    });
-  }
+  // void setDescription() async {
+  //   // var pastDescription = '';
+  //   // int pastLikes = 0;
+  //   //
+  //   // try {
+  //   //   await usersReference.doc(uId).get().then((value) {
+  //   //     pastDescription = value['p_description'];
+  //   //     pastLikes =
+  //   //         value['p_likes'].map<String>((value) => value.toString()).toList();
+  //   //   });
+  //   // } catch (e) {
+  //   //   pastDescription = description.value;
+  //   //   await usersReference.doc(uId).collection("likes").get().then((value) {
+  //   //     //pastLikes = value['likes'].map<String>((value) => value.toString()).toList();
+  //   //     print(value.docs.length);
+  //   //     pastLikes = value.docs.length;
+  //   //   });
+  //   // } finally {
+  //   //   Get.toNamed('/edit-description-screen',
+  //   //       arguments: [pastDescription, pastLikes]);
+  //   // }
+  //
+  //   FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .get().then((DocumentSnapshot documentSnapshot){
+  //
+  //         var newDes = documentSnapshot['newDescription'];
+  //         var status = documentSnapshot['status'];
+  //         if(newDes == ''){
+  //           FirebaseFirestore.instance.collection("users")
+  //           .doc(FirebaseAuth.instance.currentUser!.uid).collection(status).get().then((value){
+  //
+  //             var pastDescription = documentSnapshot['description'];
+  //             int pastLikes = value.docs.length;
+  //             Get.toNamed('/edit-description-screen', arguments: [pastDescription, pastLikes,false]);
+  //           });
+  //         }else{
+  //
+  //          // FirebaseAuth
+  //
+  //         }
+  //
+  //   });
+  // }
 
   // Future<List?> likedList(String? uId) async {
   //   var list = [];
