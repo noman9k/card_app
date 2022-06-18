@@ -26,225 +26,219 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: MyColors.backgroundColor,
-        body: Obx(
-          () => SingleChildScrollView(
-            child: SizedBox(
-              height: Get.height,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: Get.height * 0.01,
+        body: SingleChildScrollView(
+          child: SizedBox(
+            height: Get.height,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: Get.height * 0.01,
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.15,
+                    child: Center(
+                      child: Text(
+                        'Dreeam',
+                        style: TextStyle(
+                          color: MyColors.newTextColor,
+                          fontSize: Get.height * 0.10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      // child: Image.asset('assets/images/logo.png'),
                     ),
-                    SizedBox(
-                      height: Get.height * 0.15,
-                      child: Center(
-                        child: Text(
-                          'Dreeam',
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Numéro de email',
+                        style: TextStyle(
+                            color: MyColors.newTextColor, fontSize: 16),
+                      ),
+                      SizedBox(height: 5),
+                      Form(
+                        key: loginController.loginformKey,
+                        child: TextFormField(
+                          controller: loginController.emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Veuillez entrer votre numéro de email';
+                            }
+                            if (!RegExp(
+                                    r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                .hasMatch(value)) {
+                              return 'Please enter a valid email';
+                            }
+
+                            return null;
+                          },
+                          keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
                             color: MyColors.newTextColor,
-                            fontSize: Get.height * 0.10,
-                            fontWeight: FontWeight.bold,
                           ),
-                        ),
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: MyColors.newTextColor,
+                              ),
+                            ),
 
-                        // child: Image.asset('assets/images/logo.png'),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Numéro de téléphone',
-                          style: TextStyle(
-                              color: MyColors.newTextColor, fontSize: 16),
-                        ),
-                        SizedBox(height: 5),
-                        Form(
-                          key: loginController.loginformKey,
-                          child: TextFormField(
-                            controller: loginController.phoneNumberController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Veuillez entrer votre numéro de téléphone';
-                              } else if (!loginController
-                                  .isCountrySelected.value) {
-                                return 'Veuillez d\'abord sélectionner votre pays';
-                              }
-                              loginController.isLoading.value = true;
-                              return null;
-                            },
-                            keyboardType: TextInputType.phone,
-                            style: TextStyle(
-                              color: MyColors.newTextColor,
+                            labelText: 'Numéro de email',
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            labelStyle: TextStyle(color: MyColors.newTextColor),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: MyColors.newTextColor),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: MyColors.newTextColor,
-                                ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 228, 23, 125),
+                                style: BorderStyle.solid,
                               ),
-                              labelText: 'Numéro de téléphone',
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              labelStyle:
-                                  TextStyle(color: MyColors.newTextColor),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: MyColors.newTextColor),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 228, 23, 125),
-                                  style: BorderStyle.solid,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              prefixIcon: InkWell(
-                                onTap: () {
-                                  showCountryPicker(
-                                      context: context,
-                                      showPhoneCode: true,
-                                      countryListTheme: CountryListThemeData(
-                                        inputDecoration: InputDecoration(
-                                          focusColor: MyColors.newTextColor,
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: MyColors.newTextColor),
-                                          ),
-                                          hintText: 'Recherche en français',
-                                          labelStyle: TextStyle(
-                                              color: MyColors.newTextColor),
-                                          labelText: 'Recherche en français',
-                                          hintStyle: TextStyle(
-                                            color: MyColors.newTextColor,
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        backgroundColor:
-                                            Color.fromARGB(255, 163, 157, 157),
-                                      ),
-                                      onSelect: (Country selectedCountry) {
-                                        loginController.selectedCountry.value =
-                                            selectedCountry;
-                                      },
-                                      onClosed: () => loginController
-                                          .isCountrySelected.value = true);
-                                },
-                                child: SizedBox(
-                                  width: 30,
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(bottom: 3),
-                                      child: Text(
-                                        !loginController.isCountrySelected.value
-                                            ? '+ CC'
-                                            : '+ ${loginController.selectedCountry.value.phoneCode}',
-                                        style: TextStyle(
-                                          color: MyColors.newTextColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              borderRadius: BorderRadius.circular(10),
                             ),
+                            // prefixIcon: InkWell(
+                            //   onTap: () {
+                            //     showCountryPicker(
+                            //         context: context,
+                            //         showPhoneCode: true,
+                            //         countryListTheme: CountryListThemeData(
+                            //           inputDecoration: InputDecoration(
+                            //             focusColor: MyColors.newTextColor,
+                            //             focusedBorder: OutlineInputBorder(
+                            //               borderSide: BorderSide(
+                            //                   color: MyColors.newTextColor),
+                            //             ),
+                            //             hintText: 'Recherche en français',
+                            //             labelStyle: TextStyle(
+                            //                 color: MyColors.newTextColor),
+                            //             labelText: 'Recherche en français',
+                            //             hintStyle: TextStyle(
+                            //               color: MyColors.newTextColor,
+                            //             ),
+                            //             border: OutlineInputBorder(
+                            //               borderRadius:
+                            //                   BorderRadius.circular(10),
+                            //             ),
+                            //           ),
+                            //           backgroundColor:
+                            //               Color.fromARGB(255, 163, 157, 157),
+                            //         ),
+                            //         onSelect: (Country selectedCountry) {
+                            //           loginController.selectedCountry.value =
+                            //               selectedCountry;
+                            //         },
+                            //         onClosed: () => loginController
+                            //             .isCountrySelected.value = true);
+                            //   },
+                            //   child: SizedBox(
+                            //     width: 30,
+                            //     child: Center(
+                            //       child: Padding(
+                            //         padding: const EdgeInsets.only(bottom: 3),
+                            //         child: Text(
+                            //           !loginController.isCountrySelected.value
+                            //               ? '+ CC'
+                            //               : '+ ${loginController.selectedCountry.value.phoneCode}',
+                            //           style: TextStyle(
+                            //             color: MyColors.newTextColor,
+                            //             fontWeight: FontWeight.bold,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        loginController.codeSended.value
-                            ? Text(
-                                'Code que vous avez reçu',
-                                style: TextStyle(
-                                    color: MyColors.newTextColor, fontSize: 16),
-                              )
-                            : SizedBox.shrink(),
-                        SizedBox(height: 5),
-                        loginController.codeSended.value
-                            ? TextFormField(
-                                controller: loginController.codeController,
-                                style: TextStyle(
-                                  color: MyColors.newTextColor,
-                                ),
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  labelText: 'Code',
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.never,
-                                  labelStyle:
-                                      TextStyle(color: MyColors.newTextColor),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: MyColors.newTextColor),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 228, 23, 125),
-                                      style: BorderStyle.solid,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              )
-                            : SizedBox.shrink(),
-                        SizedBox(height: 5),
-                        loginController.codeSended.value
-                            ? privacyPolicyLinkAndTermsOfService()
-                            : SizedBox.shrink(),
-                      ],
-                    ),
-                    MyElevatedButton(
-                      child: loginController.codeSended.value
-                          ? Text(
-                              'Vérifier le numéro de téléphone',
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Code que vous avez reçu',
+                        style: TextStyle(
+                            color: MyColors.newTextColor, fontSize: 16),
+                      ),
+                      SizedBox(height: 5),
+                      TextFormField(
+                        controller: loginController.passwordController,
+                        style: TextStyle(
+                          color: MyColors.newTextColor,
+                        ),
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          labelStyle: TextStyle(color: MyColors.newTextColor),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MyColors.newTextColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(255, 228, 23, 125),
+                              style: BorderStyle.solid,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      privacyPolicyLinkAndTermsOfService()
+                    ],
+                  ),
+                  Obx(
+                    () => MyElevatedButton(
+                      child: loginController.isLoading.isTrue
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Text(
+                              'Vérifier le numéro de email',
                               style: const TextStyle(
                                   fontSize: 18, color: Colors.white),
-                            )
-                          : loginController.isLoading.value
-                              ? CircularProgressIndicator(
-                                  color: MyColors.newTextColor,
-                                )
-                              : Text(
-                                  'Envoyer le code',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255)),
+                            ),
+                      onButtonPressed: !agree
+                          ? () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                      'Vous devez accepter les conditions d\'utilisation'),
+                                  actions: <Widget>[
+                                    ElevatedButton(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    )
+                                  ],
                                 ),
-                      onButtonPressed: () {
-                        loginController.isLoading.value = true;
-
-                        loginController.codeSended.value
-                            ? (agree
-                                ? loginController.verifyNumber()
-                                : Get.snackbar("Avertissement",
-                                    "Veuillez accepter nos termes et conditions",
-                                    snackPosition: SnackPosition.BOTTOM,
-                                    colorText: Colors.white,
-                                    margin: EdgeInsets.all(20),
-                                    backgroundColor: Colors.white))
-                            : loginController.sendCode();
-                      },
+                              );
+                            }
+                          : () {
+                              loginController.isLoading.value = true;
+                              loginController.emailSignUp();
+                            },
                     ),
-                    TextButton(
-                      onPressed: () => loginController.sendCode(),
-                      child: Text(
-                        'Renvoyer le code ?',
-                        style: TextStyle(color: MyColors.newTextColor),
-                      ),
+                  ),
+                  TextButton(
+                    onPressed: () => loginController.resendEmail(),
+                    child: Text(
+                      'Renvoyer le verification link ?',
+                      style: TextStyle(color: MyColors.newTextColor),
                     ),
-                    SizedBox(height: Get.height * 0.01),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: Get.height * 0.01),
+                ],
               ),
             ),
           ),

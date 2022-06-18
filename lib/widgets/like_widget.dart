@@ -22,7 +22,6 @@ class MyLikeButton extends StatefulWidget {
 }
 
 class _MyLikeButtonState extends State<MyLikeButton> {
-
   @override
   Widget build(BuildContext context) {
     _isLiked();
@@ -108,7 +107,7 @@ class _MyLikeButtonState extends State<MyLikeButton> {
       if (mounted) {
         setState(() {
           widget.blueColor = doc.exists;
-          print(widget.blueColor);
+          // print(widget.blueColor);
         });
       }
       return doc.exists;

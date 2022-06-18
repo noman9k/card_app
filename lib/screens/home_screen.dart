@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (controller) {
         profileController.getProfileData();
-        // profileController.getLikes(null);
+
         return Scaffold(
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.tabIndex,
@@ -43,7 +43,6 @@ class HomeScreen extends StatelessWidget {
                 icon: Icon(Icons.person),
                 label: 'Profil',
               ),
-
             ],
           ),
           body: IndexedStack(

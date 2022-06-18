@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,8 +12,21 @@ class UserDataController extends GetxController {
   TextEditingController game = TextEditingController();
   TextEditingController level = TextEditingController();
   TextEditingController cash = TextEditingController();
+  TextEditingController country = TextEditingController();
   String uId = FirebaseAuth.instance.currentUser!.uid;
   var isLoading = false.obs;
+  Rx<Country> selectedCountry = Country(
+          countryCode: '',
+          level: 1,
+          phoneCode: '  ',
+          name: '',
+          displayName: '',
+          displayNameNoCountryCode: '',
+          geographic: true,
+          e164Key: '',
+          e164Sc: 1,
+          example: '')
+      .obs;
   // ProfileController profileController = Get.put(ProfileController());
 
   // var locationDetails = ''.obs;
@@ -37,6 +51,8 @@ class UserDataController extends GetxController {
 
     return usersReference.doc(uId).update({
       'userName': name.text,
+      'country': selectedCountry.value.flagEmoji,
+      'locationDetails': selectedCountry.value.name,
       'description': description.text,
       'locationDetails': '${city.text}_$country',
       'details.game': game.text,
@@ -88,6 +104,14 @@ class UserDataController extends GetxController {
   cashValidation() {
     if (cash.text.isEmpty) {
       'Cash is required';
+    } else {
+      return null;
+    }
+  }
+
+  countryValidation() {
+    if (selectedCountry.value.name.isEmpty) {
+      'Country is required';
     } else {
       return null;
     }
