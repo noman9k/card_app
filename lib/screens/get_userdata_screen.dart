@@ -76,7 +76,7 @@ class UserDataScreen extends StatelessWidget {
                             },
                           );
                         },
-                        text: 'Country',
+                        text: 'Pays',
                         controller: userDataController.country,
                         validator: userDataController.countryValidation(),
                       ),

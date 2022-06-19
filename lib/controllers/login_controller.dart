@@ -40,7 +40,7 @@ class LoginController extends GetxController {
         if (e.code == 'user-not-found') {
           await signup();
         } else if (e.code == 'wrong-password') {
-          Get.snackbar('Error', 'Wrong password',
+          Get.snackbar('Erreur', 'Mauvais mot de passe',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.red,
               colorText: Colors.white);
@@ -56,7 +56,7 @@ class LoginController extends GetxController {
     if (FirebaseAuth.instance.currentUser != null) {
       FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) =>
           Get.showSnackbar(
-              mySnackBar('Allert', 'Please Verify Your Email', Colors.green)));
+              mySnackBar('Alerte', 'Veuillez vérifier votre e-mail', Colors.green)));
       isLoading.value = false;
     }
   }
@@ -65,7 +65,7 @@ class LoginController extends GetxController {
     var user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
       user.sendEmailVerification().then((value) => Get.showSnackbar(
-          mySnackBar('Allert', 'Please Verify Your Email', Colors.green)));
+          mySnackBar('Alerte', 'Veuillez vérifier votre e-mail', Colors.green)));
       isLoading.value = false;
 
       return;
@@ -83,7 +83,7 @@ class LoginController extends GetxController {
           Get.offNamed('/home-screen');
           return;
         }
-        throw Exception('User not found');
+        throw Exception('Utilisateur non trouvé');
       });
     } catch (e) {
       String uId = FirebaseAuth.instance.currentUser!.uid;
@@ -136,13 +136,13 @@ class LoginController extends GetxController {
         isLoading.value = false;
         var user = FirebaseAuth.instance.currentUser;
         user!.sendEmailVerification().then((value) => Get.showSnackbar(
-            mySnackBar('Allert', 'Please Verify Your Email', Colors.green)));
+            mySnackBar('Alerte', 'Veuillez vérifier votre e-mail', Colors.green)));
       });
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
+      if (e.code == 'mot de passe faible') {
         Get.snackbar(
-          'Allert',
-          'The password provided is too weak.',
+          'Alerte',
+          'Le mot de passe fourni est trop faible.',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           borderRadius: 10,
@@ -150,8 +150,8 @@ class LoginController extends GetxController {
         );
       } else if (e.code == 'email-already-in-use') {
         Get.snackbar(
-          'Allert',
-          'The email address is already in use by another account.',
+          'Alerte',
+          'L\'adresse e-mail est déjà utilisée par un autre compte.',
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           borderRadius: 10,

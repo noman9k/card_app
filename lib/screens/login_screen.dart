@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (!RegExp(
                                     r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
                                 .hasMatch(value)) {
-                              return 'Please enter a valid email';
+                              return 'Veuillez entrer un email valide';
                             }
 
                             return null;
@@ -174,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: true,
                         decoration: InputDecoration(
-                          labelText: 'Password',
+                          labelText: 'Mot de passe',
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           labelStyle: TextStyle(color: MyColors.newTextColor),
                           enabledBorder: OutlineInputBorder(
@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'Vous devez accepter les conditions d\'utilisation'),
                                   actions: <Widget>[
                                     ElevatedButton(
-                                      child: Text('OK'),
+                                      child: Text('D\'ACCORD'),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
@@ -266,11 +266,11 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: EdgeInsets.all(10),
             child: Center(
                 child: Text.rich(TextSpan(
-                    text: 'By continuing, you agree to our ',
+                    text: 'En continuant, vous acceptez nos ',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                     children: <TextSpan>[
                   TextSpan(
-                      text: 'Terms of Service',
+                      text: 'Conditions d\'utilisation',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
@@ -282,11 +282,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               "https://github.com/shehzadraheem/Dreeam_Terms-Conditions"));
                         }),
                   TextSpan(
-                      text: ' and ',
+                      text: ' et ',
                       style: TextStyle(fontSize: 18, color: Colors.white),
                       children: <TextSpan>[
                         TextSpan(
-                            text: 'Privacy Policy',
+                            text: 'Politique de confidentialité',
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white,
