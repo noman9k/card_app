@@ -62,7 +62,7 @@ class RoleController extends GetxController {
     userSelectedRole.value = true;
   }
 
-  Future<void> saveToDB() async {
+  Future<void> saveToDB(bool isFirst) async {
     isLoading.value = true;
     if (userSelectedRole.value) {
       String roleImage = rolesList[selectedRoleIndex.value].image;
@@ -75,12 +75,13 @@ class RoleController extends GetxController {
       });
 
       profileController.getnumberofEdits();
-
       profileController.getProfileData();
-
       print(nextScreenRoute);
-      Get.offNamed(nextScreenRoute, arguments: [false]);
-
+      if(isFirst){
+        Get.back();
+      }else {
+        Get.offNamed(nextScreenRoute, arguments: [false]);
+      }
       return;
     }
     Get.snackbar('Role not Selected', 'Please Select The Role First');

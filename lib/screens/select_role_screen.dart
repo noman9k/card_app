@@ -133,7 +133,11 @@ class SelectRoleScreen extends StatelessWidget {
                               shadowColor: Color.fromARGB(0, 92, 5, 5),
                               fixedSize: Size(150, 50),
                             ),
-                            onPressed: () => roleController.saveToDB(),
+                            onPressed: (){
+                                 arguments[0] ? roleController.updateReturnRoute('/home-screen') :
+                                 roleController.updateReturnRoute('/question-screen');
+                                 roleController.saveToDB(arguments[0]);
+                              },
                             child: roleController.isLoading.isTrue
                                 ? const CircularProgressIndicator(
                                     color: Colors.white,
