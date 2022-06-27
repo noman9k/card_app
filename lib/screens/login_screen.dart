@@ -3,6 +3,7 @@
 import 'package:card_app/constant/colors.dart';
 import 'package:card_app/controllers/role_controller.dart';
 import 'package:card_app/widgets/my_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Numéro de email',
+                        'Adresse mail',
                         style: TextStyle(
                             color: MyColors.newTextColor, fontSize: 16),
                       ),
@@ -68,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: loginController.emailController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez entrer votre numéro de email';
+                              return 'Veuillez entrer votre Adresse mail';
                             }
                             if (!RegExp(
                                     r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
@@ -89,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
 
-                            labelText: 'Numéro de email',
+                            labelText: 'Adresse mail',
                             floatingLabelBehavior: FloatingLabelBehavior.never,
                             labelStyle: TextStyle(color: MyColors.newTextColor),
                             enabledBorder: OutlineInputBorder(
@@ -161,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        'Code que vous avez reçu',
+                        'Mot de passe',
                         style: TextStyle(
                             color: MyColors.newTextColor, fontSize: 16),
                       ),
@@ -191,7 +192,66 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 5),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text.rich(
+                              TextSpan(
+                                  text: 'Mot de passe oublié',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      decoration: TextDecoration.underline),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+
+                                      if(loginController.emailController.text != '') {
+                                        await FirebaseAuth.instance
+                                            .sendPasswordResetEmail(
+                                            email: loginController
+                                                .emailController.text);
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text(
+                                                'Vérifiez votre messagerie'),
+                                            actions: <Widget>[
+                                              ElevatedButton(
+                                                child: Text('Vérifier'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        );
+
+                                      }else{
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text(
+                                                'Veuillez entrer votre adresse mail afin de récuperer votre mot de passe'),
+                                            actions: <Widget>[
+                                              ElevatedButton(
+                                                child: Text('Vérifier'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    }
+                              ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       privacyPolicyLinkAndTermsOfService()
                     ],
                   ),
@@ -202,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Colors.white,
                             )
                           : Text(
-                              'Vérifier le numéro de email',
+                              'Vérifier l\'adresse mail ',
                               style: const TextStyle(
                                   fontSize: 18, color: Colors.white),
                             ),
@@ -233,7 +293,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextButton(
                     onPressed: () => loginController.resendEmail(),
                     child: Text(
-                      'Renvoyer le verification link ?',
+                      'Renvoyer le lien de vérification',
                       style: TextStyle(color: MyColors.newTextColor),
                     ),
                   ),
@@ -265,7 +325,8 @@ class _LoginScreenState extends State<LoginScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.all(10),
             child: Center(
-                child: Text.rich(TextSpan(
+                child: Text.rich(
+                    TextSpan(
                     text: 'En continuant, vous acceptez nos ',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                     children: <TextSpan>[

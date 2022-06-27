@@ -19,8 +19,7 @@ class _MessageScreenState extends State<MessageScreen> {
   final FocusNode _messageFocus = FocusNode();
   String? message;
 
-  CollectionReference _messageReferences =
-      FirebaseFirestore.instance.collection("message");
+  CollectionReference _messageReferences = FirebaseFirestore.instance.collection("message");
   CollectionReference _contactReferences = FirebaseFirestore.instance.collection("contact");
 
   //var arguments = Get.arguments;
@@ -56,18 +55,6 @@ class _MessageScreenState extends State<MessageScreen> {
         .doc(randomStr)
         .set(map);
 
-    _contactReferences
-        .doc(messageSenderId)
-        .collection("contacts")
-        .doc(messageReceiverId)
-        .set({
-      'name': userData[1],
-      'lastMsg': message,
-      'image': userData[2],
-      'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
-      'uid': messageReceiverId,
-      'unread': 0,
-    });
 
     FirebaseFirestore.instance
         .collection("users")
@@ -82,6 +69,20 @@ class _MessageScreenState extends State<MessageScreen> {
           .doc(messageSenderId)
           .get();
 
+
+      _contactReferences
+          .doc(messageSenderId)
+          .collection("contacts")
+          .doc(messageReceiverId)
+          .set({
+        'name': userData[1],
+        'lastMsg': message,
+        'image': userData[2],
+        'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
+        'uid': messageReceiverId,
+        'unread': 0,
+      });
+
       if(docc.exists){
         Map<String,dynamic> map = docc.data()!;
          if(map.containsKey("unread")){
@@ -93,7 +94,8 @@ class _MessageScreenState extends State<MessageScreen> {
                .set({
              'name': docc['name'],
              'lastMsg': message,
-             'image': userData[2],
+             'image': snapshot['image'],
+             'sender_image': snapshot['image'],
              'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
              'uid': messageSenderId,
              'unread' : unRead,
@@ -106,7 +108,7 @@ class _MessageScreenState extends State<MessageScreen> {
                .set({
              'name': docc['name'],
              'lastMsg': message,
-             'image': userData[2],
+             'image': snapshot['image'],
              'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
              'uid': messageSenderId,
              'unread' : 1,
@@ -120,7 +122,7 @@ class _MessageScreenState extends State<MessageScreen> {
             .set({
           'name': snapshot['userName'],
           'lastMsg': message,
-          'image': userData[2],
+          'image': snapshot['image'],
           'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
           'uid': messageSenderId,
           'unread': 0,

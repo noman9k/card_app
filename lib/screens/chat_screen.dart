@@ -37,6 +37,8 @@ class ChatScreen extends StatelessWidget {
           return ListView.builder(
             itemBuilder: (context, index) {
               var dt = snapshot.data!.docs[index];
+              print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+              print(snapshot.data!.docs[index]['uid']);
               return Slidable(
                 child: GestureDetector(
                   onTap: () {
@@ -75,22 +77,22 @@ class ChatScreen extends StatelessWidget {
                       children: [
                         snapshot.data!.docs[index]['image'] == ''
                             ? Container(
-                                padding: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  // color: kPrimaryColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Text(
-                                  snapshot.data!.docs[index]['name']
-                                      .substring(0, 1)
-                                      .toUpperCase(),
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
+                          padding: const EdgeInsets.all(16),
+                          decoration: const BoxDecoration(
+                            // color: kPrimaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            snapshot.data!.docs[index]['name']
+                                .substring(0, 1)
+                                .toUpperCase(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
                             : CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    snapshot.data!.docs[index]['image']),
-                              ),
+                          backgroundImage: NetworkImage(
+                              snapshot.data!.docs[index]['image']),
+                        ),
                         SizedBox(
                           width: 10,
                         ),

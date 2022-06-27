@@ -20,10 +20,6 @@ class MessageStream extends StatelessWidget {
 
   updateDatabase(String id,String receiverId) {
 
-    print('eeeeeeeeeeeeeeeeeeeeeeeeee');
-    print(messageSenderId);
-    print(idd);
-    print(id);
     _messageReferences
         .doc(messageSenderId)
         .collection(idd)

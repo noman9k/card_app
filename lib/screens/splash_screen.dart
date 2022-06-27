@@ -86,13 +86,16 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'Dreeam',
-                style: TextStyle(
-                  color: MyColors.newTextColor,
-                  fontSize: 0.30.sw,
-                  //fontSize: Get.width * 0.24,
-                  fontWeight: FontWeight.bold,
+              Flexible(
+                child: Text(
+                  'Dreeam',
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: MyColors.newTextColor,
+                    fontSize: 120.r,
+                    //fontSize: Get.width * 0.24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Row(
