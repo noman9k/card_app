@@ -262,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Colors.white,
                             )
                           : Text(
-                              'Vérifier l\'adresse mail ',
+                              'Valider ',
                               style: const TextStyle(
                                   fontSize: 18, color: Colors.white),
                             ),

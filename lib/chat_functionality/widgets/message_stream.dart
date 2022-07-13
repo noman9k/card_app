@@ -126,9 +126,6 @@ class MessageStream extends StatelessWidget {
                     isMessageRead: msg['isMessageRead'],
                     type: msg['type']);
 
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                print(messageSenderId);
-                print(msg['receiverId']);
                 if (messageSenderId == msg['receiverId']) {
                   print(msg.id);
                   updateDatabase(msg.id,msg['receiverId']);

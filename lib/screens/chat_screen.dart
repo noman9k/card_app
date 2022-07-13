@@ -37,8 +37,6 @@ class ChatScreen extends StatelessWidget {
           return ListView.builder(
             itemBuilder: (context, index) {
               var dt = snapshot.data!.docs[index];
-              print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-              print(snapshot.data!.docs[index]['uid']);
               return Slidable(
                 child: GestureDetector(
                   onTap: () {

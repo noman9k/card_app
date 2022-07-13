@@ -80,20 +80,21 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(8.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(
+              FittedBox(
+                fit: BoxFit.cover,
                 child: Text(
                   'Dreeam',
                   maxLines: 1,
                   style: TextStyle(
                     color: MyColors.newTextColor,
-                    fontSize: 120.r,
-                    //fontSize: Get.width * 0.24,
+                    //fontSize: 0.2.sw,
+                    fontSize: Get.width * 0.25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -137,16 +138,6 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-    // static String returnNewRoute() {
-    //   if (FirebaseAuth.instance.currentUser != null &&
-    //       FirebaseAuth.instance.currentUser!.phoneNumber != null) {
-    //     return '/userdata-screen';
-    //   }
-    //   if (FirebaseAuth.instance.currentUser != null) {
-    //     return '/userdata-screen';
-    //   }
-    //   return '/login-screen';
-    // }
 
 
 

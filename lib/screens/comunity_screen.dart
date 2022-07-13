@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../controllers/chat_controller.dart';
 import '../controllers/comunity_controller.dart';
 
 class ComunityScreen extends StatefulWidget {
@@ -23,15 +24,16 @@ class ComunityScreen extends StatefulWidget {
 
 class _ComunityScreenState extends State<ComunityScreen> {
   ComunityController homeController = Get.put(ComunityController());
-
   ProfileController profileController = Get.put(ProfileController());
-
   String? userId = FirebaseAuth.instance.currentUser!.uid;
-  //var liked;
+  var chatController = Get.put(ChatController());
   var id;
 
   @override
   Widget build(BuildContext context) {
+
+    chatController.getToken(context);
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

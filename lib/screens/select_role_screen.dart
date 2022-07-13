@@ -25,7 +25,7 @@ class SelectRoleScreen extends StatelessWidget {
           Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.only(top: 40.0,left: 16,right: 16),
+                padding: const EdgeInsets.only(top: 40.0,left: 60,right: 50),
                 child: SizedBox(
                   width: Get.width,
                   child: Center(

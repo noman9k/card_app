@@ -97,6 +97,7 @@ class LoginController extends GetxController {
         'phone': phoneNumber.value,
         'image': '0',
         'country': '0',
+        'token' : '',
         'locationDetails': '0',
         'role': '0',
         'status': 'likes',

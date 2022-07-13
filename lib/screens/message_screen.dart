@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:card_app/controllers/chat_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,120 +17,10 @@ class _MessageScreenState extends State<MessageScreen> {
   final TextEditingController _messageBodyController = TextEditingController();
   final FocusNode _messageFocus = FocusNode();
   String? message;
-
-  CollectionReference _messageReferences = FirebaseFirestore.instance.collection("message");
-  CollectionReference _contactReferences = FirebaseFirestore.instance.collection("contact");
-
   //var arguments = Get.arguments;
   String messageSenderId = FirebaseAuth.instance.currentUser!.uid;
+  var controller = Get.put(ChatController());
 
-  Future<void> uploadMessage() async {
-    String messageReceiverId = userData[0];
-    Map<String, dynamic> map = {
-      'text': message,
-      'senderId': messageSenderId,
-      'receiverId': messageReceiverId,
-      'sendAt': DateTime.now().millisecondsSinceEpoch,
-      'isMessageRead': false,
-      'type': 'text'
-    };
-
-    // _messageReferences.doc(messageSenderId).collection("messages").doc(messageReceiverId).set(map);
-    // _messageReferences.doc(messageReceiverId).collection("messages").doc(messageSenderId).set(map);
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    Random _rnd = Random();
-    String randomStr = String.fromCharCodes(Iterable.generate(
-        8, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-
-    _messageReferences
-        .doc(messageSenderId)
-        .collection(messageReceiverId)
-        .doc(randomStr)
-        .set(map);
-    _messageReferences
-        .doc(messageReceiverId)
-        .collection(messageSenderId)
-        .doc(randomStr)
-        .set(map);
-
-
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((DocumentSnapshot snapshot) async {
-
-      int unRead = 0;
-      var docc = await _contactReferences
-          .doc(messageReceiverId)
-          .collection("contacts")
-          .doc(messageSenderId)
-          .get();
-
-
-      _contactReferences
-          .doc(messageSenderId)
-          .collection("contacts")
-          .doc(messageReceiverId)
-          .set({
-        'name': userData[1],
-        'lastMsg': message,
-        'image': userData[2],
-        'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
-        'uid': messageReceiverId,
-        'unread': 0,
-      });
-
-      if(docc.exists){
-        Map<String,dynamic> map = docc.data()!;
-         if(map.containsKey("unread")){
-           unRead = docc['unread'] + 1;
-           await _contactReferences
-               .doc(messageReceiverId)
-               .collection("contacts")
-               .doc(messageSenderId)
-               .set({
-             'name': docc['name'],
-             'lastMsg': message,
-             'image': snapshot['image'],
-             'sender_image': snapshot['image'],
-             'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
-             'uid': messageSenderId,
-             'unread' : unRead,
-               });
-        }else{
-           await _contactReferences
-               .doc(messageReceiverId)
-               .collection("contacts")
-               .doc(messageSenderId)
-               .set({
-             'name': docc['name'],
-             'lastMsg': message,
-             'image': snapshot['image'],
-             'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
-             'uid': messageSenderId,
-             'unread' : 1,
-           });
-         }
-      }else{
-        _contactReferences
-            .doc(messageReceiverId)
-            .collection("contacts")
-            .doc(messageSenderId)
-            .set({
-          'name': snapshot['userName'],
-          'lastMsg': message,
-          'image': snapshot['image'],
-          'lastMsgTime': DateTime.now().millisecondsSinceEpoch,
-          'uid': messageSenderId,
-          'unread': 0,
-        });
-      }
-
-    });
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,8 +99,15 @@ class _MessageScreenState extends State<MessageScreen> {
                         .toString()
                         .trim()
                         .isNotEmpty) {
-                      uploadMessage();
-                      _messageBodyController.clear();
+                      FirebaseFirestore.instance.collection("users").doc(userData[0])
+                      .get().then((DocumentSnapshot snapshot){
+
+                        String token = snapshot['token'];
+                        controller.uploadMessage(userData[0],message,userData[1],userData[2]);
+                        controller.sendNotificationToDriver(token, context, message!);
+                        _messageBodyController.clear();
+
+                      });
                     }
                   },
                   icon: Icon(

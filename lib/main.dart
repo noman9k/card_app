@@ -3,6 +3,8 @@
 import 'package:camera/camera.dart';
 import 'package:card_app/constant/colors.dart';
 import 'package:card_app/screens/splash_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +22,8 @@ import 'screens/profile_screen.dart';
 import 'screens/question_screen.dart';
 
 List<CameraDescription> cameras = [];
-
-void main() async {
+bool isNewChatAvl = false;
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await ScreenUtil.ensureScreenSize();
