@@ -119,7 +119,7 @@ class ChatController extends GetxController{
 
   }
 
-  static String serverToken ="key=AAAAUfZ17BY:APA91bHGX8ZWzY7mtv7-V-0SJvU4v2nX62Q5CCvoZBM2u8g3DKWad71K1JvrvlCSI5-2A7G0dwQBuBoVc1ma1XJU0_ehsU9vb4fLujs5uRY6axjPigwBaHbrqBehvybW07RzVIZWD5ms";
+  static String serverToken ="key=";
   void sendNotificationToDriver(String token , context, String message) async
   {
 
