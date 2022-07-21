@@ -35,9 +35,12 @@ class QuestionController extends GetxController {
 
     if (!questionFormKey.currentState!.validate()) {
       print('Form is invalid');
+      isLoading.value = false;
       return;
     }
 
+    isLoading.value = false;
+    questionFormKey.currentState!.save();
     await _saveAnswersData(
         q0Controller.text, q1Controller.text, q2Controller.text);
     load

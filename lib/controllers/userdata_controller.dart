@@ -3,6 +3,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UserDataController extends GetxController {
   final userDataFormKey = GlobalKey<FormState>();
@@ -41,29 +42,45 @@ class UserDataController extends GetxController {
   void upload() async {
     isLoading.value = true;
     await _saveUserData();
-    Get.offNamed('/select-role-screen', arguments: [false]);
   }
 
   Future<void> _saveUserData() async {
+
     String country = await usersReference.doc(uId).get().then((value) {
       return value['locationDetails'];
     });
 
-    return usersReference.doc(uId).update({
-      'userName': name.text,
-      'country': selectedCountry.value.flagEmoji,
-      'locationDetails': selectedCountry.value.name,
-      'description': description.text,
-      'locationDetails': '${city.text}_$country',
-      'details.game': game.text,
-      'details.level': level.text,
-      'details.cash': cash.text
-    });
+    if(name.text.isNotEmpty && selectedCountry.toString().isNotEmpty && description.text.isNotEmpty
+    && city.text.isNotEmpty && game.text.isNotEmpty && level.text.isNotEmpty && cash.text.isNotEmpty) {
+       usersReference.doc(uId).update({
+        'userName': name.text,
+        'country': selectedCountry.value.flagEmoji,
+        'locationDetails': selectedCountry.value.name,
+        'description': description.text,
+        'locationDetails': '${city.text}_$country',
+        'details.game': game.text,
+        'details.level': level.text,
+        'details.cash': cash.text
+      }).whenComplete((){
+         isLoading.value = false;
+         Get.offNamed('/select-role-screen', arguments: [false]);
+       }).catchError((error){
+         Fluttertoast.showToast(msg: "Something went wrong",backgroundColor: Colors.red,
+             textColor: Colors.white,
+             fontSize: 16.0);
+         isLoading.value = false;
+       });
+    }else{
+      Fluttertoast.showToast(msg: "Please enter your details",backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      isLoading.value = false;
+    }
   }
 
   nameValidation() {
     if (name.text.isEmpty) {
-      'Name is required';
+       'Name is required';
     } else {
       return null;
     }
@@ -71,7 +88,7 @@ class UserDataController extends GetxController {
 
   descriptionValidation() {
     if (description.text.isEmpty) {
-      'Description is required';
+       'Description is required';
     } else {
       return null;
     }
@@ -79,7 +96,7 @@ class UserDataController extends GetxController {
 
   gameValidation() {
     if (game.text.isEmpty) {
-      'You need to specify a game you plays';
+       'You need to specify a game you plays';
     } else {
       return null;
     }
@@ -87,7 +104,7 @@ class UserDataController extends GetxController {
 
   cityValidation() {
     if (city.text.isEmpty) {
-      'You need to specify a city';
+       'You need to specify a city';
     } else {
       return null;
     }
@@ -95,7 +112,7 @@ class UserDataController extends GetxController {
 
   levelValidation() {
     if (level.text.isEmpty) {
-      'Level is required';
+       'Level is required';
     } else {
       return null;
     }
@@ -103,7 +120,7 @@ class UserDataController extends GetxController {
 
   cashValidation() {
     if (cash.text.isEmpty) {
-      'Cash is required';
+       'Cash is required';
     } else {
       return null;
     }
@@ -111,7 +128,7 @@ class UserDataController extends GetxController {
 
   countryValidation() {
     if (selectedCountry.value.name.isEmpty) {
-      'Country is required';
+       'Country is required';
     } else {
       return null;
     }

@@ -121,9 +121,16 @@ class FaceDetectorColtroller extends GetxController {
       if (url != null) {
         usersReference
             .doc(FirebaseAuth.instance.currentUser!.uid)
-            .update({"image": url});
-
-        load ? Get.offNamed('/home-screen') : Get.offAllNamed('/home-screen');
+            .update({"image": url})
+            .whenComplete(() {
+                    load ? Get.offNamed('/home-screen') : Get.offAllNamed('/home-screen');
+           }).catchError((onError){
+              Get.snackbar("Alert", "Image not uploaded , Try again later",
+                margin: EdgeInsets.all(16),
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.white,
+                colorText: Colors.black);
+        });
         isLoading = false.obs;
       } else {
         isLoading = false.obs;
