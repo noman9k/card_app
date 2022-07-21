@@ -1,4 +1,4 @@
-package com.dreeamcard.card_app
+package com.poker.cardapp.spn
 
 import io.flutter.embedding.android.FlutterActivity
 
