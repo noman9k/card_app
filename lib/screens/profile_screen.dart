@@ -450,7 +450,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 50,
           width: 70,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: Colors.grey[200],
           ),
           child: Center(
@@ -458,7 +458,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fit: BoxFit.fitHeight,
               child: Text(data,
                   maxLines: 2,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   )),
             ),

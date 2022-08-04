@@ -2,9 +2,12 @@
 
 import 'package:card_app/controllers/chat_controller.dart';
 import 'package:card_app/controllers/profile_controller.dart';
+import 'package:card_app/screens/announctment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
@@ -45,6 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.people_alt_outlined),
                 label: 'Comunity',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset("assets/icons/announce.svg",width: 30,height: 30,color: controller.tabIndex == 1 ? Colors.green : Colors.black,),
+                label: 'Announce',
               ),
               BottomNavigationBarItem(
                 label: 'Chats',
@@ -91,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
             index: controller.tabIndex,
             children: [
               ComunityScreen(),
+              AnnouncementScreen(),
               ChatScreen(),
               ProfileScreen(),
             ],
