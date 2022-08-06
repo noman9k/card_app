@@ -24,6 +24,7 @@ class CreatePostController extends GetxController {
   String sixthItem = 'Autres';
 
   var initialValue = ''.obs;
+  var isTyped = false.obs;
 
   List<String> choices = <String>[
     'Recherche joueur pour',
@@ -60,6 +61,14 @@ class CreatePostController extends GetxController {
         'image' : snapshot['image'],
       });
 
+    });
+  }
+
+  Future<void> updatedPost(String id)async{
+    _fireStorePostCollection.doc(id).update({
+      'title' : initialValue.value == '' ? titleController.text : initialValue.value,
+      'post' : postController.text,
+      'time' : DateTime.now().millisecondsSinceEpoch,
     });
   }
 }

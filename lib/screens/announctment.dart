@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/alert_dialog.dart';
 
@@ -51,7 +52,7 @@ class AnnouncementScreen extends StatelessWidget {
                             const SizedBox(width: 8,),
                             GestureDetector(
                               onTap: (){
-                                Get.toNamed("/create-post");
+                                Get.toNamed("/create-post",arguments: [false,'','','']);
                               },
                               child: Container(
                                 padding : const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
@@ -79,7 +80,7 @@ class AnnouncementScreen extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator(),);
                     }
                     if(snapshot.hasError){
-                      return const Center(child: Text('Somethig went wrong',style: TextStyle(fontSize: 16),),);
+                      return const Center(child: Text('Something went wrong',style: TextStyle(fontSize: 16),),);
                     }
                     if(snapshot.hasData) {
                       return Expanded(
@@ -96,6 +97,7 @@ class AnnouncementScreen extends StatelessWidget {
                               post: snapshot.data!.docs[index]['post'],
                               postId: snapshot.data!.docs[index]['docId'],
                               userImage: userImage,
+                              time: (snapshot.data!.docs[index]['time']),
                               moreOnPress: (){
                                 showModalBottomSheet<void>(
                                   context: context,
@@ -108,7 +110,10 @@ class AnnouncementScreen extends StatelessWidget {
                                           mainAxisSize: MainAxisSize.min,
                                           children: <Widget>[
                                             ElevatedButton.icon(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Get.toNamed("/create-post",arguments: [true,snapshot.data!.docs[index]['title'],snapshot.data!.docs[index]['post'],snapshot.data!.docs[index]['docId']]);
+                                              },
                                               icon: const Icon(
                                                 Icons.update,
                                                 size: 24.0,
@@ -117,13 +122,14 @@ class AnnouncementScreen extends StatelessWidget {
                                             ),
                                             ElevatedButton.icon(
                                               onPressed: () {
+                                                Navigator.pop(context);
                                                 showDialog(
                                                   context: context,
                                                   builder: (BuildContext context) {
                                                     return BeautifulAlertDialog(postId: snapshot.data!.docs[index]['docId']);
                                                   },
                                                 );
-                                                Navigator.pop(context);
+
                                               },
                                               icon: const Icon(
                                                 Icons.delete_forever,
@@ -171,6 +177,7 @@ class Post extends StatelessWidget {
     required this.post,
     required this.postId,
     required this.userImage,
+    required this.time,
     required this.moreOnPress,
     required this.commentOnTap
   }) : super(key: key);
@@ -184,11 +191,29 @@ class Post extends StatelessWidget {
   final String title;
   final String postId;
   final String userImage;
+  final num time;
   final VoidCallback moreOnPress;
   final VoidCallback commentOnTap;
 
   @override
   Widget build(BuildContext context) {
+
+    var minutes = ((DateTime.now().millisecondsSinceEpoch - time.toInt()) / 1000) / 60;
+    var hours = (((DateTime.now().millisecondsSinceEpoch - time.toInt()) / 1000) / 60)/60;
+
+    DateTime date =  DateTime.fromMillisecondsSinceEpoch(time.toInt());
+    var format =  DateFormat("yMd");
+    var dateString = format.format(date);
+
+    var showTime;
+    if(minutes.toInt() < 59){
+      showTime = minutes.toInt().toString()+"m";
+    }else if(hours.toInt() < 23){
+      showTime = hours.toInt().toString()+"h";
+    }else{
+      showTime = dateString;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical:4),
       child: Flexible(
@@ -202,7 +227,7 @@ class Post extends StatelessWidget {
               title: Text(name,style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold)),
               subtitle: Row(
                 children: [
-                  Text('8h'),
+                  Text(showTime),
                   Text(
                     '${country}',
                     maxLines: 1,

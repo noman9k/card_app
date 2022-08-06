@@ -14,6 +14,23 @@ class CreatePost extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePost> {
    final controller = Get.put(CreatePostController());
+   var arguments = Get.arguments;
+   bool isTyped = false;
+   Color publisherColor = Colors.black38;
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.titleController.text = arguments[1];
+    controller.postController.text = arguments[2];
+    if(arguments[0]){
+      controller.initialValue.value = 'Autres';
+      setState(() {
+       controller.isTyped.value = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,41 +61,53 @@ class _CreatePostState extends State<CreatePost> {
                        // mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Flexible(
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: ListTile(
-                                leading: Image.network(snapshot.data!['image'],width: 80,height: 80,),
-                                title: Text(snapshot.data!['userName'],style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-                                subtitle: Row(
-                                  children: [
-                                    Text(
-                                      '${snapshot.data!['country']}',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width : 250,
+                                  child: ListTile(
+                                    leading: Image.network(snapshot.data!['image'],width: 80,height: 80,),
+                                    title: Text(snapshot.data!['userName'],style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                                    subtitle: Row(
+                                      children: [
+                                        Text(
+                                          '${snapshot.data!['country']}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        SvgPicture.asset(
+                                            'assets/icons/${snapshot.data!['role']}.svg',width: 30,height: 30,)
+                                      ],
                                     ),
-                                    SvgPicture.asset(
-                                        'assets/icons/${snapshot.data!['role']}.svg',width: 30,height: 30,)
-                                  ],
-                                ),
-                                trailing: ElevatedButton(
-                                  onPressed: ()async{
-                                   await controller.createPost().then((value){
-                                     Get.back();
-                                   });
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.grey,
+                                    contentPadding: const EdgeInsets.all(0),
+                                    horizontalTitleGap: 0,
+                                    minLeadingWidth: 20,
                                   ),
-                                  child: const Text('PUBLIER'),
                                 ),
-                                contentPadding: const EdgeInsets.all(0),
-                                horizontalTitleGap: 0,
-                                minLeadingWidth: 20,
-                              ),
+                                Obx((){
+                                  return ElevatedButton(
+                                    onPressed: controller.isTyped.value ? ()async{
+                                      if(arguments[0]){
+                                        await controller.updatedPost(arguments[3]).then((value){
+                                          Get.back();
+                                        });
+                                      }else{
+                                        await controller.createPost().then((value){
+                                          Get.back();
+                                        });
+                                      }
+                                    } : null,
+                                    style: ElevatedButton.styleFrom(
+                                      primary: controller.isTyped.value ? Colors.green : Colors.black38,
+                                    ),
+                                    child: const Text('PUBLIER'),
+                                  );
+                                }),
+                              ],
                             ),
                           ),
                         ],
@@ -144,6 +173,13 @@ class _CreatePostState extends State<CreatePost> {
                             labelText: 'Create Public Post...',
                             hintText: 'Create Public Post...',
                           ),
+                          onChanged: (value){
+                            if(controller.postController.text.isNotEmpty){
+                               controller.isTyped.value = true;
+                            }else{
+                              controller.isTyped.value = false;
+                            }
+                          },
                           onSaved: (value) {
                             controller.postController.text = value!;
                           },

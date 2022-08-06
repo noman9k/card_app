@@ -57,6 +57,7 @@ dependencies:
   change_app_package_name: ^1.1.0
   fluttertoast: ^8.0.9
   font_awesome_flutter: ^10.1.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

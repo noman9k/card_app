@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class CommentStream extends StatelessWidget {
   CommentStream({Key? key,required this.id}) : super(key: key);
@@ -32,7 +33,8 @@ class CommentStream extends StatelessWidget {
                   country: snapshot.data!.docs[index]['country'],
                   role: snapshot.data!.docs[index]['role'],
                   comment: snapshot.data!.docs[index]['comment'],
-                  userImage: snapshot.data!.docs[index]['image']
+                  userImage: snapshot.data!.docs[index]['image'],
+                  time: snapshot.data!.docs[index]['time'],
               );
             },
           );
@@ -51,6 +53,7 @@ class Comment extends StatelessWidget {
     required this.role,
     required this.comment,
     required this.userImage,
+    required this.time,
   }) : super(key: key);
 
 
@@ -59,9 +62,29 @@ class Comment extends StatelessWidget {
   final String role;
   final String comment;
   final String userImage;
+  final int time;
 
   @override
   Widget build(BuildContext context) {
+
+    var minutes = ((DateTime.now().millisecondsSinceEpoch - time.toInt()) / 1000) / 60;
+    var hours = (((DateTime.now().millisecondsSinceEpoch - time.toInt()) / 1000) / 60)/60;
+
+    DateTime date =  DateTime.fromMillisecondsSinceEpoch(time.toInt());
+    var format =  DateFormat("yMd");
+    var dateString = format.format(date);
+
+    var showTime;
+    if(minutes.toInt() < 59){
+      showTime = minutes.toInt().toString()+"m";
+    }else if(hours.toInt() < 23){
+      showTime = hours.toInt().toString()+"h";
+    }else{
+      showTime = dateString;
+    }
+
+
+
     return Flexible(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +96,7 @@ class Comment extends StatelessWidget {
             title: Text(name,style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold)),
             subtitle: Row(
               children: [
-                Text('8h'),
+                Text(showTime),
                 Text(
                   '${country}',
                   maxLines: 1,
