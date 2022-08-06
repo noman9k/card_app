@@ -5,9 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class CreatePost extends StatelessWidget {
+class CreatePost extends StatefulWidget {
     CreatePost({Key? key}) : super(key: key);
 
+  @override
+  State<CreatePost> createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreatePost> {
    final controller = Get.put(CreatePostController());
 
   @override
@@ -39,7 +44,7 @@ class CreatePost extends StatelessWidget {
                        // mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Flexible(
-                            child: Container(
+                            child: SizedBox(
                               width: double.infinity,
                               child: ListTile(
                                 leading: Image.network(snapshot.data!['image'],width: 80,height: 80,),
@@ -60,9 +65,13 @@ class CreatePost extends StatelessWidget {
                                   ],
                                 ),
                                 trailing: ElevatedButton(
-                                  onPressed: (){},
+                                  onPressed: ()async{
+                                   await controller.createPost().then((value){
+                                     Get.back();
+                                   });
+                                  },
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.grey
+                                      primary: Colors.grey,
                                   ),
                                   child: const Text('PUBLIER'),
                                 ),
@@ -81,7 +90,7 @@ class CreatePost extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: SizedBox(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: 50,
                     child: Obx((){
                       return PopupMenuButton<String>(
                         icon: Row(
@@ -106,6 +115,41 @@ class CreatePost extends StatelessWidget {
                         },
                       );
                     }),
+                  ),
+                ),
+                const Divider(thickness: 1,color: Colors.black,),
+                Form(
+                  key: controller.formKey,
+                  child: Column(
+                    children: [
+                      Obx((){
+                        return controller.initialValue.value == "Autres" ? TextFormField(
+                          maxLength: 15,
+                          controller: controller.titleController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Title',
+                            hintText: 'Title',
+                          ),
+                        ) : SizedBox.shrink();
+                      }),
+                      const SizedBox(height: 8,),
+                      Obx((){
+                        return controller.initialValue.value == '' ? const SizedBox.shrink() : TextFormField(
+                          controller: controller.postController,
+                          maxLines: 3,
+                          maxLength: 100,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Create Public Post...',
+                            hintText: 'Create Public Post...',
+                          ),
+                          onSaved: (value) {
+                            controller.postController.text = value!;
+                          },
+                        );
+                      }),
+                    ],
                   ),
                 ),
               ],

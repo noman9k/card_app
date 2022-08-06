@@ -1,7 +1,20 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class CreatePostController extends GetxController {
+
+
+  CollectionReference _fireStorePostCollection = FirebaseFirestore.instance.collection("post");
+  CollectionReference _fireStoreUserCollection = FirebaseFirestore.instance.collection("users");
+  var uId  = FirebaseAuth.instance.currentUser!.uid;
+
+  var titleController = TextEditingController();
+  var postController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
 
   String firstItem = 'Recherche joueur pour';
   String secondItem = 'Travailler son jeu';
@@ -23,5 +36,30 @@ class CreatePostController extends GetxController {
 
   void choiceAction(String choice) {
     initialValue.value = choice;
+  }
+
+  Future<void> createPost()async{
+
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    String randomStr = String.fromCharCodes(Iterable.generate(
+        8, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
+    _fireStoreUserCollection.doc(uId).get().then((DocumentSnapshot snapshot){
+
+      _fireStorePostCollection.doc(randomStr).set({
+        'docId' : randomStr,
+        'uId' : uId,
+        'title' : initialValue.value == '' ? titleController.text : initialValue.value,
+        'post' : postController.text,
+        'userName' : snapshot['userName'],
+        'userRole' : snapshot['role'],
+        'userCountry' : snapshot['country'],
+        'time' : DateTime.now().millisecondsSinceEpoch,
+        'image' : snapshot['image'],
+      });
+
+    });
   }
 }

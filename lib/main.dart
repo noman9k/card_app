@@ -2,6 +2,7 @@
 
 import 'package:camera/camera.dart';
 import 'package:card_app/constant/colors.dart';
+import 'package:card_app/screens/comment_screen.dart';
 import 'package:card_app/screens/create_post.dart';
 import 'package:card_app/screens/splash_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
                 name: '/edit-description-screen',
                 page: () => EditDescriptionScreen()),
             GetPage(name: '/create-post', page: () => CreatePost()),
+            GetPage(name: '/comments', page: () => CommentScreen()),
           ],
         );
       }
