@@ -341,7 +341,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ..onTap = () async {
                           await launchUrl(Uri.parse(
                               "https://github.com/shehzadraheem/Dreeam_Terms-Conditions"));
-                        }),
+                        }
+                        ),
                   TextSpan(
                       text: ' et ',
                       style: TextStyle(fontSize: 18, color: Colors.white),

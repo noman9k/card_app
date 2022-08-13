@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               BottomNavigationBarItem(
                 icon: SvgPicture.asset("assets/icons/announce.svg",width: 30,height: 30,color: controller.tabIndex == 1 ? Colors.green : Colors.black,),
-                label: 'Announce',
+                label: 'Annonce',
               ),
               BottomNavigationBarItem(
                 label: 'Chats',

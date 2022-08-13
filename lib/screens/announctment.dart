@@ -27,7 +27,7 @@ class AnnouncementScreen extends StatelessWidget {
               children:  [
                 const Padding(
                   padding: EdgeInsets.only(top: 16,left: 16),
-                  child: Text('Announce',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+                  child: Text('Annonce',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
                 ),
                 const Divider(thickness: 1,color: Colors.black,),
                 SizedBox(
@@ -40,7 +40,7 @@ class AnnouncementScreen extends StatelessWidget {
                         return const Center(child: CircularProgressIndicator(),);
                       }
                       if(snapshot.hasError){
-                        return const Center(child: Text('Somethig went wrong',style: TextStyle(fontSize: 16),),);
+                        return const Center(child: Text('Quelque chose s\'est mal passé',style: TextStyle(fontSize: 16),),);
                       }
                       userImage = snapshot.data!['image'];
                       userName = snapshot.data!['userName'];
@@ -80,7 +80,7 @@ class AnnouncementScreen extends StatelessWidget {
                       return const Center(child: CircularProgressIndicator(),);
                     }
                     if(snapshot.hasError){
-                      return const Center(child: Text('Something went wrong',style: TextStyle(fontSize: 16),),);
+                      return const Center(child: Text('Quelque chose s\'est mal passé',style: TextStyle(fontSize: 16),),);
                     }
                     if(snapshot.hasData) {
                       return Expanded(
@@ -100,45 +100,61 @@ class AnnouncementScreen extends StatelessWidget {
                               time: (snapshot.data!.docs[index]['time']),
                               moreOnPress: (){
                                 showModalBottomSheet<void>(
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      topRight: Radius.circular(20.0),
+                                    ),
+                                  ),
                                   context: context,
                                   builder: (BuildContext context) {
                                     return SizedBox(
                                       height: 150,
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            ElevatedButton.icon(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                Get.toNamed("/create-post",arguments: [true,snapshot.data!.docs[index]['title'],snapshot.data!.docs[index]['post'],snapshot.data!.docs[index]['docId']]);
-                                              },
-                                              icon: const Icon(
-                                                Icons.update,
-                                                size: 24.0,
-                                              ),
-                                              label: const Text('Update'),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          const SizedBox(height: 16,),
+                                          ElevatedButton.icon(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return BeautifulAlertDialog(postId: snapshot.data!.docs[index]['docId']);
+                                                },
+                                              );
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.white),
+                                              elevation: MaterialStateProperty.all(0),
                                             ),
-                                            ElevatedButton.icon(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) {
-                                                    return BeautifulAlertDialog(postId: snapshot.data!.docs[index]['docId']);
-                                                  },
-                                                );
-
-                                              },
-                                              icon: const Icon(
-                                                Icons.delete_forever,
-                                                size: 24.0,
-                                              ),
-                                              label: const Text('Delete'), // <-- Text
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              size: 24.0,
+                                              color: Colors.black,
                                             ),
-                                          ],
-                                        ),
+                                            label: const Text('Éliminer',style: TextStyle(color: Colors.black),), // <-- Text
+                                          ),
+                                          ElevatedButton.icon(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              Get.toNamed("/create-post",arguments: [true,snapshot.data!.docs[index]['title'],
+                                                snapshot.data!.docs[index]['post'],snapshot.data!.docs[index]['docId']]);
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.white),
+                                              elevation: MaterialStateProperty.all(0),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.create,
+                                              size: 24.0,
+                                              color: Colors.black,
+                                            ),
+                                            label: const Text(' Modifier la publication',style: TextStyle(color: Colors.black),),
+                                          ),
+                                        ],
                                       ),
                                     );
                                   },
@@ -148,12 +164,18 @@ class AnnouncementScreen extends StatelessWidget {
                                 Get.toNamed('/comments',arguments: [userImage,userName,snapshot.data!.docs[index]['docId'],
                                   snapshot.data!.docs[index]['userCountry'],snapshot.data!.docs[index]['userRole'],]);
                               },
+                              profileTap: (){
+                                FirebaseFirestore.instance.collection("users").doc(snapshot.data!.docs[index]['uId'])
+                                    .get().then((DocumentSnapshot documentSnapshot){
+                                  Get.toNamed('/profile-screen', arguments: documentSnapshot);
+                                });
+                              },
                             );
                           },
                         ),
                       );
                     }
-                    return const Text('Data not found',style: TextStyle(fontSize: 16));
+                    return const Text('Données introuvables',style: TextStyle(fontSize: 16));
                   },
                 ),
               ],
@@ -179,7 +201,8 @@ class Post extends StatelessWidget {
     required this.userImage,
     required this.time,
     required this.moreOnPress,
-    required this.commentOnTap
+    required this.commentOnTap,
+    required this.profileTap
   }) : super(key: key);
 
   final String image;
@@ -194,6 +217,7 @@ class Post extends StatelessWidget {
   final num time;
   final VoidCallback moreOnPress;
   final VoidCallback commentOnTap;
+  final VoidCallback profileTap;
 
   @override
   Widget build(BuildContext context) {
@@ -220,34 +244,37 @@ class Post extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: Image.network(image, width: 80, height: 80,),
-              horizontalTitleGap: 0,
-              title: Text(name,style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold)),
-              subtitle: Row(
-                children: [
-                  Text(showTime),
-                  Text(
-                    '${country}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+            GestureDetector(
+              onTap: profileTap,
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Image.network(image, width: 80, height: 80,),
+                horizontalTitleGap: 0,
+                title: Text(name,style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold)),
+                subtitle: Row(
+                  children: [
+                    Text(showTime),
+                    Text(
+                      '${country}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  SvgPicture.asset(
-                    'assets/icons/$role.svg',width: 30,height: 30,)
-                ],
+                    SvgPicture.asset(
+                      'assets/icons/$role.svg',width: 30,height: 30,)
+                  ],
+                ),
+                trailing: uId ==
+                    FirebaseAuth.instance.currentUser!.uid
+                    ? IconButton(
+                        onPressed: moreOnPress,
+                        icon: const Icon(Icons.more_horiz)
+                      )
+                    : const SizedBox.shrink(),
               ),
-              trailing: uId ==
-                  FirebaseAuth.instance.currentUser!.uid
-                  ? IconButton(
-                      onPressed: moreOnPress,
-                      icon: const Icon(Icons.more_horiz)
-                    )
-                  : const SizedBox.shrink(),
             ),
             const SizedBox(height: 4,),
             Padding(
@@ -268,12 +295,12 @@ class Post extends StatelessWidget {
                     stream: FirebaseFirestore.instance.collection("post").doc(postId).collection("comments").snapshots(),
                     builder: (context,snapshot){
                       if(snapshot.connectionState == ConnectionState.waiting){
-                        return const Text('0 Comments',style: TextStyle(fontSize: 16),);
+                        return const Text('0 Commentaires',style: TextStyle(fontSize: 16),);
                       }
                       if(snapshot.hasData){
-                        return Text('${snapshot.data!.docs.length} Comments',style: const TextStyle(fontSize: 16),);
+                        return Text('${snapshot.data!.docs.length} Commentaires',style: const TextStyle(fontSize: 16),);
                       }
-                      return const Text('0 Comments',style: TextStyle(fontSize: 16),);
+                      return const Text('0 Commentaires',style: TextStyle(fontSize: 16),);
                     },
                   ),
                   const Spacer(),
@@ -299,7 +326,7 @@ class Post extends StatelessWidget {
                           color: Colors.grey.shade300,
                           borderRadius: const BorderRadius.all(Radius.circular(30))
                         ),
-                        child: const Text('Write an answer...',textAlign: TextAlign.start,style: TextStyle(fontSize: 16),),
+                        child: const Text('Rédigez une réponse...',textAlign: TextAlign.start,style: TextStyle(fontSize: 16),),
                       ),
                     ),
                   ],

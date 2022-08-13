@@ -25,9 +25,18 @@ class _CreatePostState extends State<CreatePost> {
     controller.titleController.text = arguments[1];
     controller.postController.text = arguments[2];
     if(arguments[0]){
-      controller.initialValue.value = 'Autres';
+
+      if(arguments[1] != controller.firstItem && arguments[1] != controller.secondItem
+        && arguments[1] != controller.thirdItem && arguments[1] != controller.fourthItem
+        && arguments[1] != controller.fifthItem){
+
+        controller.initialValue.value = 'Autres';
+
+      }else{
+        controller.initialValue.value = arguments[1];
+      }
       setState(() {
-       controller.isTyped.value = true;
+        controller.isTyped.value = true;
       });
     }
   }
@@ -43,7 +52,7 @@ class _CreatePostState extends State<CreatePost> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Announce',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.green),),
+                const Text('Annonce',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.green),),
                 const Divider(thickness: 1,color: Colors.black,),
                 SizedBox(
                   width: double.infinity,
@@ -55,7 +64,7 @@ class _CreatePostState extends State<CreatePost> {
                         return const Center(child: CircularProgressIndicator(),);
                       }
                       if(snapshot.hasError){
-                        return const Center(child: Text('Somethig went wrong',style: TextStyle(fontSize: 16),),);
+                        return const Center(child: Text('Quelque chose s\'est mal passé',style: TextStyle(fontSize: 16),),);
                       }
                       return Row(
                        // mainAxisAlignment: MainAxisAlignment.start,
@@ -157,34 +166,41 @@ class _CreatePostState extends State<CreatePost> {
                           controller: controller.titleController,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: 'Title',
-                            hintText: 'Title',
+                            labelText: 'Titre',
+                            hintText: 'Titre',
                           ),
                         ) : SizedBox.shrink();
                       }),
                       const SizedBox(height: 8,),
                       Obx((){
-                        return controller.initialValue.value == '' ? const SizedBox.shrink() : TextFormField(
-                          controller: controller.postController,
-                          maxLines: 3,
-                          maxLength: 100,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Create Public Post...',
-                            hintText: 'Create Public Post...',
-                          ),
-                          onChanged: (value){
-                            if(controller.postController.text.isNotEmpty){
-                               controller.isTyped.value = true;
-                            }else{
-                              controller.isTyped.value = false;
-                            }
-                          },
-                          onSaved: (value) {
-                            controller.postController.text = value!;
-                          },
+                        return controller.initialValue.value == '' ? const SizedBox.shrink() : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              controller: controller.postController,
+                              maxLines: 3,
+                              maxLength: 100,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Crée une annonce publique...',
+                                hintText: 'Crée une annonce publique...',
+                              ),
+                              onChanged: (value){
+                                if(controller.postController.text.isNotEmpty){
+                                   controller.isTyped.value = true;
+                                }else{
+                                  controller.isTyped.value = false;
+                                }
+                              },
+                              onSaved: (value) {
+                                controller.postController.text = value!;
+                              },
+                            ),
+                            const Text('Indiquer l’heure, La date et l’endroit de l’événement’'),
+                          ],
                         );
                       }),
+
                     ],
                   ),
                 ),

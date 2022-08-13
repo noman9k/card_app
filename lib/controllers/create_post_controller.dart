@@ -52,7 +52,8 @@ class CreatePostController extends GetxController {
       _fireStorePostCollection.doc(randomStr).set({
         'docId' : randomStr,
         'uId' : uId,
-        'title' : initialValue.value == '' ? titleController.text : initialValue.value,
+        'title' : initialValue.value == 'Autres' || initialValue.value == ''
+            ? titleController.text : initialValue.value,
         'post' : postController.text,
         'userName' : snapshot['userName'],
         'userRole' : snapshot['role'],
@@ -66,7 +67,7 @@ class CreatePostController extends GetxController {
 
   Future<void> updatedPost(String id)async{
     _fireStorePostCollection.doc(id).update({
-      'title' : initialValue.value == '' ? titleController.text : initialValue.value,
+      'title' : initialValue.value == 'Autres' || initialValue.value == '' ? titleController.text : initialValue.value,
       'post' : postController.text,
       'time' : DateTime.now().millisecondsSinceEpoch,
     });
