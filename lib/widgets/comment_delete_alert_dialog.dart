@@ -35,7 +35,7 @@ class CommentDeleteDialog extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                      const Text(
-                          "Êtes-vous sûr de vouloir supprimer cette annonce ?",
+                          "Êtes-vous sûr de vouloir supprimer ce commentaire",
                            style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
                       const SizedBox(height: 10.0),
                       Row(

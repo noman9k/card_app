@@ -22,54 +22,6 @@ class CommentStream extends StatelessWidget {
   final String country;
   final String role;
 
-
-  TextEditingController _textFieldController = TextEditingController();
-  String? codeDialog;
-  String? valueText;
-  
-  Future<void> _displayTextInputDialog(BuildContext context,String commentId,String postId) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Mettre à jour votre commentaire'),
-            content: TextField(
-              controller: _textFieldController,
-              maxLines: 3,
-              minLines: 3,
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                ),
-                child: Text('ANNULER',style: TextStyle(color: Colors.white),),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
-                ),
-                child: Text('D\'ACCORD',style: TextStyle(color: Colors.white,),),
-                onPressed: () {
-
-                  FirebaseFirestore.instance.collection("post").doc(postId).collection("comments")
-                  .doc(commentId).update({
-                    "comment": _textFieldController.text
-                  });
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -135,9 +87,8 @@ class CommentStream extends StatelessWidget {
                               ),
                               ElevatedButton.icon(
                                 onPressed: () {
-                                  _textFieldController.text = snapshot.data!.docs[index]['comment'];
-                                  _displayTextInputDialog(context,snapshot.data!.docs[index]['commentId']
-                                  ,snapshot.data!.docs[index]['postId']);
+                                  Get.toNamed("/comments-update-screen",arguments: [snapshot.data!.docs[index]['commentId'],
+                                    snapshot.data!.docs[index]['postId'],image,snapshot.data!.docs[index]['comment']]);
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(Colors.white),

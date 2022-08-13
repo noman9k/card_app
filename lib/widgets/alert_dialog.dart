@@ -36,7 +36,7 @@ class BeautifulAlertDialog extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Text("Êtes-vous sûr de vouloir supprimer cette annonce ?",
+                      const Text("Êtes-vous sûr de vouloir supprimer cette annonce",
                       style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
                       const SizedBox(height: 10.0),
                       Row(
