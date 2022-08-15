@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class CommentDeleteDialog extends StatelessWidget {
+class CommentResponseDeleteDialog extends StatelessWidget {
   final String postId;
   final String commentId;
-  CommentDeleteDialog({required this.postId, required this.commentId});
+  final String responseId;
+  CommentResponseDeleteDialog({required this.postId, required this.commentId, required this.responseId});
 
 
   @override
@@ -52,11 +53,14 @@ class CommentDeleteDialog extends StatelessWidget {
                           ),
                           const SizedBox(width: 4.0),
                           TextButton(
-                            child: Text("SUPPRIMER",style: TextStyle(color: Colors.green,fontSize: 16,
+                            child: const Text("SUPPRIMER",style: TextStyle(color: Colors.green,fontSize: 16,
                                 fontWeight: FontWeight.bold),),
                             onPressed: () {
+                           //   /post/EUPeEVYb/comments/8rDQ2Wtt/comments/Rrv2u2Xa
+                                   // post id           commentid        response id
                               FirebaseFirestore.instance.collection("post").doc(postId)
-                                  .collection("comments").doc(commentId).delete();
+                                  .collection("comments").doc(commentId).collection("comments")
+                                  .doc(responseId).delete();
                               Navigator.pop(context);
                             },
                           ),

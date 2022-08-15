@@ -20,7 +20,7 @@ class CreatePostController extends GetxController {
   String secondItem = 'Travailler son jeu';
   String thirdItem = 'Faire une coloc poker';
   String fourthItem = 'Faire un event poker';
-  String fifthItem = 'Trouver une partie privée';
+  String fifthItem = 'Partie privée';
   String sixthItem = 'Autres';
 
   var initialValue = ''.obs;
@@ -31,7 +31,7 @@ class CreatePostController extends GetxController {
     'Travailler son jeu',
     'Faire une coloc poker',
     'Faire un event poker',
-    'Trouver une partie privée',
+    'Partie privée',
     'Autres',
   ];
 

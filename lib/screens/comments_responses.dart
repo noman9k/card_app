@@ -1,4 +1,4 @@
-import 'package:card_app/controllers/comment_responses_stream.dart';
+import 'package:card_app/widgets/comment_responses_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,7 +28,7 @@ class _CommentResponsesState extends State<CommentResponses> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox(height: 20,),
-              const Text('Commentaires:',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+              const Text('Réponse:',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
               const SizedBox(height: 20,),
               Expanded(child: CommentResponsesStream(id: arguments[0], commentId: arguments[1],)),
               SizedBox(

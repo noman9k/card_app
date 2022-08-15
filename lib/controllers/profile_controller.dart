@@ -80,27 +80,21 @@ class ProfileController extends GetxController {
     answer3.value = doc['question.answer3'];
   }
 
+  void setSingleProfileData(DocumentSnapshot doc){
+    name.value = doc['userName'];
+    role.value = doc['role'];
+    flag.value = doc['country'];
+    picture.value = doc['image'];
+    description.value = doc['description'];
+    game.value = doc['details.game'];
+    level.value = doc['details.level'];
+    cash.value = doc['details.cash'];
+    answer1.value = doc['question.answer1'];
+    answer2.value = doc['question.answer2'];
+    answer3.value = doc['question.answer3'];
+  }
+
   void setDescription() async {
-    // var pastDescription = '';
-    // int pastLikes = 0;
-    //
-    // try {
-    //   await usersReference.doc(uId).get().then((value) {
-    //     pastDescription = value['p_description'];
-    //     pastLikes =
-    //         value['p_likes'].map<String>((value) => value.toString()).toList();
-    //   });
-    // } catch (e) {
-    //   pastDescription = description.value;
-    //   await usersReference.doc(uId).collection("likes").get().then((value) {
-    //     //pastLikes = value['likes'].map<String>((value) => value.toString()).toList();
-    //     print(value.docs.length);
-    //     pastLikes = value.docs.length;
-    //   });
-    // } finally {
-    //   Get.toNamed('/edit-description-screen',
-    //       arguments: [pastDescription, pastLikes]);
-    // }
 
     FirebaseFirestore.instance
         .collection("users")
@@ -127,13 +121,4 @@ class ProfileController extends GetxController {
       }
     });
   }
-
-  // Future<List?> likedList(String? uId) async {
-  //   var list = [];
-  //   await usersReference.doc(uId ?? this.uId).get().then((value) {
-  //     list = value['likes'].map<String>((value) => value.toString()).toList();
-  //   });
-  //
-  //   return list;
-  // }
 }

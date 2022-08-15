@@ -2,6 +2,7 @@
 
 import 'package:camera/camera.dart';
 import 'package:card_app/constant/colors.dart';
+import 'package:card_app/screens/comment_response_update_screen.dart';
 import 'package:card_app/screens/comment_update_screen.dart';
 import 'package:card_app/screens/comment_screen.dart';
 import 'package:card_app/screens/comments_responses.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/comments', page: () => CommentScreen()),
             GetPage(name: '/comments-responses', page: () => CommentResponses()),
             GetPage(name: '/comments-update-screen', page: () => CommentUpdateScreen()),
+            GetPage(name: '/comments-response-update-screen', page: () => CommentResponseUpdateScreen()),
           ],
         );
       }

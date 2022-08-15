@@ -1,4 +1,3 @@
-import 'package:card_app/widgets/comment_delete_alert_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,22 +6,14 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../controllers/profile_controller.dart';
-import 'comments_like.dart';
+import 'comment_delete_alert_dialog.dart';
+import 'comment_response_delete_alert_dialog.dart';
 
-class CommentStream extends StatelessWidget {
-  CommentStream({Key? key,
-    required this.id,
-    required this.image,
-    required this.name,
-    required this.country,
-    required this.role
-  }) : super(key: key);
+class CommentResponsesStream extends StatelessWidget {
+  CommentResponsesStream({Key? key,required this.id, required this.commentId}) : super(key: key);
+
   final String id;
-  final String image;
-  final String name;
-  final String country;
-  final String role;
-
+  final String commentId;
   ProfileController profileController = Get.put(ProfileController());
 
   @override
@@ -31,6 +22,8 @@ class CommentStream extends StatelessWidget {
       stream: FirebaseFirestore.instance
           .collection("post")
           .doc(id)
+          .collection("comments")
+          .doc(commentId)
           .collection("comments")
           .orderBy('time',descending: false)
           .snapshots(),
@@ -72,8 +65,9 @@ class CommentStream extends StatelessWidget {
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return CommentDeleteDialog(postId: snapshot.data!.docs[index]['postId'],
-                                          commentId: snapshot.data!.docs[index]['commentId']);
+                                      return CommentResponseDeleteDialog(postId: id,
+                                          commentId: commentId,
+                                          responseId: snapshot.data!.docs[index]['commentId'],);
                                     },
                                   );
                                 },
@@ -90,8 +84,9 @@ class CommentStream extends StatelessWidget {
                               ),
                               ElevatedButton.icon(
                                 onPressed: () {
-                                  Get.toNamed("/comments-update-screen",arguments: [snapshot.data!.docs[index]['commentId'],
-                                    snapshot.data!.docs[index]['postId'],image,snapshot.data!.docs[index]['comment']]);
+                                  Get.toNamed('/comments-response-update-screen',arguments: [
+                                    id,commentId,snapshot.data!.docs[index]['commentId'],
+                                    snapshot.data!.docs[index]['image'],snapshot.data!.docs[index]['comment']]);
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -102,7 +97,7 @@ class CommentStream extends StatelessWidget {
                                   size: 24.0,
                                   color: Colors.black,
                                 ),
-                                label: const Text(' Modifier le commentaire',style: TextStyle(color: Colors.black),),
+                                label: const Text(' Modifier la réponse',style: TextStyle(color: Colors.black),),
                               ),
                             ],
                           ),
@@ -111,26 +106,22 @@ class CommentStream extends StatelessWidget {
                     );
                   }
                 },
-                child: Comment(
-                    name: snapshot.data!.docs[index]['name'],
-                    country: snapshot.data!.docs[index]['country'],
-                    role: snapshot.data!.docs[index]['role'],
-                    comment: snapshot.data!.docs[index]['comment'],
-                    userImage: snapshot.data!.docs[index]['image'],
-                    time: snapshot.data!.docs[index]['time'],
-                    postId: snapshot.data!.docs[index]['postId'],
-                    commentId: snapshot.data!.docs[index]['commentId'],
-                    onRespond: (){
-                      Get.toNamed('/comments-responses',
-                          arguments: [id,snapshot.data!.docs[index]['commentId'],image,name,country,role]);
-                    },
-                    profileTap: (){
-                      FirebaseFirestore.instance.collection("users").doc(snapshot.data!.docs[index]['userId'])
-                      .get().then((DocumentSnapshot documentSnapshot){
-                        profileController.setSingleProfileData(documentSnapshot);
-                        Get.toNamed('/profile-screen', arguments: documentSnapshot);
-                      });
-                    },
+                child: OtherComment(
+                  name: snapshot.data!.docs[index]['name'],
+                  country: snapshot.data!.docs[index]['country'],
+                  role: snapshot.data!.docs[index]['role'],
+                  comment: snapshot.data!.docs[index]['comment'],
+                  userImage: snapshot.data!.docs[index]['image'],
+                  time: snapshot.data!.docs[index]['time'],
+                  postId: snapshot.data!.docs[index]['postId'],
+                  commentId: snapshot.data!.docs[index]['commentId'],
+                  profileTap: (){
+                    FirebaseFirestore.instance.collection("users").doc(snapshot.data!.docs[index]['userId'])
+                        .get().then((DocumentSnapshot documentSnapshot){
+                      profileController.setSingleProfileData(documentSnapshot);
+                      Get.toNamed('/profile-screen', arguments: documentSnapshot);
+                    });
+                  },
                 ),
               );
             },
@@ -142,8 +133,8 @@ class CommentStream extends StatelessWidget {
   }
 }
 
-class Comment extends StatelessWidget {
-  const Comment({
+class OtherComment extends StatelessWidget {
+  const OtherComment({
     Key? key,
     required this.name,
     required this.country,
@@ -153,8 +144,7 @@ class Comment extends StatelessWidget {
     required this.time,
     required this.postId,
     required this.commentId,
-    required this.onRespond,
-    required this.profileTap
+    required this.profileTap,
   }) : super(key: key);
 
 
@@ -166,8 +156,8 @@ class Comment extends StatelessWidget {
   final int time;
   final String postId;
   final String commentId;
-  final VoidCallback onRespond;
   final VoidCallback profileTap;
+
 
   @override
   Widget build(BuildContext context) {
@@ -221,40 +211,8 @@ class Comment extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(comment,style: const TextStyle(fontSize: 16),),
         ),
-        const SizedBox(height: 8,),
-        Row(
-          children: [
-            TextButton(
-              onPressed: onRespond,
-              child: Column(
-                children: [
-                  const Text('Répondre',style: TextStyle(fontSize: 18),),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection("post").doc(postId).collection("comments")
-                        .doc(commentId).collection("comments").snapshots(),
-                    builder: (context,snapshot){
-                      if(snapshot.connectionState == ConnectionState.waiting){
-                        return const Text('0 Réponses',style: TextStyle(fontSize: 16),);
-                      }
-                      if(snapshot.hasData){
-                        return Text('${snapshot.data!.docs.length} Réponses',style: const TextStyle(fontSize: 16),);
-                      }
-                      return const Text('0 Réponses',style: TextStyle(fontSize: 16),);
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            Spacer(),
-            Text('J\'aime',style: TextStyle(fontSize: 18)),
-            CommentsLike(postId: postId, commentId: commentId,),
-          ],
-        ),
         const Divider(thickness: 2,),
       ],
     );
   }
 }
-
-

@@ -3,7 +3,6 @@ import 'package:card_app/controllers/profile_controller.dart';
 import 'package:card_app/controllers/question_controller.dart';
 import 'package:card_app/controllers/role_controller.dart';
 import 'package:card_app/widgets/like_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,31 +26,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('jhggggggggggggggggggggggggggg');
+    print('${personData}');
     userItself = personData == null ? true : false;
     return Obx(
-          () => Scaffold(
+      () => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey,
           leading: userItself
               ? Container()
               : IconButton(
-            icon: Icon(Icons.arrow_back,color: Colors.white,),
-            onPressed: () {
-              Get.back();
-            },
-          ),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
           actions: [
             !userItself
                 ? Container()
                 : IconButton(
-                icon: Icon(Icons.logout,color: Colors.white,),
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  Get.offAllNamed('/');
-                }),
+                    icon: Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Get.offAllNamed('/');
+                    }),
           ],
           centerTitle: true,
-          title: Text('Profile',style: TextStyle(color: Colors.white),),
+          title: Text(
+            'Profile',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         body: Column(
           children: [
@@ -93,71 +103,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     userItself
                         ? Container()
                         : Positioned(
-                      bottom: 50,
-                      left: 10,
-                      child: SizedBox(
-                        width: 120,
-                        height: 100,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                                left: 0,
-                                bottom: 60,
-                                child: Text(
-                                  'Message',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                )),
-                            Positioned(
-                                bottom: -2,
-                                right: 35,
-                                child: Container(
-                                  margin: EdgeInsetsDirectional.all(8),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.black, width: 3),
-                                      //color: Colors.white,
-                                      shape: BoxShape.circle),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Get.toNamed(
-                                        '/message-screen',
-                                        arguments: [
-                                          personData['uId'],
-                                          personData['userName'],
-                                          personData['image'],
-                                        ],
-                                      );
-                                    },
-                                    icon: Icon(Icons.chat_bubble),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ),
-                      // child: Container(
-                      //   margin: EdgeInsetsDirectional.all(8),
-                      //   decoration: BoxDecoration(
-                      //       border: Border.all(color: Colors.black,width: 3),
-                      //       //color: Colors.white,
-                      //       shape: BoxShape.circle),
-                      //   child: IconButton(
-                      //     onPressed: () {
-                      //       Get.toNamed(
-                      //         '/message-screen',
-                      //         arguments: [
-                      //           personData['uId'],
-                      //           personData['userName'],
-                      //           personData['image'],
-                      //         ],
-                      //       );
-                      //     },
-                      //     icon: Icon(Icons.chat_bubble),
-                      //   ),
-                      // )
-                    ),
+                            bottom: 50,
+                            left: 10,
+                            child: SizedBox(
+                              width: 120,
+                              height: 100,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      left: 0,
+                                      bottom: 60,
+                                      child: Text(
+                                        'Message',
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      )),
+                                  Positioned(
+                                      bottom: -2,
+                                      right: 35,
+                                      child: Container(
+                                        margin: EdgeInsetsDirectional.all(8),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black, width: 3),
+                                            //color: Colors.white,
+                                            shape: BoxShape.circle),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            Get.toNamed(
+                                              '/message-screen',
+                                              arguments: [
+                                                personData['uId'],
+                                                personData['userName'],
+                                                personData['image'],
+                                              ],
+                                            );
+                                          },
+                                          icon: Icon(Icons.chat_bubble),
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            // child: Container(
+                            //   margin: EdgeInsetsDirectional.all(8),
+                            //   decoration: BoxDecoration(
+                            //       border: Border.all(color: Colors.black,width: 3),
+                            //       //color: Colors.white,
+                            //       shape: BoxShape.circle),
+                            //   child: IconButton(
+                            //     onPressed: () {
+                            //       Get.toNamed(
+                            //         '/message-screen',
+                            //         arguments: [
+                            //           personData['uId'],
+                            //           personData['userName'],
+                            //           personData['image'],
+                            //         ],
+                            //       );
+                            //     },
+                            //     icon: Icon(Icons.chat_bubble),
+                            //   ),
+                            // )
+                          ),
                     //Role
                     Positioned(
                       bottom: 50,
@@ -193,8 +203,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onTap: () {
                                     if (userItself &&
                                         !profileController.roleEdited.value) {
-                                     // roleController.updateReturnRoute('/home-screen');
-                                      Get.toNamed('/select-role-screen', arguments: [true]);
+                                      // roleController.updateReturnRoute('/home-screen');
+                                      Get.toNamed('/select-role-screen',
+                                          arguments: [true]);
                                     }
                                   },
                                   child: SvgPicture.asset(
@@ -223,35 +234,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   child: profileController.picture.value == ''
                                       ? Image.asset(
-                                    'assets/images/logo.png',
-                                    fit: BoxFit.cover,
-                                  )
+                                          'assets/images/logo.png',
+                                          fit: BoxFit.cover,
+                                        )
                                       : Image.network(
-                                    profileController.picture.value,
-                                    fit: BoxFit.cover,
-                                  ),
+                                          profileController.picture.value,
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                               userItself
                                   ? Positioned(
-                                bottom: 0,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed('/image-upload-screen',
-                                        arguments: [true]);
-                                  },
-                                  child: ClipOval(
-                                    child: Container(
-                                      color: Colors.black,
-                                      padding:
-                                      EdgeInsetsDirectional.all(8),
-                                      child: Icon(Icons.add_a_photo,
-                                          size: 30, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              )
+                                      bottom: 0,
+                                      right: 4,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed('/image-upload-screen',
+                                              arguments: [true]);
+                                        },
+                                        child: ClipOval(
+                                          child: Container(
+                                            color: Colors.black,
+                                            padding:
+                                                EdgeInsetsDirectional.all(8),
+                                            child: Icon(Icons.add_a_photo,
+                                                size: 30, color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   : Positioned(child: SizedBox()),
                             ],
                           ),
@@ -305,12 +316,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       right: 20,
                       child: userItself
                           ? IconButton(
-                        onPressed: () {
-                          //profileController.setDescription();
-                          Get.toNamed('/edit-description-screen');
-                        },
-                        icon: Icon(Icons.edit),
-                      )
+                              onPressed: () {
+                                //profileController.setDescription();
+                                Get.toNamed('/edit-description-screen');
+                              },
+                              icon: Icon(Icons.edit),
+                            )
                           : Container(),
                     ),
                   ],
@@ -338,25 +349,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(width: 10),
                         !profileController.questionEdited.value && userItself
                             ? IconButton(
-                          onPressed: () {
-                            questionController.setControllerValues(
-                              profileController.answer1.value,
-                              profileController.answer2.value,
-                              profileController.answer3.value,
-                            );
+                                onPressed: () {
+                                  questionController.setControllerValues(
+                                    profileController.answer1.value,
+                                    profileController.answer2.value,
+                                    profileController.answer3.value,
+                                  );
 
-                            questionController
-                                .updateReturnRoute('/home-screen');
-                            Get.toNamed('/question-screen',
-                                arguments: [true]);
-                          },
-                          icon: Icon(Icons.edit),
-                        )
+                                  questionController
+                                      .updateReturnRoute('/home-screen');
+                                  Get.toNamed('/question-screen',
+                                      arguments: [true]);
+                                },
+                                icon: Icon(Icons.edit),
+                              )
                             : Container(),
                         Spacer(),
                         MyLikeButton(
-                          userId: userItself ? userId.toString() : personData['uId'].toString(),
-                          status: userItself ? profileController.status.value : personData['status'],
+                          userId: userItself
+                              ? userId.toString()
+                              : personData['uId'].toString(),
+                          status: userItself
+                              ? profileController.status.value
+                              : personData['status'],
                         ),
                         SizedBox(width: 3),
                       ],
@@ -398,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: Get.height * 0.15,
                             decoration: BoxDecoration(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10)),
+                                  BorderRadius.all(Radius.circular(10)),
                               color: MyColors.backgroundColor.withOpacity(0.7),
                             ),
                             child: Row(

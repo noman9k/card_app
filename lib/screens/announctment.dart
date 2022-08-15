@@ -6,10 +6,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../controllers/profile_controller.dart';
 import '../widgets/alert_dialog.dart';
 
 class AnnouncementScreen extends StatelessWidget {
   AnnouncementScreen({Key? key}) : super(key: key);
+  ProfileController profileController = Get.put(ProfileController());
 
   var userImage;
   var userName;
@@ -31,7 +33,7 @@ class AnnouncementScreen extends StatelessWidget {
                 ),
                 const Divider(thickness: 1,color: Colors.black,),
                 SizedBox(
-                  width: double.infinity,
+                  width: 300,
                   height: 80,
                   child: StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
@@ -44,22 +46,23 @@ class AnnouncementScreen extends StatelessWidget {
                       }
                       userImage = snapshot.data!['image'];
                       userName = snapshot.data!['userName'];
-                      return SizedBox(
+                      return Container(
+                        margin: EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.network(snapshot.data!['image'],width: 60,height: 60,),
-                            const SizedBox(width: 8,),
+                            const SizedBox(width: 2,),
                             GestureDetector(
                               onTap: (){
                                 Get.toNamed("/create-post",arguments: [false,'','','']);
                               },
                               child: Container(
                                 padding : const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 1),
-                                ),
-                                child: const Text('Publier une announce...',style: TextStyle(fontSize: 20),),
+                                child: const Text('Publier une annonce',style: TextStyle(fontSize: 20),),
                               ),
                             ),
                           ],
@@ -73,7 +76,6 @@ class AnnouncementScreen extends StatelessWidget {
                   stream: FirebaseFirestore.instance
                       .collection("post")
                   .orderBy('time',descending: true)
-                      .limit(5)
                       .snapshots(),
                   builder: (context,snapshot){
                     if(snapshot.connectionState == ConnectionState.waiting){
@@ -167,6 +169,7 @@ class AnnouncementScreen extends StatelessWidget {
                               profileTap: (){
                                 FirebaseFirestore.instance.collection("users").doc(snapshot.data!.docs[index]['uId'])
                                     .get().then((DocumentSnapshot documentSnapshot){
+                                  profileController.setSingleProfileData(documentSnapshot);
                                   Get.toNamed('/profile-screen', arguments: documentSnapshot);
                                 });
                               },
@@ -240,54 +243,55 @@ class Post extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical:4),
-      child: Flexible(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: profileTap,
-              child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Image.network(image, width: 80, height: 80,),
-                horizontalTitleGap: 0,
-                title: Text(name,style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold)),
-                subtitle: Row(
-                  children: [
-                    Text(showTime),
-                    Text(
-                      '${country}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: profileTap,
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.network(image, width: 80, height: 80,),
+              horizontalTitleGap: 0,
+              title: Text(name,style: const TextStyle(fontSize: 22,fontWeight: FontWeight.bold)),
+              subtitle: Row(
+                children: [
+                  Text(showTime),
+                  Text(
+                    '${country}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                    SvgPicture.asset(
-                      'assets/icons/$role.svg',width: 30,height: 30,)
-                  ],
-                ),
-                trailing: uId ==
-                    FirebaseAuth.instance.currentUser!.uid
-                    ? IconButton(
-                        onPressed: moreOnPress,
-                        icon: const Icon(Icons.more_horiz)
-                      )
-                    : const SizedBox.shrink(),
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/$role.svg',width: 30,height: 30,)
+                ],
               ),
+              trailing: uId ==
+                  FirebaseAuth.instance.currentUser!.uid
+                  ? IconButton(
+                      onPressed: moreOnPress,
+                      icon: const Icon(Icons.more_horiz)
+                    )
+                  : const SizedBox.shrink(),
             ),
-            const SizedBox(height: 4,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(title,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-            ),
-            const SizedBox(height: 4,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(post,style: TextStyle(fontSize: 16),),
-            ),
-            const SizedBox(height: 12,),
-            Padding(
+          ),
+          const SizedBox(height: 4,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(title,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+          ),
+          const SizedBox(height: 4,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(post,style: TextStyle(fontSize: 16),),
+          ),
+          const SizedBox(height: 12,),
+          GestureDetector(
+            onTap: commentOnTap,
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 children: [
@@ -308,35 +312,35 @@ class Post extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 4,),
-            GestureDetector(
-              onTap: commentOnTap,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Image.network(userImage,width: 40,height: 40,),
-                    const SizedBox(width: 4,),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        height: 45,
-                        padding: const EdgeInsets.only(left: 15,top: 15),
-                        decoration:  BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: const BorderRadius.all(Radius.circular(30))
-                        ),
-                        child: const Text('Rédigez une réponse...',textAlign: TextAlign.start,style: TextStyle(fontSize: 16),),
+          ),
+          const SizedBox(height: 4,),
+          GestureDetector(
+            onTap: commentOnTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  Image.network(userImage,width: 40,height: 40,),
+                  const SizedBox(width: 4,),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      height: 45,
+                      padding: const EdgeInsets.only(left: 15,top: 15),
+                      decoration:  BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: const BorderRadius.all(Radius.circular(30))
                       ),
+                      child: const Text('Rédigez une réponse...',textAlign: TextAlign.start,style: TextStyle(fontSize: 16),),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 4,),
-            const Divider(thickness: 2,),
-          ],
-        ),
+          ),
+          const SizedBox(height: 4,),
+          const Divider(thickness: 2,),
+        ],
       ),
     );
   }

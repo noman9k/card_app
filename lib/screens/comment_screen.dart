@@ -46,7 +46,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     controller: _controller.commentController,
                     maxLines: 2,
                     decoration: const InputDecoration(
-                      hintText: 'Rédigez une réponse...',
+                      hintText: 'Rédiger un commentaire',
                     ),
                   ),
                   trailing: IconButton(
